@@ -82,6 +82,11 @@ sintam-se livres para alterar.
   padding-bottom: var(--pd-2);
 }
 
+/* classe para titulos não tão grandes quanto o principal */
+.small-title-text{
+  font-size: 1.3rem;
+}
+
 /* classe para textos de conteúdo, pode ser alterado */
 .text{
   font-size: 1rem;
