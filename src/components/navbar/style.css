@@ -1,0 +1,14 @@
+.navbar{
+  position: fixed;
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--main-white);
+  padding: var(--pd-3);
+}
+.navbar .navbar-logo .logo{
+  background-color: transparent;
+}

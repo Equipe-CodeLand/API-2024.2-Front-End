@@ -3,11 +3,12 @@
   margin: 0;
   box-sizing: border-box;
   text-decoration: none;
-  background-color: var(--main-pink);
   /* font global */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
-
+body{
+  background-color: var(--main-pink);
+}
 :root {
 /* ---------------------------- CORES PRINCIPAIS ----------------------------*/
 
@@ -18,6 +19,7 @@
   --main-red: #EC1E22;
   --main-yellow: #e2b538;
   --main-green: #00FD00;
+  --main-white: #f1f1f1;
 
 /* ----------------------------- COR DAS FONTES -----------------------------*/
 
@@ -49,18 +51,20 @@ sintam-se livres para alterar.
   --mg-6: 1.50rem;
   --mg-7: 1.75rem;
   --mg-8: 2rem;
+  --mg-10: 4rem;
+  --mg-12: 6rem;
 }
 
 /* classe para ser usada globalmente envolvendo as paginas, pode ser alterada */
 .container{
-  padding: var(--pd-4);
+  margin-top: var(--mg-12);
 }
 .container .content{
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  padding: var(--pd-4);
+  padding: var(--pd-8) var(--pd-4);
 }
 
 /* classe para titulo e subtitulo, pode ser alterado */
@@ -84,9 +88,17 @@ sintam-se livres para alterar.
   letter-spacing: 0.3px;
 }
 
+/* classe padrão para os icones, pode ser alterado */
+.icon{
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
 /* classe para a logo, pode ser alterado */
 .logo{
   width: 150px;
+  background: none;
 }
 
 /* classe geral para os botões, pode ser alterado */
