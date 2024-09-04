@@ -1,0 +1,130 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  background-color: var(--main-pink);
+  /* font global */
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+:root {
+/* ---------------------------- CORES PRINCIPAIS ----------------------------*/
+
+  --main-pink: #F2DFF9;
+  --main-purple: #6D39A8;
+  --main-purple-hover: #7f43c5;
+  --main-second-purple: #DBC6F2;
+  --main-red: #EC1E22;
+  --main-yellow: #e2b538;
+  --main-green: #00FD00;
+
+/* ----------------------------- COR DAS FONTES -----------------------------*/
+
+  --font-white: #f1f1f1;
+  --font-black: #333333;
+
+/* ------------------------------ ESPAÇAMENTO ------------------------------*/
+/* 
+notas: defini algumas variáveis para padding e margin para ficar padronizado,
+sintam-se livres para alterar.
+*/
+
+/* variaveis isoladas para padding */
+  --pd-1: 0.25rem;
+  --pd-2: 0.50rem;
+  --pd-3: 0.75rem;
+  --pd-4: 1rem;
+  --pd-5: 1.25rem;
+  --pd-6: 1.50rem;
+  --pd-7: 1.75rem;
+  --pd-8: 2rem;
+
+/* variaveis isoladas para margin */
+  --mg-1: 0.25rem;
+  --mg-2: 0.50rem;
+  --mg-3: 0.75rem;
+  --mg-4: 1rem;
+  --mg-5: 1.25rem;
+  --mg-6: 1.50rem;
+  --mg-7: 1.75rem;
+  --mg-8: 2rem;
+}
+
+/* classe para ser usada globalmente envolvendo as paginas, pode ser alterada */
+.container{
+  padding: var(--pd-4);
+}
+.container .content{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--pd-4);
+}
+
+/* classe para titulo e subtitulo, pode ser alterado */
+.title-box{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* classe para font do titulo, pode ser alterado */
+.title-text{
+  font-size: 1.6rem;
+  color: var(--main-purple-hover);
+  padding-bottom: var(--pd-2);
+}
+
+/* classe para textos de conteúdo, pode ser alterado */
+.text{
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+}
+
+/* classe para a logo, pode ser alterado */
+.logo{
+  width: 150px;
+}
+
+/* classe geral para os botões, pode ser alterado */
+.btn{
+  background: var(--main-purple);
+  color: var(--font-white);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 100ms ease-in-out;
+}
+.btn:hover{
+  background-color: var(--main-purple-hover);
+}
+
+/* ------------------------------ INPUTS ------------------------------*/
+/* 
+notas: se for usar mais de um input na mema linha, envolva-os dentro de uma div 
+com display:flex e use o gap para dar espaço entre eles.
+*/
+
+/* classe para input único por linha, pode ser alterado */
+.input-full-size{
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+/* classe para 1/2 input, dois por linha, pode ser alterado */
+.input-half-size{
+  width: 50%;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+/* classe para 1/4 input, quatro por linha, pode ser alterado */
+.input-quarter-size{
+  width: 25%;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
