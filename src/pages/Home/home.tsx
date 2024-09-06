@@ -1,7 +1,8 @@
 import React from 'react'
-import Navbar from '../../components/navbar'
+import { Navbar } from '../../components'
 
 const Home: React.FC = () => {
+
   return (
     <div className='container'>
       <Navbar />
@@ -11,7 +12,7 @@ const Home: React.FC = () => {
         <p className='text'>Construa sua pagina dentro da classe Content.</p>
       </div>
       <div className="content">
-        Content.
+        Content
       </div>
     </div>
   )

@@ -1,0 +1,30 @@
+.forms {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.titulo {
+    text-align: center;
+}
+
+.forms-input{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 60%;
+    margin: 2%
+}
+
+.botao-enviar {
+    justify-content: center;
+    background-color: #6D39A8;
+    width: 100px;
+    height: 30px;
+    margin: 2%;
+    border-radius: 10px;
+    color: #ffffff;
+    border: 0px;
+}

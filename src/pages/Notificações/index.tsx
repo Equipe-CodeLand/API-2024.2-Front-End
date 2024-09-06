@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../../components/navbar'
+import Navbar from '../../components/navbar/navbar'
 import WarningIcon from '@mui/icons-material/Warning';
 import './style.css'
 
