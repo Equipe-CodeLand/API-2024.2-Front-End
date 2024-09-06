@@ -1,0 +1,12 @@
+.dropdown select option{
+  color: var(--main-white);
+}
+.dropdown select {
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--main-purple);
+  color: var(--main-white);
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+}
