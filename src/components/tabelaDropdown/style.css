@@ -1,0 +1,105 @@
+.container-tabela { /* css do container principal */
+  display: flex;
+  justify-content: center;
+  border-radius: 15px;
+  background: var(--main-white);
+  color: var(--font-black);
+  border: 1px solid var(--font-black);
+  box-sizing: border-box;
+  width: 90%;
+}
+
+/* CSS REFERENTE A TABELA */
+
+.tabela {
+  width: 100%;
+  border-collapse: separate; /* Separa as bordas das células */
+  border-spacing: 0; /* Espaçamento entre as células */
+  border-radius: 12px;
+  overflow: hidden; /* Esconde as bordas arredondadas das células */
+}
+
+.tabela th, .tabela td { /* Estilização das células */
+  padding: 10px;
+  border-right: 1px solid var(--font-black); /* Borda direita */
+  border-bottom: 1px solid var(--font-black); /* Borda inferior */
+  text-align: center;
+}
+
+.tabela tbody tr { /* Estilização das linhas */
+  cursor: pointer; /* Muda o cursor ao passar por cima */
+}
+
+/* Remove a borda inferior das células da última linha */
+.tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Remove a borda direita das células da última coluna */
+.tabela td:last-child {
+  border-right: none;
+}
+
+/* Remove a borda direita da última célula do cabeçalho */
+.tabela thead th:last-child {
+  border-right: none;
+}
+
+/* Estilos específicos para o dropdown */
+.dropdown-tabela {
+  background-color: var(--main-second-purple);
+  border-top: 1px solid var(--font-black); 
+  border-bottom: 1px solid var(--font-black);
+  border-radius: 0 0 12px 12px; /* Borda arredondada apenas na parte inferior */
+  padding: 10px;
+  transition: all 0.3s ease; /* Animação de transição */
+}
+
+/* Linha separada para o ID */
+.id-row {
+  margin: 1% 0 0 2.8%;
+  font-weight: bold;
+  text-align: left;
+}
+
+/* Layout para o conteúdo do dropdown com duas colunas */
+.dropdown-columns {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Estilos para as colunas do dropdown */
+.dropdown-col { 
+  flex: 1;
+  padding: 0 10px;
+  box-sizing: border-box;
+  margin: 2%;
+  text-align: left !important;
+}
+
+/* Estilos para os elementos extras (como botões) */
+.dropdown-extra {
+  margin-top: 10px;
+}
+
+/* Estilização dos botões do dropdown */
+.dropdown-item {
+  margin-bottom: 10px;
+}
+
+/* Estilização do botão */
+button {
+  padding: 5px 10px;
+  background-color: var(--main-purple);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: var(--main-white);
+  color: black;
+  border: 3px solid var(--main-purple);
+}

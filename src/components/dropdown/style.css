@@ -1,5 +1,6 @@
 .dropdown select option{
-  color: var(--main-white);
+  background-color: var(--main-second-purple);
+  color: black;
 }
 .dropdown select {
   padding: 8px;
