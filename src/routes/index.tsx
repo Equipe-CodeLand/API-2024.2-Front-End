@@ -1,10 +1,10 @@
-import { Home } from "@mui/icons-material";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CadastroEstacao from "../pages/CadastroEstação/cadastroEstacao";
 import DropdownExample from "../pages/DropdownExample";
 import DropdownUsuario from "../pages/DropdownUsuario";
 import Notificacoes from "../pages/Notificações";
 import '../globalCss/index.css'
+import Home from "../pages/Home/home";
 
 export default function Rotas() {
     return(
