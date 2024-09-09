@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   border-radius: 15px;
-  background: var(--main-white);
+  background: white;
   color: var(--font-black);
   border: 1px solid var(--font-black);
   box-sizing: border-box;
