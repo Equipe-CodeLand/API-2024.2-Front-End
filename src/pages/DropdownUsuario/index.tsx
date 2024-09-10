@@ -2,6 +2,7 @@ import React from 'react';
 import TabelaGenerica from '../../components/tabelaDropdown'; 
 import { Navbar } from '../../components';
 import { Usuario } from '../../interface/usuario';
+import './style.css';
 
 // Dados de exemplo
 const usuarios: Usuario[] = [
@@ -51,7 +52,7 @@ const UsuarioTable: React.FC = () => {
     extra: [
       // Elemento extra, como um botão
       <div key="action-button">
-        <button onClick={() => alert(`Ação realizada para ${usuario.nome}`)}>Ação</button>
+        <button className='btn' onClick={() => alert(`Ação realizada para ${usuario.nome}`)}>Ação</button>
       </div>
     ]
   });
@@ -59,7 +60,13 @@ const UsuarioTable: React.FC = () => {
   return (
     <div className="container">
       <Navbar />
+      <div className="title-box">
+          <h2 className='title-text'>Usuários</h2>
+      </div>
       <div className="content">
+        <div className='adicionarUsuario'>
+            <button className='btn'>Adicionar usuário</button>
+        </div>
         {/* Tabela genérica que recebe os dados e configurações */}
         <TabelaGenerica<Usuario> 
           data={usuarios} 

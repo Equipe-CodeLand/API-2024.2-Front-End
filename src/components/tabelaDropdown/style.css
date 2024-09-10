@@ -7,6 +7,7 @@
   border: 1px solid var(--font-black);
   box-sizing: border-box;
   width: 90%;
+  margin-top: 1.5%;
 }
 
 /* CSS REFERENTE A TABELA */
@@ -88,7 +89,7 @@
 }
 
 /* Estilização do botão */
-button {
+button .btnTabela {
   padding: 5px 10px;
   background-color: var(--main-purple);
   border: none;
@@ -98,7 +99,7 @@ button {
   transition: background-color 0.3s;
 }
 
-button:hover {
+button .btnTabela:hover {
   background-color: var(--main-white);
   color: black;
   border: 3px solid var(--main-purple);
