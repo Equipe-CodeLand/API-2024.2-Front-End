@@ -10,68 +10,92 @@ const usuarios: Usuario[] = [
   { id: 2, nome: 'Letícia Helena', tipo: 'Visualizador', status: 'Inativo', email: 'leticia@gmail.com', cpf: '234.567.890/11' },
 ];
 
-const UsuarioTable: React.FC = () => {
-  // Colunas que serão exibidas na tabela
-  const columns: Array<{ label: string; key: keyof Usuario }> = [
-    { label: 'ID', key: 'id' },
-    { label: 'Nome', key: 'nome' },
-    { label: 'Tipo', key: 'tipo' },
-    { label: 'Status', key: 'status' },
-  ];
+// Função para renderizar o status com bolinha colorida
+const renderStatus = (status: string | number) => {
+  const statusClasses: { [key: string]: string } = {
+    Ativo: 'status-active',
+    Inativo: 'status-inactive',
+  };
 
-  // Função para renderizar os detalhes do usuário
-  const renderDetails = (usuario: Usuario) => (
-    <div className="usuario-detalhes">
+  const statusClass = statusClasses[status as string] || '';
+
+  return (
+    <span className='status-container'>
+      {status}
+      <span className={`status-bullet ${statusClass}`}></span>
+    </span>
+  );
+};
+
+// Função para gerar o conteúdo em duas colunas + o extra no dropdown
+const dropdownContent = (usuario: Usuario) => ({
+  idRow: (
+    <div>
       <p><strong>ID:</strong> {usuario.id}</p>
+    </div>
+  ),
+  col1: (
+    <div>
       <p><strong>Nome:</strong> {usuario.nome}</p>
       <p><strong>Email:</strong> {usuario.email}</p>
+    </div>
+  ),
+  col2: (
+    <div>
       <p><strong>Tipo:</strong> {usuario.tipo}</p>
       <p><strong>CPF:</strong> {usuario.cpf}</p>
     </div>
-  );
+  ),
+  extra: [
+    <div key="action-button">
+      <button className='btn' onClick={() => alert(`Ação realizada para ${usuario.nome}`)}>Ação</button>
+    </div>
+  ]
+});
 
-  // Função para gerar o conteúdo em duas colunas + o extra no dropdown
-  const dropdownContent = (usuario: Usuario) => ({
-    idRow: (
-      <div>
-        <p><strong>ID:</strong> {usuario.id}</p>
-      </div>
-    ), // o ID e o extra ficam em linhas separadas
-    col1: (
-      <div>
-        <p><strong>Nome:</strong> {usuario.nome}</p>
-        <p><strong>Email:</strong> {usuario.email}</p>
-      </div>
-    ),
-    col2: (
-      <div>
-        <p><strong>Tipo:</strong> {usuario.tipo}</p>
-        <p><strong>CPF:</strong> {usuario.cpf}</p>
-      </div>
-    ),
-    extra: [
-      // Elemento extra, como um botão
-      <div key="action-button">
-        <button className='btn' onClick={() => alert(`Ação realizada para ${usuario.nome}`)}>Ação</button>
-      </div>
-    ]
-  });
+const UsuarioTable: React.FC = () => {
+  // Define a type for the columns that includes the optional renderCell property
+  type Column<T> = {
+    label: string;
+    key: keyof T;
+    renderCell?: (value: string | number) => JSX.Element;
+  };
+
+  // Colunas que serão exibidas na tabela
+  const columns: Array<Column<Usuario>> = [
+    { label: 'ID', key: 'id' },
+    { label: 'Nome', key: 'nome' },
+    { label: 'Tipo', key: 'tipo' },
+    { 
+      label: 'Status', 
+      key: 'status',
+      renderCell: renderStatus // Passa a função de renderização personalizada
+    },
+  ];
 
   return (
     <div className="container">
       <Navbar />
       <div className="title-box">
-          <h2 className='title-text'>Usuários</h2>
+        <h2 className='title-text'>Usuários</h2>
       </div>
       <div className="content">
         <div className='adicionarUsuario'>
-            <button className='btn'>Adicionar usuário</button>
+          <button className='btn'>Adicionar usuário</button>
         </div>
         {/* Tabela genérica que recebe os dados e configurações */}
         <TabelaGenerica<Usuario> 
           data={usuarios} 
           columns={columns} 
-          detailExtractor={renderDetails}
+          detailExtractor={(usuario) => (
+            <div className="usuario-detalhes">
+              <p><strong>ID:</strong> {usuario.id}</p>
+              <p><strong>Nome:</strong> {usuario.nome}</p>
+              <p><strong>Email:</strong> {usuario.email}</p>
+              <p><strong>Tipo:</strong> {usuario.tipo}</p>
+              <p><strong>CPF:</strong> {usuario.cpf}</p>
+            </div>
+          )}
           dropdownContent={dropdownContent} 
         />
       </div>
