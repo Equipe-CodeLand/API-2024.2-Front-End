@@ -1,46 +1,73 @@
 import { useEffect, useState } from "react";
-import InputField from "../../interface/InputField";
-import { Form } from "../../components";
+import InputCampo from "../../interface/InputCampo";
+import { Forms } from "../../components";
+
+/* Interface com os dados que serão enviados ao back-end */
+interface formsDados {
+    nome?: string,
+    macAddress?: string,
+    parametros?: string[],
+    cep?: string,
+    rua?: string,
+    numero?: number,
+    bairro?: string,
+    cidade?: string
+}
 
 const CadastroEstacao: React.FC = () => {
 
+    const [formDados, setFormDados] = useState<formsDados | undefined>()
     const [erro, setErro] = useState(false)
-    const [parametros /*, setParametros*/] = useState(["umidade", "temperatura"])
+    const [parametros, setParametros] = useState<string[] | undefined>(undefined);
 
-    const inputs: InputField[] = [
-        { label: 'Nome', type: 'text', name: 'Nome', value: '', placeholder: 'Digite o nome' },
-        { label: 'MAC Address (UID)', type: 'text', name: 'MacAddress', value: '', placeholder: 'Digite o MAC Address' },
-        { label: 'Parâmetros', type: 'select', name: 'Parametros', value: '', placeholder: 'Selecione um parâmetro', options: parametros },
-        { label: 'CEP', type: 'text', name: 'Cep', value: '', placeholder: 'Digite o cep' },
-        { label: 'Rua', type: 'text', name: 'Rua', value: '', placeholder: 'Digite a Rua' },
-        { label: 'Número', type: 'text', name: 'Numero', value: '', placeholder: 'Digite o número' },
-        { label: 'Bairro', type: 'text', name: 'Bairro', value: '', placeholder: 'Digite o bairro' },
-        { label: 'Cidade', type: 'text', name: 'Cidade', value: '', placeholder: 'Digite a cidade' }
+    /* Lista dos inputs do forms */
+    const inputs: InputCampo[] = [
+        { label: 'Nome', type: 'text', name: 'Nome', placeholder: 'Digite o nome' },
+        { label: 'MAC Address (UID)', type: 'text', name: 'MacAddress', placeholder: 'Digite o MAC Address' },
+        { label: 'Parâmetros', type: 'select', name: 'Parametros', placeholder: 'Selecione um parâmetro', options: parametros },
+        { label: 'CEP', type: 'text', name: 'Cep', placeholder: 'Digite o cep' },
+        { label: 'Rua', type: 'text', name: 'Rua', placeholder: 'Digite a Rua' },
+        { label: 'Número', type: 'number', name: 'Numero', placeholder: 'Digite o número' },
+        { label: 'Bairro', type: 'text', name: 'Bairro', placeholder: 'Digite o bairro' },
+        { label: 'Cidade', type: 'text', name: 'Cidade', placeholder: 'Digite a cidade' }
     ];
 
-    // let parametro = ["umidade", "temperatura"]
-    // setParametros(parametro)
     useEffect(() => {
+        /* isso aqui será susbtituido por uma busca no back-end */
+        let parametro = ["temperatura", "umildade", "carisma", 'simpatia']
+        setParametros(parametro)
     }, [])
 
+    /* Esta função verifica se os campos estão preenchidos, caso não, envia um alerta,
+    caso sim, envia ao back*/
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         inputs.map(input => {
-            if (input.value === "") {
+            if (input.value === "" || input.value === undefined) {
                 setErro(true)
             }
         })
-        if (erro) {
-            alert("Todos os campos são obrigatórios!")
+        if (erro === false) {
+            console.log("Isto sera enviado ao backend" + formDados); 
         }
         else {
-            //enviar ao back-end
+            alert("Todos os campos são obrigatórios!")
+            setErro(false)
         }
     }
 
+    /* Esta função atualiza os dados do objeto formDados conforme o usuário preenche o forms */
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormDados({
+            ...formDados,
+            [e.target.name]: e.target.value
+        });
+    };
+
     return (
         <div>
-            <Form titulo="Cadastro de Estação" inputs={inputs} handleSubmit={handleSubmit} />
+            {/* Renderiza o componente do forms e envia as funções citadas anteriormente */}
+            <Forms titulo="Cadastro de Estação" inputs={inputs} handleSubmit={handleSubmit} handleChange={handleChange} />
         </div>
     )
 }
