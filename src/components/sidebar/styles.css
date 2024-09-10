@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+.sidebar {
+  width: 60px;
+  background-color: white;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.sidebar.open {
+  width: 240px;
+}
+
+.toggle-btn {
+  background-color: white;
+  color: #000000;
+  border: none;
+  width: 40px; /* Definir largura fixa */
+  height: 40px; /* Definir altura fixa */
+  cursor: pointer;
+  display: flex; /* Usar flexbox para centralizar o ícone */
+  align-items: center; /* Centralizar verticalmente */
+  justify-content: center; /* Centralizar horizontalmente */
+  margin: 0; /* Remover margem */
+  transition: none; /* Remover transição */
+}
+
+.toggle-btn:hover {
+  border: none; /* Remover borda ao redor do botão */
+  transform: none; /* Garantir que o botão não se mova */
+}
+
+.toggle-icon {
+  width: 25px; /* Ajustar tamanho do ícone de toggle */
+  height: 25px; /* Ajustar tamanho do ícone de toggle */
+}
+
+.sidebar-logo {
+  margin-left: 5px; /* Reduzir margem para aproximar do botão */
+  height: 35px;
+}
+
+.sidebar-nav {
+  padding-top: 20px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 15px; /* Aumentar o padding para tornar os botões maiores */
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s ease;
+  font-family: 'Montserrat', sans-serif; /* Aplicar fonte Montserrat */
+  font-weight: 700; /* Aplicar estilo bold */
+  white-space: nowrap; /* Evitar quebra de linha */
+}
+
+.sidebar-link:hover {
+  background-color: white;
+}
+
+.sidebar .icon {
+  margin-right: 10px;
+  width: 35px; /* Ajustar tamanho do ícone */
+  height: 35px; /* Ajustar tamanho do ícone */
+}
+
+.sidebar:not(.open) .sidebar-link {
+  justify-content: center; /* Centralizar horizontalmente quando fechado */
+}
+
+.sidebar:not(.open) .icon {
+  margin-right: 0; /* Remover margem direita quando fechado */
+}
+
+.label {
+  display: none;
+}
+
+.sidebar.open .label {
+  display: inline;
+}

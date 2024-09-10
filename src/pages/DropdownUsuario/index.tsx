@@ -1,5 +1,6 @@
 import React from 'react';
 import TabelaGenerica from '../../components/tabelaDropdown'; 
+import { Sidebar } from '../../components/sidebar/sidebar';
 import { Navbar } from '../../components';
 import { Usuario } from '../../interface/usuario';
 
@@ -58,15 +59,18 @@ const UsuarioTable: React.FC = () => {
 
   return (
     <div className="container">
-      <Navbar />
-      <div className="content">
-        {/* Tabela genérica que recebe os dados e configurações */}
-        <TabelaGenerica<Usuario> 
-          data={usuarios} 
-          columns={columns} 
-          detailExtractor={renderDetails}
-          dropdownContent={dropdownContent} 
-        />
+      {/* <Navbar /> */}
+      <Sidebar /> {/* Adicionar Sidebar */}
+      <div style={{ marginLeft: '60px' }}> {/* Adicionar margem à esquerda */}
+        <div className="content">
+          {/* Tabela genérica que recebe os dados e configurações */}
+          <TabelaGenerica<Usuario> 
+            data={usuarios} 
+            columns={columns} 
+            detailExtractor={renderDetails}
+            dropdownContent={dropdownContent} 
+          />
+        </div>
       </div>
     </div>
   );

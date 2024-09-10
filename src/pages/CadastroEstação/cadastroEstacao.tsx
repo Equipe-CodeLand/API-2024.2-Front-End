@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import InputField from "../../interface/InputField";
 import { Form } from "../../components";
+import { Sidebar } from "../../components/sidebar/sidebar";
 
 const CadastroEstacao: React.FC = () => {
 
@@ -18,8 +19,6 @@ const CadastroEstacao: React.FC = () => {
         { label: 'Cidade', type: 'text', name: 'Cidade', value: '', placeholder: 'Digite a cidade' }
     ];
 
-    // let parametro = ["umidade", "temperatura"]
-    // setParametros(parametro)
     useEffect(() => {
     }, [])
 
@@ -40,7 +39,10 @@ const CadastroEstacao: React.FC = () => {
 
     return (
         <div>
-            <Form titulo="Cadastro de Estação" inputs={inputs} handleSubmit={handleSubmit} />
+            <Sidebar /> {/* Adicionar Sidebar */}
+            <div style={{ marginLeft: '60px' }}> {/* Adicionar margem à esquerda */}
+                <Form titulo="Cadastro de Estação" inputs={inputs} handleSubmit={handleSubmit} />
+            </div>
         </div>
     )
 }
