@@ -1,7 +1,7 @@
 import React from 'react';
 import TabelaGenerica from '../../components/tabelaDropdown'; 
 import { Sidebar } from '../../components/sidebar/sidebar';
-import { Navbar } from '../../components';
+// import { Navbar } from '../../components';
 import { Usuario } from '../../interface/usuario';
 
 // Dados de exemplo

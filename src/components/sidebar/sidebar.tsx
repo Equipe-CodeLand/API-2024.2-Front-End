@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import './styles.css';
 import Logo from '../../../public/images/Logo.png';
 import AprendaMais from '../../assets/AprendaMais.png';
@@ -47,10 +47,10 @@ export const Sidebar: React.FC = () => {
         <ul>
           {links.map((link) => (
             <li key={link.href}>
-              <Link to={link.href} className="sidebar-link">
+              <NavLink to={link.href} className="sidebar-link">
                 <img src={link.icon} alt={`${link.label} icon`} className="icon" />
                 <span className="label">{link.label}</span>
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>

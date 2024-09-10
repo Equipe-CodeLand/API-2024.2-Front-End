@@ -70,6 +70,10 @@
   background-color: white;
 }
 
+.sidebar-link.active {
+  background-color: rgb(228, 147, 228);
+}
+
 .sidebar .icon {
   margin-right: 10px;
   width: 35px; /* Ajustar tamanho do ícone */
