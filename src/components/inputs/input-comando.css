@@ -1,0 +1,39 @@
+.option {
+    background-color: #ffffff;
+    border: #000000 1px solid;
+    width: 400px;
+    height: 30px;
+    padding: 3px;
+}
+
+.selected-options {
+    display: flex;
+    width: 400px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 10px 0px;
+}
+
+.selected-option {
+    background-color: var(--main-white);
+    border: 2px solid var(--main-purple);
+    color: var(--main-purple);
+    padding: 2px;
+    border-radius: 15px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.selected-option button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--main-purple);
+    font-size: 15px;
+}
+
+.selected-option button:hover {
+    border: 0px solid;
+    color: var(--main-second-purple);
+}

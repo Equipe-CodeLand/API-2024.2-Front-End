@@ -1,10 +1,10 @@
 import React from 'react';
 import "./input.css"
-import InputField from '../../interface/InputField';
+import InputField from '../../interface/InputCampo';
 
 const Input: React.FC<InputField> = ({ label, type, name, value, placeholder, onChange }) => {
     return (
-        <div className="mb-4">
+        <div>
             {label && (
                 <label>
                     <p>
