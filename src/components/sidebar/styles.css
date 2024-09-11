@@ -1,91 +1,98 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
-
 .sidebar {
   width: 60px;
-  background-color: white;
+  background-color: #5751d3;
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
   transition: width 0.3s ease;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .toggle-container {
   display: flex;
   align-items: center;
+  justify-content: flex-start; /* Mantém o botão de toggle à esquerda */
   padding: 10px;
+  position: relative;
+  z-index: 10;
 }
 
 .sidebar.open {
-  width: 240px;
+  width: 220px;
 }
 
 .toggle-btn {
-  background-color: white;
-  color: #000000;
+  background-color: transparent;
   border: none;
-  width: 40px; /* Definir largura fixa */
-  height: 40px; /* Definir altura fixa */
+  width: 40px; /* Ajustar largura */
+  height: 40px; /* Ajustar altura */
   cursor: pointer;
-  display: flex; /* Usar flexbox para centralizar o ícone */
-  align-items: center; /* Centralizar verticalmente */
-  justify-content: center; /* Centralizar horizontalmente */
-  margin: 0; /* Remover margem */
-  transition: none; /* Remover transição */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
 }
 
 .toggle-btn:hover {
-  border: none; /* Remover borda ao redor do botão */
-  transform: none; /* Garantir que o botão não se mova */
+  background-color: transparent;
+  color: inherit;
+  border: none;
 }
 
+
 .toggle-icon {
-  width: 25px; /* Ajustar tamanho do ícone de toggle */
-  height: 25px; /* Ajustar tamanho do ícone de toggle */
+  width: 25px; /* Ajustar tamanho do ícone */
+  height: 25px;
 }
 
 .sidebar-logo {
-  margin-left: 5px; /* Reduzir margem para aproximar do botão */
-  height: 35px;
+  height: 45px; /* Reduzir o tamanho do logo */
+  position: absolute;
+  top: 10px;
+  left: 50px; /* Ajustar a posição do logo quando expandido */
 }
 
 .sidebar-nav {
-  padding-top: 20px;
+  flex-grow: 1;
+  padding-top: 60px; /* Garantir que os links fiquem abaixo do botão e logo */
 }
 
 .sidebar-link {
   display: flex;
   align-items: center;
-  padding: 15px; /* Aumentar o padding para tornar os botões maiores */
+  padding: 10px 15px; /* Ajustar padding para tornar os botões menores */
   text-decoration: none;
-  color: #333;
+  color: #ffffff;
   transition: background-color 0.3s ease;
-  font-family: 'Montserrat', sans-serif; /* Aplicar fonte Montserrat */
-  font-weight: 700; /* Aplicar estilo bold */
-  white-space: nowrap; /* Evitar quebra de linha */
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .sidebar-link:hover {
-  background-color: white;
+  background-color: #4e48b9;
 }
 
 .sidebar-link.active {
-  background-color: rgb(228, 147, 228);
+  background-color: #2d26ac;
 }
 
 .sidebar .icon {
-  margin-right: 10px;
-  width: 35px; /* Ajustar tamanho do ícone */
-  height: 35px; /* Ajustar tamanho do ícone */
+  width: 32px;
+  height: 32px;
 }
+
+.sidebar.open .icon {
+  margin-right: 10px;
+}
+
 
 .sidebar:not(.open) .sidebar-link {
-  justify-content: center; /* Centralizar horizontalmente quando fechado */
-}
-
-.sidebar:not(.open) .icon {
-  margin-right: 0; /* Remover margem direita quando fechado */
+  justify-content: center;
 }
 
 .label {
