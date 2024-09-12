@@ -5,6 +5,7 @@ import DropdownUsuario from "../pages/DropdownUsuario";
 import Notificacoes from "../pages/Notificações";
 import '../globalCss/index.css'
 import Home from "../pages/Home/home";
+import AprendaMais from "../pages/AprendaMais/aprendaMais";
 
 export default function Rotas() {
     return(
@@ -15,6 +16,7 @@ export default function Rotas() {
                 <Route path='/estacao/cadastro' element={<CadastroEstacao />} />
                 <Route path='/dropdown-exemplo' element={<DropdownExample />} />
                 <Route path='/usuarios' element={<DropdownUsuario />} />
+                <Route path='/aprenda-mais' element={<AprendaMais />} />
             </Routes>
         </BrowserRouter>
     )
