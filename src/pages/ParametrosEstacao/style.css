@@ -4,12 +4,12 @@
   flex-direction: row;
   align-items: center;
   padding: var(--pd-4) var(--pd-8);
-  gap: 16px;
+  gap: 12px;
 }
 
 .parameter-estacao-container .parameter{
-  padding: var(--pd-3);
-  color: var(--main-purple);
+  padding: var(--pd-2);
+  color: whiteblack;
   background-color: white;
   border-radius: 12px;
   border: 1px solid black;
@@ -27,7 +27,7 @@
 }
 
 .middle-container .description-container{
-  width: 70%;
+  width: 50%;
   background: white;
   border: 1px solid var(--main-purple);
   padding: var(--pd-8);
@@ -39,7 +39,9 @@
   justify-content: space-between;
   padding-bottom: var(--pd-3);
 }
-
+.middle-container .description-container .description-title .porcentage h3{
+  font-size: 1.3rem;
+}
 .middle-container .description-container .description-title .porcentage span{
   background-color: var(--main-purple);
   color: white;

@@ -60,12 +60,12 @@ const ParametrosEstação: React.FC = () => {
                   <h2 className='title-text'>Descrição</h2>
 
                   <div className="porcentage">
-                    <p>
+                    <h3>
                       Nível de {selectedParametro ? selectedParametro.charAt(0).toUpperCase() + selectedParametro.slice(1) : ''}:
                       <span>
                         {stations.porcentage}
                       </span>
-                    </p>
+                    </h3>
                   </div>
 
                 </div>

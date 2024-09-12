@@ -20,7 +20,7 @@ const Grafico: React.FC<GraficoProps> = ({ parametro }) => {
   return (
     <div className="grafico-container">
       <h4 className='small-title-text'>Gráfico de {parametro}</h4>
-      <LineChart width={400} height={250} data={data}>
+      <LineChart width={700} height={250} data={data}>
         <Line type="monotone" dataKey={parametro.toLowerCase()} stroke="#7f43c5" />
         <CartesianGrid stroke="#ccc" />
         <XAxis dataKey="name" />
