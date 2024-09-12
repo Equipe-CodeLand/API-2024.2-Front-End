@@ -5,33 +5,51 @@
     align-items: center;
     text-align: center;
     margin-bottom: var(--mg-4);
-  }
-  
-  .text-box {
-    width: 80%; 
-    text-align: justify; 
-  }
-  
-  .small-title-text {
+}
+
+.text-box {
+    width: 80%;
+    text-align: justify;
+}
+
+.small-title-text {
     text-align: left;
     width: 80%;
     margin-bottom: var(--mg-4);
-  }
+}
 
-  .formula {
+.formula {
     font-style: italic;
     font-weight: bold;
-  }
-  
-  .text-box p {
-    margin-bottom: var(--mg-2); 
-  }
-  
-  ul.list {
+}
+
+.text-box p {
+    margin-bottom: var(--mg-2);
+}
+
+ul.list {
     padding-left: var(--pd-6);
-  }
-  
-  ul.list li {
+}
+
+ul.list li {
     margin-left: var(--mg-1);
-  }
-  
+}
+
+.instrument-image {
+    width: 80%; 
+    max-width: 250px; 
+    height: auto; 
+    display: block; 
+    margin: var(--mg-4) auto; 
+    border-radius: 12px;
+}
+
+@media (max-width: 900px) {
+    .text-box {
+        width: 80%; 
+    }
+
+    .text-container {
+        margin-left: 5%; 
+    }
+}
