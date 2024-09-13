@@ -1,30 +1,45 @@
+
+/* Essa classe centraliza o forms em si */
+.forms-container{
+    display: flex;
+    justify-content: center;
+}
+
+/* Essa classe centraliza os campos e o botão de enviar*/
 .forms {
     display: flex;
-    width: 100%;
     justify-content: center;
+    align-items: center;
     flex-direction: column;
+    width: 60%;
+}
+
+/* Essa classe distribui os campos do forms*/
+.forms-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .titulo {
     text-align: center;
-}
-
-.forms-input{
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 60%;
-    margin: 2%
+    margin: 2%;
 }
 
 .botao-enviar {
+    display: flex;
     justify-content: center;
-    background-color: #6D39A8;
+    background-color: var(--main-purple);
     width: 100px;
     height: 30px;
-    margin: 2%;
+    margin: 5%;
     border-radius: 10px;
+    border: 0px solid;
+}
+
+.botao-enviar:hover {
+    background-color: var(--main-purple-hover);
     color: #ffffff;
-    border: 0px;
+    border: 0px solid;
 }

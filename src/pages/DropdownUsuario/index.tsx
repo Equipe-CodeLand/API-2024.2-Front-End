@@ -1,6 +1,7 @@
 import React from 'react';
 import TabelaGenerica from '../../components/tabelaDropdown'; 
-import { Navbar } from '../../components';
+import { Sidebar } from '../../components/sidebar/sidebar';
+// import { Navbar } from '../../components';
 import { Usuario } from '../../interface/usuario';
 import './style.css';
 
@@ -75,7 +76,7 @@ const UsuarioTable: React.FC = () => {
 
   return (
     <div className="container">
-      <Navbar />
+      <Sidebar />
       <div className="title-box">
         <h2 className='title-text'>Usuários</h2>
       </div>

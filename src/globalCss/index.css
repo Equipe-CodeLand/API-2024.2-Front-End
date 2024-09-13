@@ -7,7 +7,7 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 body{
-  background-color: var(--main-pink);
+  background-color: var(--white-sidebar);
 }
 :root {
 /* ---------------------------- CORES PRINCIPAIS ----------------------------*/
@@ -15,11 +15,12 @@ body{
   --main-pink: #F2DFF9;
   --main-purple: #6D39A8;
   --main-purple-hover: #7f43c5;
-  --main-second-purple: #DBC6F2;
+  --main-second-purple: #fcf5fd;
   --main-red: #EC1E22;
   --main-yellow: #e2b538;
   --main-green: #00FD00;
   --main-white: #f1f1f1;
+  --white-sidebar: #d8cfff;
 
 /* ----------------------------- COR DAS FONTES -----------------------------*/
 

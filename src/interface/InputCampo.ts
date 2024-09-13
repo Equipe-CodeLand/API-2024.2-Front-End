@@ -1,4 +1,4 @@
-export default interface InputField {
+export default interface InputCampo {
     label?: string;
     type: string;
     name: string;
