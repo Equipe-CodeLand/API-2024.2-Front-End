@@ -31,6 +31,8 @@ const Forms: React.FC<FormProps> = ({ titulo, inputs, handleSubmit, handleChange
                                             placeholder={input.placeholder}
                                             onChange={handleChange}
                                             options={input.options}
+                                            height={input.height}
+                                            width={input.width}
                                         />
                                     ) : (
                                         <Input
@@ -40,6 +42,8 @@ const Forms: React.FC<FormProps> = ({ titulo, inputs, handleSubmit, handleChange
                                             name={input.name}
                                             placeholder={input.placeholder}
                                             onChange={handleChange}
+                                            height={input.height}
+                                            width={input.width}
                                         />
                                     )
                                 }

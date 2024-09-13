@@ -22,14 +22,14 @@ const CadastroEstacao: React.FC = () => {
 
     /* Lista dos inputs do forms */
     const inputs: InputCampo[] = [
-        { label: 'Nome', type: 'text', name: 'Nome', placeholder: 'Digite o nome' },
-        { label: 'MAC Address (UID)', type: 'text', name: 'MacAddress', placeholder: 'Digite o MAC Address' },
-        { label: 'Parâmetros', type: 'select', name: 'Parametros', placeholder: 'Selecione um parâmetro', options: parametros },
-        { label: 'CEP', type: 'text', name: 'Cep', placeholder: 'Digite o cep' },
-        { label: 'Rua', type: 'text', name: 'Rua', placeholder: 'Digite a Rua' },
-        { label: 'Número', type: 'number', name: 'Numero', placeholder: 'Digite o número' },
-        { label: 'Bairro', type: 'text', name: 'Bairro', placeholder: 'Digite o bairro' },
-        { label: 'Cidade', type: 'text', name: 'Cidade', placeholder: 'Digite a cidade' }
+        { label: 'Nome', type: 'text', name: 'Nome', placeholder: 'Digite o nome', height: 30, width: 400 },
+        { label: 'MAC Address (UID)', type: 'text', name: 'MacAddress', placeholder: 'Digite o MAC Address', height: 30, width: 400  },
+        { label: 'Parâmetros', type: 'select', name: 'Parametros', placeholder: 'Selecione um parâmetro', options: parametros, height: 30, width: 400  },
+        { label: 'CEP', type: 'text', name: 'Cep', placeholder: 'Digite o cep', height: 30, width: 400  },
+        { label: 'Bairro', type: 'text', name: 'Bairro', placeholder: 'Digite o bairro', height: 30, width: 400  },
+        { label: 'Cidade', type: 'text', name: 'Cidade', placeholder: 'Digite a cidade', height: 30, width: 400  },
+        { label: 'Rua', type: 'text', name: 'Rua', placeholder: 'Digite a Rua', height: 30, width: 400  },
+        { label: 'Número', type: 'number', name: 'Numero', placeholder: 'Digite o número', height: 30, width: 400  }
     ];
 
     useEffect(() => {
