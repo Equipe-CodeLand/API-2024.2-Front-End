@@ -6,8 +6,9 @@
   color: var(--font-black);
   border: 1px solid var(--font-black);
   box-sizing: border-box;
-  width: 90%;
+  width: 80%;
   margin-top: 1.5%;
+  margin-left: 3.5%;
 }
 
 /* CSS REFERENTE A TABELA */
