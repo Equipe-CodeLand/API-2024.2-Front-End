@@ -1,4 +1,4 @@
-.container-tabela { /* css do container principal */
+.container-tabela {
   display: flex;
   justify-content: center;
   border-radius: 15px;
@@ -7,40 +7,38 @@
   border: 1px solid var(--font-black);
   box-sizing: border-box;
   width: 90%;
+  margin-top: 1.5%;
 }
 
 /* CSS REFERENTE A TABELA */
 
 .tabela {
   width: 100%;
-  border-collapse: separate; /* Separa as bordas das células */
-  border-spacing: 0; /* Espaçamento entre as células */
+  border-collapse: separate;
+  border-spacing: 0;
   border-radius: 12px;
-  overflow: hidden; /* Esconde as bordas arredondadas das células */
+  overflow: hidden;
 }
 
-.tabela th, .tabela td { /* Estilização das células */
+.tabela th, .tabela td {
   padding: 10px;
-  border-right: 1px solid var(--font-black); /* Borda direita */
-  border-bottom: 1px solid var(--font-black); /* Borda inferior */
+  border-right: 1px solid var(--font-black);
+  border-bottom: 1px solid var(--font-black);
   text-align: center;
 }
 
-.tabela tbody tr { /* Estilização das linhas */
-  cursor: pointer; /* Muda o cursor ao passar por cima */
+.tabela tbody tr {
+  cursor: pointer;
 }
 
-/* Remove a borda inferior das células da última linha */
 .tabela tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Remove a borda direita das células da última coluna */
 .tabela td:last-child {
   border-right: none;
 }
 
-/* Remove a borda direita da última célula do cabeçalho */
 .tabela thead th:last-child {
   border-right: none;
 }
@@ -50,9 +48,9 @@
   background-color: var(--main-second-purple);
   border-top: 1px solid var(--font-black); 
   border-bottom: 1px solid var(--font-black);
-  border-radius: 0 0 12px 12px; /* Borda arredondada apenas na parte inferior */
+  border-radius: 0 0 12px 12px;
   padding: 10px;
-  transition: all 0.3s ease; /* Animação de transição */
+  transition: all 0.3s ease;
 }
 
 /* Linha separada para o ID */
@@ -69,7 +67,7 @@
 }
 
 /* Estilos para as colunas do dropdown */
-.dropdown-col { 
+.dropdown-col {
   flex: 1;
   padding: 0 10px;
   box-sizing: border-box;
@@ -88,7 +86,7 @@
 }
 
 /* Estilização do botão */
-button {
+button .btnTabela {
   padding: 5px 10px;
   background-color: var(--main-purple);
   border: none;
@@ -98,7 +96,7 @@ button {
   transition: background-color 0.3s;
 }
 
-button:hover {
+button .btnTabela:hover {
   background-color: var(--main-white);
   color: black;
   border: 3px solid var(--main-purple);
