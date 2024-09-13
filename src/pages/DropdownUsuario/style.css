@@ -1,0 +1,37 @@
+.adicionarUsuario {
+    display: flex;
+    justify-content: flex-end ;
+    align-items: flex-end ;
+    width: 100%;
+    margin-right: 15%;
+  }
+  
+  .adicionarUsuario .btn {
+    margin: var(--mg-2);
+  }
+  
+/* Estiliza o contêiner que envolve o status e a bolinha */
+.status-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estiliza a bolinha ao lado do status */
+.status-bullet {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 8px; /* Espaçamento entre a frase e a bolinha */
+}
+
+/* Cor da bolinha para status ativo */
+.status-active {
+  background-color: #00FD00;
+}
+
+/* Cor da bolinha para status inativo */
+.status-inactive {
+  background-color: #FD0000;
+}

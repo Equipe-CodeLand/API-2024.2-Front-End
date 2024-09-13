@@ -1,0 +1,104 @@
+.sidebar {
+  width: 60px;
+  background-color: #5751d3;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Mantém o botão de toggle à esquerda */
+  padding: 10px;
+  position: relative;
+  z-index: 10;
+}
+
+.sidebar.open {
+  width: 220px;
+}
+
+.toggle-btn {
+  background-color: transparent;
+  border: none;
+  width: 40px; /* Ajustar largura */
+  height: 40px; /* Ajustar altura */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.toggle-btn:hover {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+}
+
+
+.toggle-icon {
+  width: 25px; /* Ajustar tamanho do ícone */
+  height: 25px;
+}
+
+.sidebar-logo {
+  height: 45px; /* Reduzir o tamanho do logo */
+  position: absolute;
+  top: 10px;
+  left: 50px; /* Ajustar a posição do logo quando expandido */
+}
+
+.sidebar-nav {
+  flex-grow: 1;
+  padding-top: 60px; /* Garantir que os links fiquem abaixo do botão e logo */
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px; /* Ajustar padding para tornar os botões menores */
+  text-decoration: none;
+  color: #ffffff;
+  transition: background-color 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sidebar-link:hover {
+  background-color: #4e48b9;
+}
+
+.sidebar-link.active {
+  background-color: #2d26ac;
+}
+
+.sidebar .icon {
+  width: 32px;
+  height: 32px;
+}
+
+.sidebar.open .icon {
+  margin-right: 10px;
+}
+
+
+.sidebar:not(.open) .sidebar-link {
+  justify-content: center;
+}
+
+.label {
+  display: none;
+}
+
+.sidebar.open .label {
+  display: inline;
+}

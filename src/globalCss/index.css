@@ -7,7 +7,7 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 body{
-  background-color: var(--main-pink);
+  background-color: var(--white-sidebar);
 }
 :root {
 /* ---------------------------- CORES PRINCIPAIS ----------------------------*/
@@ -15,11 +15,12 @@ body{
   --main-pink: #F2DFF9;
   --main-purple: #6D39A8;
   --main-purple-hover: #7f43c5;
-  --main-second-purple: #DBC6F2;
+  --main-second-purple: #fcf5fd;
   --main-red: #EC1E22;
   --main-yellow: #e2b538;
   --main-green: #00FD00;
   --main-white: #f1f1f1;
+  --white-sidebar: #d8cfff;
 
 /* ----------------------------- COR DAS FONTES -----------------------------*/
 
@@ -64,7 +65,7 @@ sintam-se livres para alterar.
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  padding: var(--pd-8) var(--pd-4);
+  padding: var(--pd-0) var(--pd-4);
 }
 
 /* classe para titulo e subtitulo, pode ser alterado */
@@ -78,8 +79,7 @@ sintam-se livres para alterar.
 /* classe para font do titulo, pode ser alterado */
 .title-text{
   font-size: 1.6rem;
-  color: var(--main-purple-hover);
-  padding-bottom: var(--pd-2);
+  color: var(--font-black);
 }
 
 /* classe para titulos não tão grandes quanto o principal */
@@ -107,17 +107,25 @@ sintam-se livres para alterar.
 }
 
 /* classe geral para os botões, pode ser alterado */
-.btn{
-  background: var(--main-purple);
-  color: var(--font-white);
+.btn {
+  display: flex;
+  background: #5751d3;
+  color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: 100ms ease-in-out;
 }
-.btn:hover{
-  background-color: var(--main-purple-hover);
+
+.btn:hover {
+  transform: scale(1.1);
+}
+
+.btn:puls {
+  background-color: white;
+  color: var(--main-purple);
+  border: 2px solid var(--main-purple);
 }
 
 /* ------------------------------ INPUTS ------------------------------*/

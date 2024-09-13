@@ -1,6 +1,7 @@
-import Form from "./formulario/forms";
-import Command from "./inputs/command";
+import Forms from "./formulario/forms";
 import Input from "./inputs/input";
 import Navbar from "./navbar/navbar";
+import InputComando from "./inputs/input-comando";
 
-export { Command, Navbar, Input, Form }
+
+export { InputComando, Navbar, Input, Forms }
