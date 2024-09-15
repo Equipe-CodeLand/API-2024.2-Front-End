@@ -4,13 +4,13 @@ export const validateEmail = (email: string) => {
 };
 
 export const validateCpf = (cpf: string) => {
-  const re = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+  const re = /^\d{11}$/;  
   return re.test(cpf);
 };
 
 export const formatCpf = (cpf: string) => {
-  cpf = cpf.replace(/\D/g, '');
-  if (cpf.length <= 11) {
+  cpf = cpf.replace(/\D/g, '');  
+  if (cpf.length === 11) {
     cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
     cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
     cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');

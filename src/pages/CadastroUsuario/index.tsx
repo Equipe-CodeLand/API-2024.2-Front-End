@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { formatCpf, validateCpf, validateEmail } from '../../utils/formatters';
+import axios from 'axios';
 import './style.css'
 
 const CadastroUsuario: React.FC = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [senha, setSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -15,12 +16,12 @@ const CadastroUsuario: React.FC = () => {
     if (successMessage) {
       const timer = setTimeout(() => {
         setSuccessMessage('');
-      }, 3000); 
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formErrors: { [key: string]: string } = {};
     setSuccessMessage('');
@@ -38,33 +39,49 @@ const CadastroUsuario: React.FC = () => {
     }
 
     // validação de cpf
+    const cpfUnformatted = cpf.replace(/\D/g, '');
     if (!cpf) {
       formErrors.cpf = 'CPF é obrigatório';
-    } else if (!validateCpf(cpf)) {
+    } else if (!validateCpf(cpfUnformatted)) {
       formErrors.cpf = 'CPF inválido';
     }
 
     // validação de senha
-    if (!password) {
-      formErrors.password = 'Senha é obrigatória';
+    if (!senha) {
+      formErrors.senha = 'Senha é obrigatória';
     }
 
     // confirmar a senha
-    if (!confirmPassword) {
-      formErrors.confirmPassword = 'Confirmação de senha é obrigatória';
-    } else if (password !== confirmPassword) {
-      formErrors.confirmPassword = 'As senhas não coincidem';
+    if (!confirmarSenha) {
+      formErrors.confirmarSenha = 'Confirmação de senha é obrigatória';
+    } else if (senha !== confirmarSenha) {
+      formErrors.confirmarSenha = 'As senhas não coincidem';
     }
 
     setErrors(formErrors);
     if (Object.keys(formErrors).length === 0) {
-      console.log('Formulário enviado', { nome, email, cpf, password });
-      setSuccessMessage('Cadastro realizado com sucesso!');
-      setNome('')
-      setEmail('')
-      setCpf('')
-      setPassword('')
-      setConfirmPassword('')
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/usuario/cadastro`, {
+          nome,
+          email,
+          senha,
+          cpf
+        });
+
+        if (response.data.success) {
+          setSuccessMessage('Cadastro realizado com sucesso!');
+          setNome('');
+          setEmail('');
+          setCpf('');
+          setSenha('');
+          setConfirmarSenha('');
+        } else {
+          setErrors({ ...errors, form: response.data.message });
+        }
+      } catch (error) {
+        console.error('Erro ao cadastrar usuário:', error);
+        setErrors({ ...errors, form: 'Erro ao cadastrar usuário' });
+      }
     }
   };
 
@@ -115,10 +132,10 @@ const CadastroUsuario: React.FC = () => {
                 id="cpf"
                 name="cpf"
                 className='input-full-size'
-                value={cpf}
+                value={formatCpf(cpf)}
                 maxLength={14}
                 onChange={(e) => {
-                  setCpf(formatCpf(e.target.value));
+                  setCpf(e.target.value);
                   setErrors({ ...errors, cpf: '' });
                 }}
               />
@@ -127,34 +144,34 @@ const CadastroUsuario: React.FC = () => {
           </div>
           <div className="signin-item-row">
             <div className="signin-row">
-              <label htmlFor="password">Digite a nova senha:</label>
+              <label htmlFor="senha">Digite a nova senha:</label>
               <input
                 type="password"
-                id="password"
-                name="password"
+                id="senha"
+                name="senha"
                 className='input-full-size'
-                value={password}
+                value={senha}
                 onChange={(e) => {
-                  setPassword(e.target.value);
-                  setErrors({ ...errors, password: '' });
+                  setSenha(e.target.value);
+                  setErrors({ ...errors, senha: '' });
                 }}
               />
-              {errors.password && <span className="error">{errors.password}</span>}
+              {errors.senha && <span className="error">{errors.senha}</span>}
             </div>
             <div className="signin-row">
-              <label htmlFor="confirm-password">Confirmar senha:</label>
+              <label htmlFor="confirm-senha">Confirmar senha:</label>
               <input
                 type="password"
-                id="confirm-password"
-                name="confirm-password"
+                id="confirm-senha"
+                name="confirm-senha"
                 className='input-full-size'
-                value={confirmPassword}
+                value={confirmarSenha}
                 onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  setErrors({ ...errors, confirmPassword: '' });
+                  setConfirmarSenha(e.target.value);
+                  setErrors({ ...errors, confirmarSenha: '' });
                 }}
               />
-              {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
+              {errors.confirmarSenha && <span className="error">{errors.confirmarSenha}</span>}
             </div>
           </div>
           <div className="signin-item last">
