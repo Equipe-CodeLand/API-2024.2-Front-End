@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../../components/navbar/navbar'
 import { Sidebar } from '../../components/sidebar/sidebar'
 import WarningIcon from '@mui/icons-material/Warning';
 import './style.css'
@@ -9,7 +8,7 @@ const Notificacoes: React.FC = () => {
     <div className='container'>
       {/* <Navbar /> */}
       <Sidebar />
-      <div style={{ marginLeft: '60px' }}>
+      <div>
         <div className="title-box">
           <h2 className='title-text'>Notificações</h2>
           <p className='text'>Fique atualizado quanto as notificações existentes.</p>

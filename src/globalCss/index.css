@@ -13,7 +13,7 @@ body{
 /* ---------------------------- CORES PRINCIPAIS ----------------------------*/
 
   --main-pink: #F2DFF9;
-  --main-purple: #6D39A8;
+  --main-purple: #5751d3;
   --main-purple-hover: #7f43c5;
   --main-second-purple: #fcf5fd;
   --main-red: #EC1E22;
@@ -59,6 +59,7 @@ sintam-se livres para alterar.
 /* classe para ser usada globalmente envolvendo as paginas, pode ser alterada */
 .container{
   margin-top: var(--mg-12);
+  margin-left: 60px;
 }
 .container .content{
   display: flex;
