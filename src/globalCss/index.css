@@ -139,17 +139,20 @@ com display:flex e use o gap para dar espaço entre eles.
   width: 100%;
   padding: 6px 8px;
   border-radius: 8px;
+  border: none;
 }
 /* classe para 1/2 input, dois por linha, pode ser alterado */
 .input-half-size{
   width: 50%;
   padding: 6px 8px;
   border-radius: 8px;
+  border: none;
 }
 /* classe para 1/4 input, quatro por linha, pode ser alterado */
 .input-quarter-size{
   width: 25%;
   padding: 6px 8px;
   border-radius: 8px;
+  border: none;
 }
 
