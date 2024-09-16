@@ -3,7 +3,7 @@ import "./input-comando.css";
 import "./input.css";
 import InputField from '../../interface/InputCampo';
 
-const InputComando: React.FC<InputField> = ({ label, placeholder, options }) => {
+const InputComando: React.FC<InputField> = ({ label, placeholder, options, width, height }) => {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
@@ -37,11 +37,21 @@ const InputComando: React.FC<InputField> = ({ label, placeholder, options }) => 
 
       <input
         type="text"
-        className="input"
         placeholder={placeholder}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onClick={() => setIsOpen(true)}
+        style={{
+          backgroundColor: '#ffffff',
+          width: width,
+          height: height,
+          borderRadius: 10,
+          padding: 1,
+          margin: 3,
+          border: "#00000 1px solid",
+          gap: 5
+      }
+        }
       />
 
       {/* Mostra todas as opções dentro da pesquisa do usuário */}
@@ -50,13 +60,21 @@ const InputComando: React.FC<InputField> = ({ label, placeholder, options }) => 
           {filteredOptions?.map((option, index) => (
             <p
               key={index}
-              className={`option ${selectedOptions.includes(option) ? 'selected' : ''}`}
+              style={{
+                backgroundColor: '#ffffff',
+                width: width,
+                height: height,
+                borderRadius: 10,
+                padding: 1,
+                border: "1px solid #000"
+              }}
               onClick={() => handleSelect(option)}
             >
               {option}
             </p>
           ))}
         </div>
+
       )}
 
       {/* Mostra as opções selecionadas como tags */}
@@ -64,7 +82,7 @@ const InputComando: React.FC<InputField> = ({ label, placeholder, options }) => 
         {selectedOptions.map((option, index) => (
           <span key={index} className="selected-option">
             <b> {option} </b>
-            <button onClick={() => handleRemoveSelected(option)}><b> x </b></button>
+            <button type='button' onClick={() => handleRemoveSelected(option)}><b> x </b></button>
           </span>
         ))}
       </div>
