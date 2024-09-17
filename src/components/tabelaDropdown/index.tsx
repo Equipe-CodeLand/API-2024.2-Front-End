@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './style.css';
 
 interface TableProps<T> {
@@ -12,12 +12,16 @@ interface TableProps<T> {
   dropdownContent: (item: T) => { idRow: JSX.Element; col1: JSX.Element; col2: JSX.Element; extra?: JSX.Element[] };
 }
 
+
 const TabelaGenerica = <T,>({ data, columns, dropdownContent }: TableProps<T>): JSX.Element => {
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
   const handleRowClick = (itemId: number) => {
     setSelectedItemId((prevId) => (prevId === itemId ? null : itemId));
   };
+
+  // Transformar data em um array vazio se não for um array
+  const validData = Array.isArray(data) ? data : [];
 
   return (
     <div className='container-tabela'>
@@ -30,9 +34,9 @@ const TabelaGenerica = <T,>({ data, columns, dropdownContent }: TableProps<T>): 
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
-            <>
-              <tr key={index} onClick={() => handleRowClick(index)}>
+          {validData.map((item, index) => (
+            <React.Fragment key={index}>
+              <tr onClick={() => handleRowClick(index)}>
                 {columns.map((column) => (
                   <td key={String(column.key)}>
                     {column.renderCell ? column.renderCell(item[column.key]) : String(item[column.key])}
@@ -67,7 +71,7 @@ const TabelaGenerica = <T,>({ data, columns, dropdownContent }: TableProps<T>): 
                   </td>
                 </tr>
               )}
-            </>
+            </React.Fragment>
           ))}
         </tbody>
       </table>

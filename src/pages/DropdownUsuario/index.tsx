@@ -1,34 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import TabelaGenerica from '../../components/tabelaDropdown'; 
 import { Sidebar } from '../../components/sidebar/sidebar';
-// import { Navbar } from '../../components';
-import { Usuario } from '../../interface/usuario';
+import { Perfil, Usuario } from '../../interface/usuario';
 import './style.css';
 
-// Dados de exemplo
-const usuarios: Usuario[] = [
-  { id: 1, nome: 'Pedro Henrique de Souza', tipo: 'Administrador', status: 'Ativo', email: 'pedro@gmail.com', cpf: '123.456.789/10' },
-  { id: 2, nome: 'Letícia Helena', tipo: 'Visualizador', status: 'Inativo', email: 'leticia@gmail.com', cpf: '234.567.890/11' },
-];
+// Interface para o dado do backend
+interface UsuarioBackend {
+  id: number;
+  nome: string;
+  email: string;
+  senha: string;
+  cpf: string;
+  perfil: string; // Vem como string do backend, depois mapeamos para o enum Perfil
+  criadoEm: string;
+  atualizadoEm: string;
+}
 
-// Função para renderizar o status com bolinha colorida
-const renderStatus = (status: string | number) => {
-  const statusClasses: { [key: string]: string } = {
-    Ativo: 'status-active',
-    Inativo: 'status-inactive',
-  };
-
-  const statusClass = statusClasses[status as string] || '';
-
-  return (
-    <span className='status-container'>
-      {status}
-      <span className={`status-bullet ${statusClass}`}></span>
-    </span>
-  );
+const PerfilLabel: { [key in Perfil]: string } = {
+  [Perfil.Admin]: 'Administrador',
+  [Perfil.Leitor]: 'Leitor'
 };
 
-// Função para gerar o conteúdo em duas colunas + o extra no dropdown
 const dropdownContent = (usuario: Usuario) => ({
   idRow: (
     <div>
@@ -55,6 +48,36 @@ const dropdownContent = (usuario: Usuario) => ({
 });
 
 const UsuarioTable: React.FC = () => {
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]); // Estado para armazenar os usuários
+  const [loading, setLoading] = useState<boolean>(true); // Estado de loading
+
+  useEffect(() => {
+    // Função para buscar usuários do backend
+    const fetchUsuarios = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/usuarios'); // Substitua pela sua URL do backend
+        
+        // Mapeia os dados recebidos do backend para o formato correto
+        const usuariosData = response.data.map((user: UsuarioBackend): Usuario => ({
+          id: user.id,
+          nome: user.nome,
+          email: user.email,
+          cpf: user.cpf,
+          status: 'Ativo', // ou ajuste conforme necessário
+          tipo: user.perfil as Perfil // Mapeia o perfil para o enum `Perfil`
+        }));
+
+        setUsuarios(usuariosData); // Armazena os dados recebidos
+      } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
+      } finally {
+        setLoading(false); // Finaliza o loading após a resposta
+      }
+    };
+
+    fetchUsuarios();
+  }, []);
+
   // Define a type for the columns that includes the optional renderCell property
   type Column<T> = {
     label: string;
@@ -66,13 +89,18 @@ const UsuarioTable: React.FC = () => {
   const columns: Array<Column<Usuario>> = [
     { label: 'ID', key: 'id' },
     { label: 'Nome', key: 'nome' },
-    { label: 'Tipo', key: 'tipo' },
     { 
-      label: 'Status', 
-      key: 'status',
-      renderCell: renderStatus // Passa a função de renderização personalizada
-    },
+      label: 'Tipo', 
+      key: 'tipo', 
+      renderCell: (value: string | number) => {
+        return <span>{PerfilLabel[value as Perfil] || 'Desconhecido'}</span>;
+      } // Renderiza o valor do enum
+    }
   ];
+
+  if (loading) {
+    return <div>Carregando...</div>; // Mostra uma mensagem enquanto os dados estão sendo carregados
+  }
 
   return (
     <div className="container">
@@ -93,7 +121,7 @@ const UsuarioTable: React.FC = () => {
               <p><strong>ID:</strong> {usuario.id}</p>
               <p><strong>Nome:</strong> {usuario.nome}</p>
               <p><strong>Email:</strong> {usuario.email}</p>
-              <p><strong>Tipo:</strong> {usuario.tipo}</p>
+              <p><strong>Tipo:</strong> {PerfilLabel[usuario.tipo]}</p>
               <p><strong>CPF:</strong> {usuario.cpf}</p>
             </div>
           )}
