@@ -17,3 +17,11 @@ export const formatCpf = (cpf: string) => {
   }
   return cpf;
 };
+
+export const formatCep = (cep: string) => {
+  cep = cep.replace(/\D/g, '');
+  if (cep.length === 8) {
+    cep = cep.replace(/(\d{5})(\d)/, '$1-$2');
+  }
+  return cep;
+};

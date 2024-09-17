@@ -133,7 +133,7 @@ const CadastroUsuario: React.FC = () => {
                 name="cpf"
                 className='input-full-size'
                 value={formatCpf(cpf)}
-                maxLength={14}
+                maxLength={11}
                 onChange={(e) => {
                   setCpf(e.target.value);
                   setErrors({ ...errors, cpf: '' });

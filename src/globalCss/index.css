@@ -59,6 +59,7 @@ sintam-se livres para alterar.
 /* classe para ser usada globalmente envolvendo as paginas, pode ser alterada */
 .container{
   margin-top: var(--mg-12);
+  margin-left: 60px;
 }
 .container .content{
   display: flex;

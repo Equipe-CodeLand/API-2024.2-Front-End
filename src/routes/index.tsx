@@ -6,6 +6,7 @@ import Notificacoes from "../pages/Notificações";
 import '../globalCss/index.css'
 import Home from "../pages/Home/home";
 import CadastroUsuario from "../pages/CadastroUsuario";
+import CadastroParametros from "../pages/CadastroParametros";
 
 export default function Rotas() {
     return(
@@ -17,6 +18,7 @@ export default function Rotas() {
                 <Route path='/dropdown-exemplo' element={<DropdownExample />} />
                 <Route path='/usuarios' element={<DropdownUsuario />} />
                 <Route path='/cadastro/usuario' element={<CadastroUsuario />} />
+                <Route path='/parametros/cadastro' element={<CadastroParametros />} />
             </Routes>
         </BrowserRouter>
     )
