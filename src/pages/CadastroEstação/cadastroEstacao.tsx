@@ -26,15 +26,7 @@ const CadastroEstacao: React.FC = () => {
             return () => clearTimeout(timer);
         }
     }, [successMessage]);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setErrors({});
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, [errors]);
-
+    
     const handleSelectParametro = (parametro: string) => {
         if (!selectedParametros.includes(parametro)) {
             setSelectedParametros([...selectedParametros, parametro]);

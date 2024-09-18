@@ -33,14 +33,17 @@
 }
 
 .error {
-  background: #ffe57b;
-  padding: var(--pd-2);
+  background: transparent;
+  /* padding: var(--pd-1); */
+  color: red;
+  font-weight: 700;
 }
 
 .success-message {
-  background: #5eff00;
+  background: #39ff1f;
   padding: var(--pd-2);
   width: 100%;
+  font-weight: 600;
 }
 
 .btn {
@@ -51,4 +54,8 @@
 .signin-item-last {
   display: flex; 
   justify-content: center; 
+}
+
+.signin-row {
+  font-weight: 600;
 }

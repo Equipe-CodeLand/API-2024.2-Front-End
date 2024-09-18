@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { formatCpf, validateCpf, validateEmail } from '../../utils/formatters';
 import axios from 'axios';
 import './style.css';
-import { Sidebar } from '../../components/sidebar/sidebar'; // Importar o componente Sidebar
+import { Sidebar } from '../../components/sidebar/sidebar'; 
+import { Usuario } from '../../interface/usuario'; 
 
 const CadastroUsuario: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -22,6 +23,18 @@ const CadastroUsuario: React.FC = () => {
     }
   }, [successMessage]);
 
+  const checkExistingEmail = async (email: string) => {
+    const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
+    const usuarios = response.data;
+    return usuarios.some((usuario) => usuario.email === email);
+  };
+
+  const checkExistingCpf = async (cpf: string) => {
+    const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
+    const usuarios = response.data;
+    return usuarios.some((usuario) => usuario.cpf === cpf);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formErrors: { [key: string]: string } = {};
@@ -37,6 +50,8 @@ const CadastroUsuario: React.FC = () => {
       formErrors.email = 'Email é obrigatório';
     } else if (!validateEmail(email)) {
       formErrors.email = 'Email inválido';
+    } else if (await checkExistingEmail(email)) {
+      formErrors.email = 'Email já cadastrado';
     }
 
     // validação de cpf
@@ -45,6 +60,8 @@ const CadastroUsuario: React.FC = () => {
       formErrors.cpf = 'CPF é obrigatório';
     } else if (!validateCpf(cpfUnformatted)) {
       formErrors.cpf = 'CPF inválido';
+    } else if (await checkExistingCpf(cpfUnformatted)) {
+      formErrors.cpf = 'CPF já cadastrado';
     }
 
     // validação de senha
