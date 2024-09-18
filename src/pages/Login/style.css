@@ -1,0 +1,59 @@
+/* Estilos para a página de login */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--white-sidebar);
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 300px;
+  }
+  
+  .login-logo {
+    width: 300px;
+    margin-bottom: var(--mg-4);
+  }
+  
+  .login-label {
+    margin-bottom: var(--mg-1);
+    font-size: 1rem;
+    color: var(--font-black);
+  }
+  
+  .login-input {
+    width: 100%;
+    padding: var(--pd-4);
+    margin-bottom: var(--mg-4);
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: var(--pd-4);
+    background-color: var(--main-purple);
+    color: var(--font-white);
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: var(--mg-4);
+  }
+  
+  .login-links {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .login-link {
+    color: #0000EE;
+    text-decoration: none;
+    display: block;
+    margin: var(--mg-1) 0;
+  }
+  
