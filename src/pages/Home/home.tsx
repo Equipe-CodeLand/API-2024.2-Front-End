@@ -8,7 +8,7 @@ const Home: React.FC = () => {
     <div className="container">
       {/* <Navbar /> */}
       <Sidebar />
-      <div style={{ marginLeft: '60px' }}> 
+      <div> 
         <div className="title-box">
           <h2 className="title-text">Default Page</h2>
           <p className="text">Essa é uma tela default.</p>

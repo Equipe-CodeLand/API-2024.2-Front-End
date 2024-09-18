@@ -2,7 +2,7 @@ import React from 'react';
 import "./input.css"
 import InputField from '../../interface/InputCampo';
 
-const Input: React.FC<InputField> = ({ label, type, name, value, placeholder, onChange }) => {
+const Input: React.FC<InputField> = ({ label, type, name, value, placeholder, onChange, width, height}) => {
     return (
         <div>
             {label && (
@@ -19,7 +19,15 @@ const Input: React.FC<InputField> = ({ label, type, name, value, placeholder, on
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
-                className="input"
+                style={{ 
+                    backgroundColor: '#ffffff',
+                    width: width,
+                    height: height,
+                    borderRadius: 10,
+                    padding: 1,
+                    margin: 3,
+                    border: "#00000 1px solid"
+                }}
             />
         </div>
     );
