@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { formatCpf, validateCpf, validateEmail } from '../../utils/formatters';
 import axios from 'axios';
-import './style.css'
+import './style.css';
+import { Sidebar } from '../../components/sidebar/sidebar'; // Importar o componente Sidebar
 
 const CadastroUsuario: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -87,9 +88,10 @@ const CadastroUsuario: React.FC = () => {
 
   return (
     <div className='container'>
+      <Sidebar /> 
       <div className="content">
         <div className="title-box">
-          <h2 className="title-text">Cadastro</h2>
+          <h2 className="title-text">Cadastro de Usuários</h2>
         </div>
         <form className="signin-container" onSubmit={handleSubmit}>
           <div className="signin-item">
@@ -174,7 +176,7 @@ const CadastroUsuario: React.FC = () => {
               {errors.confirmarSenha && <span className="error">{errors.confirmarSenha}</span>}
             </div>
           </div>
-          <div className="signin-item last">
+          <div className="signin-item-last"> 
             <div className="signin-row">
               <input type="submit" className='btn' value="Cadastrar" />
             </div>
@@ -186,4 +188,4 @@ const CadastroUsuario: React.FC = () => {
   )
 }
 
-export default CadastroUsuario
+export default CadastroUsuario;

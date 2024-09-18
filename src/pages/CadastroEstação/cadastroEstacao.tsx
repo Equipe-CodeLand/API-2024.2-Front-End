@@ -121,7 +121,7 @@ const CadastroEstacao: React.FC = () => {
             <Sidebar />
             <div className='container'>
                     <div className="title-box">
-                        <h2 className="title-text">Cadastro de Estação</h2>
+                        <h2 className="title-text">Cadastro de Estações</h2>
                     </div>
                 <div className="content">
 
