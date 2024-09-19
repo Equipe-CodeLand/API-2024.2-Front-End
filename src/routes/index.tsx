@@ -8,6 +8,8 @@ import Home from "../pages/Home/home";
 import AprendaMais from "../pages/AprendaMais/aprendaMais";
 import CadastroUsuario from "../pages/CadastroUsuario";
 import CadastroParametro from "../pages/CadastroParametro";
+import ParametrosEstação from "../pages/ParametrosEstacao";
+
 
 export default function Rotas() {
     return(
@@ -16,6 +18,7 @@ export default function Rotas() {
                 <Route path='/' element={<Home />} />
                 <Route path='/notificacoes' element={<Notificacoes />} />
                 <Route path='/estacao/cadastro' element={<CadastroEstacao />} />
+                <Route path='/estacao/parametros' element={<ParametrosEstação />} />
                 <Route path='/dropdown-exemplo' element={<DropdownExample />} />
                 <Route path='/usuarios' element={<DropdownUsuario />} />
                 <Route path='/aprenda-mais' element={<AprendaMais />} />

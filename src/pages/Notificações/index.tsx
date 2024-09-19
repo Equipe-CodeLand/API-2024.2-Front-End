@@ -8,7 +8,7 @@ const Notificacoes: React.FC = () => {
     <div className='container'>
       {/* <Navbar /> */}
       <Sidebar />
-      <div >
+      <div>
         <div className="title-box">
           <h2 className='title-text'>Notificações</h2>
           <p className='text'>Fique atualizado quanto as notificações existentes.</p>

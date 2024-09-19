@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from '../../components/navbar/navbar';
+import {Sidebar} from '../../components/sidebar/sidebar';
 import './style.css'
 import Grafico from '../../components/grafico';
 
@@ -32,7 +32,7 @@ const ParametrosEstação: React.FC = () => {
 
   return (
     <div className='container'>
-      <Navbar />
+      <Sidebar />
       {stations.map((stations, index) => (
         <div key={index} className="station">
           <div className="title-box">
