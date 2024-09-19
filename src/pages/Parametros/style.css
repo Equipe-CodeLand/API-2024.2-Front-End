@@ -5,3 +5,19 @@
   flex-direction: column;
   gap: 12px;
 }
+
+.adicionarParametro{
+  width: 50%;
+  margin-top: 12px;
+  padding: var(--pd-4);
+  /* margin-left: 50%; */
+  margin-left: auto;
+}
+
+@media screen and (max-width: 768px){
+
+  .adicionarParametro{
+    width: 100%;
+  }
+  
+}

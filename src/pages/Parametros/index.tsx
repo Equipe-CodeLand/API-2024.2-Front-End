@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Sidebar } from '../../components/sidebar/sidebar';
+import { Link } from 'react-router-dom'; 
 import ParametroCard, { Parametro } from '../../components/parametro-card';
 import './style.css';
 
@@ -43,6 +44,9 @@ const Parametros: React.FC = () => {
       <div className="title-box">
         <h2 className='title-text'>Parâmetros</h2>
         <p className='text'>Aqui você pode ver todos os parâmetros!</p>
+      </div>
+      <div className='adicionarParametro'>
+        <Link to="/parametro/cadastro" className='btn'>Adicionar parâmetro</Link>
       </div>
       <div className="content">
         {error && <p className='error-text'>{error}</p>}
