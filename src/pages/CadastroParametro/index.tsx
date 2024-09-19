@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/sidebar/sidebar';
+import axios from 'axios';
 import './style.css';
+// import { Parametro } from '../../interface/parametro';
 
 const CadastroParametros: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -9,7 +11,6 @@ const CadastroParametros: React.FC = () => {
   const [offset, setOffset] = useState('');
   const [unidade, setUnidade] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
@@ -21,7 +22,7 @@ const CadastroParametros: React.FC = () => {
     }
   }, [successMessage]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formErrors: { [key: string]: string } = {};
 
@@ -37,12 +38,12 @@ const CadastroParametros: React.FC = () => {
 
     // Validação do fator
     if (!fator || isNaN(Number(fator))) {
-      formErrors.fator = 'Fator é obrigatório';
+      formErrors.fator = 'Fator é obrigatório e deve ser numérico';
     }
 
     // Validação do offset
     if (!offset || isNaN(Number(offset))) {
-      formErrors.offset = 'Offset é obrigatório';
+      formErrors.offset = 'Offset é obrigatório e deve ser numérico';
     }
 
     // Validação da unidade
@@ -53,15 +54,30 @@ const CadastroParametros: React.FC = () => {
     setErrors(formErrors);
 
     if (Object.keys(formErrors).length === 0) {
-      // Aqui você pode enviar os dados para o servidor
-      console.log('Formulário enviado com sucesso:', { nome, descricao, fator, offset, unidade });
-      setSuccessMessage('Cadastro realizado com sucesso!');
-      // Resetar o formulário após envio bem-sucedido (opcional)
-      setNome('');
-      setDescricao('');
-      setFator('');
-      setOffset('');
-      setUnidade('');
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/parametro/cadastro`, {
+          nome,
+          descricao,
+          fator,
+          offset,
+          unidade
+        });
+
+        if (response.data.success) {
+          setSuccessMessage('Cadastro realizado com sucesso!');
+          // Resetar o formulário após envio bem-sucedido
+          setNome('');
+          setDescricao('');
+          setFator('');
+          setOffset('');
+          setUnidade('');
+        } else {
+          setErrors({ form: response.data.message });
+        }
+      } catch (error) {
+        console.error('Erro ao cadastrar parâmetro:', error);
+        setErrors({ form: 'Erro ao cadastrar parâmetro' });
+      }
     }
   };
 
@@ -74,7 +90,6 @@ const CadastroParametros: React.FC = () => {
         </div>
         <div className="content">
           <form className="signin-container" onSubmit={handleSubmit}>
-
             <div className="signin-item-row">
               <div className="signin-row">
                 <label htmlFor="nome">Nome:</label>
@@ -82,7 +97,7 @@ const CadastroParametros: React.FC = () => {
                   type="text"
                   id="nome"
                   name="nome"
-                  className='input-full-size'
+                  className="input-full-size"
                   value={nome}
                   onChange={(e) => {
                     setNome(e.target.value);
@@ -99,7 +114,7 @@ const CadastroParametros: React.FC = () => {
                 <textarea
                   id="descricao"
                   name="descricao"
-                  className='input-full-size'
+                  className="input-full-size"
                   value={descricao}
                   onChange={(e) => {
                     setDescricao(e.target.value);
@@ -117,7 +132,7 @@ const CadastroParametros: React.FC = () => {
                   type="text"
                   id="fator"
                   name="fator"
-                  className='input-full-size'
+                  className="input-full-size"
                   value={fator}
                   onChange={(e) => {
                     setFator(e.target.value);
@@ -132,7 +147,7 @@ const CadastroParametros: React.FC = () => {
                   type="text"
                   id="offset"
                   name="offset"
-                  className='input-full-size'
+                  className="input-full-size"
                   value={offset}
                   onChange={(e) => {
                     setOffset(e.target.value);
@@ -147,7 +162,7 @@ const CadastroParametros: React.FC = () => {
                   type="text"
                   id="unidade"
                   name="unidade"
-                  className='input-full-size'
+                  className="input-full-size"
                   value={unidade}
                   onChange={(e) => {
                     setUnidade(e.target.value);
@@ -157,15 +172,17 @@ const CadastroParametros: React.FC = () => {
                 {errors.unidade && <span className="error">{errors.unidade}</span>}
               </div>
             </div>
+
             <div className="signin-row-submit">
-              <input type="submit" className='btn' value="Cadastrar" />
+              <input type="submit" className="btn" value="Cadastrar" />
             </div>
+
             {successMessage && <div className="success-message">{successMessage}</div>}
           </form>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default CadastroParametros;
