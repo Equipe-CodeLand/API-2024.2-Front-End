@@ -1,0 +1,61 @@
+.signin-container {
+  width: 100%;
+  max-width: 700px;
+  min-width: 400px;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.signin-container .signin-item-row {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+}
+
+.signin-container .signin-item-row .signin-row {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signin-container .signin-item .signin-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.signin-container .signin-item.last {
+  margin-top: var(--mg-4);
+}
+
+.error {
+  background: transparent;
+  /* padding: var(--pd-1); */
+  color: red;
+  font-weight: 700;
+}
+
+.success-message {
+  background: #39ff1f;
+  padding: var(--pd-2);
+  width: 100%;
+  font-weight: 600;
+}
+
+.btn {
+  width: fit-content;
+  margin: 0 auto; 
+}
+
+.signin-item-last {
+  display: flex; 
+  justify-content: center; 
+}
+
+.signin-row {
+  font-weight: 600;
+}

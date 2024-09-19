@@ -4,6 +4,9 @@ import DropdownUsuario from "../pages/DropdownUsuario";
 import Notificacoes from "../pages/Notificações";
 import '../globalCss/index.css'
 import Home from "../pages/Home/home";
+import AprendaMais from "../pages/AprendaMais/aprendaMais";
+import CadastroUsuario from "../pages/CadastroUsuario";
+import CadastroParametro from "../pages/CadastroParametro";
 import Alertas from "../pages/Alertas";
 
 export default function Rotas() {
@@ -14,7 +17,10 @@ export default function Rotas() {
                 <Route path='/notificacoes' element={<Notificacoes />} />
                 <Route path='/estacao/cadastro' element={<CadastroEstacao />} />
                 <Route path='/usuarios' element={<DropdownUsuario />} />
-                <Route path='/alertas' element={<Alertas />} />
+                <Route path='/aprenda-mais' element={<AprendaMais />} />
+                <Route path='/usuario/cadastro' element={<CadastroUsuario />} />
+                <Route path='/parametro/cadastro' element={<CadastroParametro />} />
+                <Route path='/alertas' element={<Alertas/>}/>
             </Routes>
         </BrowserRouter>
     )

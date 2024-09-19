@@ -59,13 +59,14 @@ sintam-se livres para alterar.
 /* classe para ser usada globalmente envolvendo as paginas, pode ser alterada */
 .container{
   margin-top: var(--mg-12);
+  margin-left: 60px;
 }
 .container .content{
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  padding: var(--pd-8) var(--pd-4);
+  padding: var(--pd-0) var(--pd-4);
 }
 
 /* classe para titulo e subtitulo, pode ser alterado */
@@ -79,8 +80,7 @@ sintam-se livres para alterar.
 /* classe para font do titulo, pode ser alterado */
 .title-text{
   font-size: 1.6rem;
-  color: var(--main-purple-hover);
-  padding-bottom: var(--pd-2);
+  color: var(--font-black);
 }
 
 /* classe para titulos não tão grandes quanto o principal */
@@ -108,17 +108,25 @@ sintam-se livres para alterar.
 }
 
 /* classe geral para os botões, pode ser alterado */
-.btn{
-  background: var(--main-purple);
-  color: var(--font-white);
+.btn {
+  display: flex;
+  background: #5751d3;
+  color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: 100ms ease-in-out;
 }
-.btn:hover{
-  background-color: var(--main-purple-hover);
+
+.btn:hover {
+  transform: scale(1.1);
+}
+
+.btn:puls {
+  background-color: white;
+  color: var(--main-purple);
+  border: 2px solid var(--main-purple);
 }
 
 /* ------------------------------ INPUTS ------------------------------*/
@@ -132,17 +140,20 @@ com display:flex e use o gap para dar espaço entre eles.
   width: 100%;
   padding: 6px 8px;
   border-radius: 8px;
+  border: none;
 }
 /* classe para 1/2 input, dois por linha, pode ser alterado */
 .input-half-size{
   width: 50%;
   padding: 6px 8px;
   border-radius: 8px;
+  border: none;
 }
 /* classe para 1/4 input, quatro por linha, pode ser alterado */
 .input-quarter-size{
   width: 25%;
   padding: 6px 8px;
   border-radius: 8px;
+  border: none;
 }
 

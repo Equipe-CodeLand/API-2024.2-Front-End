@@ -1,0 +1,13 @@
+.grafico-container {
+  width: 100%;
+  height: 300px;
+  /* Ajuste a altura conforme necessário */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Opcional, para centralizar o conteúdo */
+}
+
+.small-title-text {
+  margin-bottom: 10px;
+}
