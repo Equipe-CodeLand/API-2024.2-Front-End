@@ -1,5 +1,5 @@
 .parameter-container{
-  width: 100%;
+  width: 80%;
   padding: var(--pd-4);
   display: flex;
   flex-direction: column;

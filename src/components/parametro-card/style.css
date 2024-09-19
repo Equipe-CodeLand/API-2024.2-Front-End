@@ -38,10 +38,12 @@
 }
 .inside-box .information-box-row .information-box-item{
   display: flex;
+  flex-direction: column;
   width: 50%;
 }
 .inside-box .information-box-row .information-box-desc{
   display: flex;
+  flex-direction: column;
   width: 100%;
 }
 .inside-box .information-box-row .information-box-item h4, .information-box-desc h4{
@@ -51,6 +53,46 @@
   display: flex;
   justify-content: end;
   gap: 20px;
+}
+
+.edit-form {
+  background: var(--main-white);
+  border-radius: 18px;
+  padding: var(--pd-4);
+  border: 1px solid var(--main-purple);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  padding: var(--pd-2);
+  border: 0;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.edit-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--main-purple);
+  font-weight: bold;
+}
+
+.edit-form .box-btn {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.edit-form .btn {
+  padding: var(--pd-2) var(--pd-4);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: var(--main-purple);
+  color: var(--main-white);
+  font-size: 1rem;
 }
 
 @media(max-width:553px) {
