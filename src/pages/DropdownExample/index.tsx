@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Navbar } from '../../components'; 
 import { Sidebar } from '../../components/sidebar/sidebar';
 import Dropdown from '../../components/dropdown';
 
@@ -31,7 +30,7 @@ const DropdownExample: React.FC = () => {
     <div className='container'>
       {/* <Navbar /> */}
       <Sidebar />
-      <div style={{ marginLeft: '60px' }}>
+      <div>
         <div className="title-box">
           <h2 className='title-text'>Exemplo Implementado</h2>
           <p className='text'>pode apagar depois essa pagina quando for integrar o backend</p>

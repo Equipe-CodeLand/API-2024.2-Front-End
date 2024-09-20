@@ -1,7 +1,7 @@
 import React from 'react';
 import TabelaGenerica from '../../components/tabelaDropdown'; 
 import { Sidebar } from '../../components/sidebar/sidebar';
-// import { Navbar } from '../../components';
+import { Link } from 'react-router-dom'; // Importar o componente Link
 import { Usuario } from '../../interface/usuario';
 import './style.css';
 
@@ -82,7 +82,7 @@ const UsuarioTable: React.FC = () => {
       </div>
       <div className="content">
         <div className='adicionarUsuario'>
-          <button className='btn'>Adicionar usuário</button>
+          <Link to="/usuario/cadastro" className='btn'>Adicionar usuário</Link> 
         </div>
         {/* Tabela genérica que recebe os dados e configurações */}
         <TabelaGenerica<Usuario> 
