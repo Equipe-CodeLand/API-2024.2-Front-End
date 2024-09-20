@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './style.css';
+import { IoIosArrowDown } from 'react-icons/io';
 
 interface TableProps<T> {
   data: T[];
@@ -11,7 +12,6 @@ interface TableProps<T> {
   detailExtractor: (item: T) => JSX.Element;
   dropdownContent: (item: T) => { idRow: JSX.Element; col1: JSX.Element; col2: JSX.Element; extra?: JSX.Element[] };
 }
-
 
 const TabelaGenerica = <T,>({ data, columns, dropdownContent }: TableProps<T>): JSX.Element => {
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
@@ -31,21 +31,25 @@ const TabelaGenerica = <T,>({ data, columns, dropdownContent }: TableProps<T>): 
             {columns.map((column) => (
               <th key={String(column.key)}>{column.label}</th>
             ))}
+            <th></th> {/* Coluna vazia para alinhar com o ícone */}
           </tr>
         </thead>
         <tbody>
           {validData.map((item, index) => (
             <React.Fragment key={index}>
-              <tr onClick={() => handleRowClick(index)}>
+              <tr className='linha' onClick={() => handleRowClick(index)}>
                 {columns.map((column) => (
                   <td key={String(column.key)}>
                     {column.renderCell ? column.renderCell(item[column.key]) : String(item[column.key])}
                   </td>
                 ))}
+                <td>
+                  <IoIosArrowDown />
+                </td>
               </tr>
               {selectedItemId === index && (
                 <tr className='dropdown-tabela'>
-                  <td colSpan={columns.length}>
+                  <td colSpan={columns.length + 1}>
                     <div className='dropdown-content'>
                       <div className='id-row'>
                         {dropdownContent(item).idRow}

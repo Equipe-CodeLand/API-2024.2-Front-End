@@ -17,19 +17,20 @@ const dropdownContent = (
   usuarioEditado: Usuario | null,
   setUsuarioEditado: (usuario: Usuario | null) => void,
   salvarEdicao: (usuario: Usuario) => void,
-  cancelarEdicao: (usuario: Usuario | null) => void, // Certifique-se de que cancelarEdicao está presente
+  cancelarEdicao: (usuario: Usuario | null) => void,
   excluirUsuario: (id: number) => void
 ) => {
   if (isEditando && usuarioEditado) {
     return {
       idRow: (
         <div className='edicao'>
-          <p><strong>ID:</strong> {usuarioEditado.id}</p>
+          <p style={{ color: 'var(--main-purple)' }}><strong>ID:</strong> {usuarioEditado.id}</p>
         </div>
       ),
       col1: (
         <div className='edicao'>
-          <p><strong>Nome:</strong>
+          <p><strong style={{ color: 'var(--main-purple)' }}>Nome:</strong></p>
+          <p>
             <input
               type="text"
               value={usuarioEditado.nome}
@@ -38,7 +39,8 @@ const dropdownContent = (
               }
             />
           </p>
-          <p><strong>Email:</strong>
+          <p><strong style={{ color: 'var(--main-purple)' }}>Email:</strong></p>
+          <p>
             <input
               type="email"
               value={usuarioEditado.email}
@@ -47,7 +49,8 @@ const dropdownContent = (
               }
             />
           </p>
-          <p><strong>Senha:</strong>
+          <p><strong style={{ color: 'var(--main-purple)' }}>Senha:</strong></p>
+          <p>
             <input
               type="text"
               value={usuarioEditado.senha}
@@ -59,69 +62,85 @@ const dropdownContent = (
         </div>
       ),
       col2: (
-        <>
-          <div className='edicao'>
-            <p><strong>Tipo:</strong> 
-              <select
-                value={usuarioEditado.perfil}
-                onChange={(e) =>
-                  setUsuarioEditado({ ...usuarioEditado, perfil: e.target.value as Perfil })
-                }
-              >
-                <option value={Perfil.Admin}>Administrador</option>
-                <option value={Perfil.Leitor}>Leitor</option>
-              </select>
-            </p>
-            <p><strong>CPF:</strong>
-              <input
-                type="text"
-                value={usuarioEditado.cpf}
-                onChange={(e) =>
-                  setUsuarioEditado({ ...usuarioEditado, cpf: e.target.value })
-                }
-              />
-            </p>
-          </div>
-        </>
+        <div className='edicao'>
+          <p><strong style={{ color: 'var(--main-purple)' }}>Tipo:</strong></p>
+          <p>
+            <select
+              value={usuarioEditado.perfil}
+              onChange={(e) =>
+                setUsuarioEditado({ ...usuarioEditado, perfil: e.target.value as Perfil })
+              }
+            >
+              <option value={Perfil.Admin}>Administrador</option>
+              <option value={Perfil.Leitor}>Leitor</option>
+            </select>
+          </p>
+          <p><strong style={{ color: 'var(--main-purple)' }}>CPF:</strong></p>
+          <p>
+            <input
+              type="text"
+              value={usuarioEditado.cpf}
+              onChange={(e) =>
+                setUsuarioEditado({ ...usuarioEditado, cpf: e.target.value })
+              }
+            />
+          </p>
+          <p>
+            <div style={{background: 'white', padding: '1.25rem'}} />
+          </p>
+          <p>
+            <div style={{background: 'white', padding: 'var(--pd-3)'}} />
+          </p>
+        </div>
       ),
       extra: [
-        <>
-        <div key="save-button">
-          <button className="btn" onClick={() => salvarEdicao(usuarioEditado)}>Salvar</button>
-        </div>,
-        <div key="cancel-button">
-          <button className="btn" onClick={() => cancelarEdicao(null)}>Cancelar</button>
+        <div className='botoes'>
+          <div key="save-button">
+            <button className="btn" onClick={() => salvarEdicao(usuarioEditado)}>Salvar</button>
+          </div>
+          <div key="cancel-button">
+            <button className="btn" onClick={() => cancelarEdicao(null)}>Cancelar</button>
+          </div>
         </div>
-        </>
       ]
-    };
-  } else {
+    }
+  }else {
     return {
       idRow: (
         <div>
-          <p><strong>ID:</strong> {usuario.id}</p>
+          <p style={{ color: 'var(--main-purple)' }}><strong>ID:</strong> {usuario.id}</p>
         </div>
       ),
       col1: (
-        <div>
-          <p><strong>Nome:</strong> {usuario.nome}</p>
-          <p><strong>Email:</strong> {usuario.email}</p>
-          <p><strong>Senha:</strong> {usuario.senha}</p>
+        <div className='listagem'>
+          <p><strong style={{ color: 'var(--main-purple)' }}>Nome:</strong></p>
+          <p>{usuario.nome}</p>
+          <p><strong style={{ color: 'var(--main-purple)' }}>Email:</strong></p>
+          <p>{usuario.email}</p>
+          <p><strong style={{ color: 'var(--main-purple)' }}>Senha:</strong></p>
+          <p>{usuario.senha}</p>
         </div>
       ),
       col2: (
-        <div>
-          <p><strong>Tipo:</strong> {PerfilLabel[usuario.perfil as Perfil]}</p>
-          <p><strong>CPF:</strong> {usuario.cpf}</p>
+        <div className='listagem'>
+          <p><strong style={{ color: 'var(--main-purple)' }}>Tipo:</strong></p>
+          <p>{PerfilLabel[usuario.perfil as Perfil]}</p>
+          <p><strong style={{ color: 'var(--main-purple)' }}>CPF:</strong></p>
+          <p>{usuario.cpf}</p>
+          <p>
+            <div style={{background: 'white', padding: '2rem'}} />
+          </p>
         </div>
       ),
       extra: [
         <>
-        <div key="edit-button">
-          <button className="btn" onClick={() => setUsuarioEditado(usuario)}>Editar</button>
-        </div>,
-        <div key="delete-button">
-          <button className="btn" onClick={() => excluirUsuario(usuario.id)}>Excluir</button>
+        <div className='botoes'>
+          <div key="edit-button">
+            <button className="btn" onClick={() => setUsuarioEditado(usuario)}>Editar</button>
+          </div>
+          <div key="delete-button">
+            <button className="btn" onClick={() => excluirUsuario(usuario.id)}>Excluir</button>
+          </div>
         </div>
         </>
       ]
@@ -219,7 +238,11 @@ const UsuarioTable: React.FC = () => {
       key: 'perfil',
       renderCell: (value) => {
         const perfil = value as Perfil;
-        return <span>{PerfilLabel[perfil] || 'Desconhecido'}</span>;
+        return (
+          <span>
+            {PerfilLabel[perfil] || 'Desconhecido'}
+          </span>
+        );
       }
     }
   ];
@@ -243,7 +266,7 @@ const UsuarioTable: React.FC = () => {
           columns={columns}
           detailExtractor={(usuario) => (
             <div className="usuario-detalhes">
-              <p><strong>ID:</strong> {usuario.id}</p>
+              <p><strong>ID:</strong> {usuario.id}</p>              
               <p><strong>Nome:</strong> {usuario.nome}</p>
               <p><strong>Email:</strong> {usuario.email}</p>
               <p><strong>Tipo:</strong> {PerfilLabel[usuario.perfil as Perfil]}</p>
