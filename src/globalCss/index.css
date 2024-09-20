@@ -58,11 +58,7 @@ sintam-se livres para alterar.
 
 /* classe para ser usada globalmente envolvendo as paginas, pode ser alterada */
 .container{
-<<<<<<< HEAD
   margin-top: var(--mg-8);
-=======
-  margin-top: var(--mg-12);
->>>>>>> 520d626f6db442424b3b697d2174b0bf4934436b
   margin-left: 60px;
 }
 .container .content{
