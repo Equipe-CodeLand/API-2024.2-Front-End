@@ -1,28 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import TabelaGenerica from '../../components/tabelaDropdown'; 
+import TabelaGenerica from '../../components/tabelaDropdown';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Perfil, Usuario } from '../../interface/usuario';
 import './style.css';
-
-// Interface para o dado do backend
-interface UsuarioBackend {
-  id: number;
-  nome: string;
-  email: string;
-  senha: string;
-  cpf: string;
-  perfil: string; // Vem como string do backend, depois mapeamos para o enum Perfil
-  criadoEm: string;
-  atualizadoEm: string;
-}
 
 const PerfilLabel: { [key in Perfil]: string } = {
   [Perfil.Admin]: 'Administrador',
   [Perfil.Leitor]: 'Leitor'
 };
 
-const dropdownContent = (usuario: Usuario) => ({
+const dropdownContent = (
+  usuario: Usuario,
+  atualizarUsuario: (usuario: Usuario) => void,
+  excluirUsuario: (id: number) => void
+) => ({
   idRow: (
     <div>
       <p><strong>ID:</strong> {usuario.id}</p>
@@ -36,14 +28,19 @@ const dropdownContent = (usuario: Usuario) => ({
   ),
   col2: (
     <div>
-      <p><strong>Tipo:</strong> {usuario.tipo}</p>
+      <p><strong>Tipo:</strong> {usuario.perfil}</p>
       <p><strong>CPF:</strong> {usuario.cpf}</p>
     </div>
   ),
   extra: [
-    <div key="action-button">
-      <button className='btn' onClick={() => alert(`Ação realizada para ${usuario.nome}`)}>Ação</button>
-    </div>
+    <>
+      <div key="action-button">
+        <button className="btn" onClick={() => atualizarUsuario(usuario)}>Editar</button>
+      </div>,
+      <div key="delete-button">
+        <button className="btn" onClick={() => excluirUsuario(usuario.id)}>Excluir</button>
+      </div>
+    </>
   ]
 });
 
@@ -58,13 +55,12 @@ const UsuarioTable: React.FC = () => {
         const response = await axios.get('http://localhost:5000/usuarios'); // Substitua pela sua URL do backend
         
         // Mapeia os dados recebidos do backend para o formato correto
-        const usuariosData = response.data.map((user: UsuarioBackend): Usuario => ({
+        const usuariosData = response.data.map((user: Usuario): Usuario => ({
           id: user.id,
           nome: user.nome,
           email: user.email,
           cpf: user.cpf,
-          status: 'Ativo', // ou ajuste conforme necessário
-          tipo: user.perfil as Perfil // Mapeia o perfil para o enum `Perfil`
+          perfil: user.perfil as Perfil // Mapeia o perfil para o enum `Perfil`
         }));
 
         setUsuarios(usuariosData); // Armazena os dados recebidos
@@ -78,11 +74,33 @@ const UsuarioTable: React.FC = () => {
     fetchUsuarios();
   }, []);
 
+  const atualizarUsuario = async (usuario: Usuario) => {
+    try {
+      await axios.put('http://localhost:5000/usuario/atualizar', usuario); // Substitua pela sua URL do backend
+      alert('Usuário atualizado com sucesso!');
+      setUsuarios(usuarios.map(u => u.id === usuario.id ? usuario : u)); // Atualiza o estado dos usuários
+    } catch (error) {
+      console.error("Erro ao atualizar usuário:", error);
+    }
+  };
+
+  const excluirUsuario = async (id: number) => {
+    try {
+      await axios.delete('http://localhost:5000/usuario/deletar', {
+        data: { id } // Passa o ID como parte do payload
+      });
+      alert('Usuário excluído com sucesso!');
+      setUsuarios(usuarios.filter(usuario => usuario.id !== id)); // Remove o usuário da lista
+    } catch (error) {
+      console.error("Erro ao excluir usuário:", error);
+    }
+  };
+
   // Define a type for the columns that includes the optional renderCell property
   type Column<T> = {
     label: string;
     key: keyof T;
-    renderCell?: (value: string | number) => JSX.Element;
+    renderCell?: (value: T[keyof T]) => JSX.Element; // Ajuste para renderizar com base no tipo da chave
   };
 
   // Colunas que serão exibidas na tabela
@@ -91,9 +109,10 @@ const UsuarioTable: React.FC = () => {
     { label: 'Nome', key: 'nome' },
     { 
       label: 'Tipo', 
-      key: 'tipo', 
-      renderCell: (value: string | number) => {
-        return <span>{PerfilLabel[value as Perfil] || 'Desconhecido'}</span>;
+      key: 'perfil', 
+      renderCell: (value) => {
+        const perfil = value as Perfil;
+        return <span>{PerfilLabel[perfil] || 'Desconhecido'}</span>;
       } // Renderiza o valor do enum
     }
   ];
@@ -106,26 +125,26 @@ const UsuarioTable: React.FC = () => {
     <div className="container">
       <Sidebar />
       <div className="title-box">
-        <h2 className='title-text'>Usuários</h2>
+        <h2 className="title-text">Usuários</h2>
       </div>
       <div className="content">
-        <div className='adicionarUsuario'>
-          <button className='btn'>Adicionar usuário</button>
+        <div className="adicionarUsuario">
+          <button className="btn">Adicionar usuário</button>
         </div>
         {/* Tabela genérica que recebe os dados e configurações */}
-        <TabelaGenerica<Usuario> 
-          data={usuarios} 
-          columns={columns} 
+        <TabelaGenerica<Usuario>
+          data={usuarios}
+          columns={columns}
           detailExtractor={(usuario) => (
             <div className="usuario-detalhes">
               <p><strong>ID:</strong> {usuario.id}</p>
               <p><strong>Nome:</strong> {usuario.nome}</p>
               <p><strong>Email:</strong> {usuario.email}</p>
-              <p><strong>Tipo:</strong> {PerfilLabel[usuario.tipo]}</p>
+              <p><strong>Tipo:</strong> {PerfilLabel[usuario.perfil as Perfil]}</p>
               <p><strong>CPF:</strong> {usuario.cpf}</p>
             </div>
           )}
-          dropdownContent={dropdownContent} 
+          dropdownContent={(usuario) => dropdownContent(usuario, atualizarUsuario, excluirUsuario)}
         />
       </div>
     </div>

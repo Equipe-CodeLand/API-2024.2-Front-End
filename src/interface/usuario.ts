@@ -6,8 +6,10 @@ export enum Perfil {
 export interface Usuario {
   id: number;
   nome: string;
-  tipo: Perfil; 
   email: string;
+  senha?: string;
   cpf: string;
-  status: string;
+  perfil: string; // Vem como string do backend, depois mapeamos para o enum Perfil
+  criadoEm?: string;
+  atualizadoEm?: string;
 }

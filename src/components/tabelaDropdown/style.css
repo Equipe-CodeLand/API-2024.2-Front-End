@@ -52,6 +52,16 @@
   border-radius: 0 0 12px 12px;
   padding: 10px;
   transition: all 0.3s ease;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+}
+
+.dropdown-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Linha separada para o ID */
@@ -65,6 +75,8 @@
 .dropdown-columns {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 /* Estilos para as colunas do dropdown */
@@ -72,18 +84,28 @@
   flex: 1;
   padding: 0 10px;
   box-sizing: border-box;
-  margin: 2%;
+  margin: 3% 7% 4% 2%;
   text-align: left !important;
+  width: 100%;
 }
 
 /* Estilos para os elementos extras (como botões) */
 .dropdown-extra {
+  display: flex;
+  flex-direction: row;
   margin-top: 10px;
+  width: 100%;
+  justify-content: center;
 }
 
 /* Estilização dos botões do dropdown */
 .dropdown-item {
+  display: flex;
+  flex-direction: row;
   margin-bottom: 10px;
+  justify-content: center;
+  gap: 60%;
+
 }
 
 /* Estilização do botão */
