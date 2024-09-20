@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // Importe o SweetAlert2
 import TabelaGenerica from '../../components/tabelaDropdown';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Perfil, Usuario } from '../../interface/usuario';
@@ -12,113 +13,219 @@ const PerfilLabel: { [key in Perfil]: string } = {
 
 const dropdownContent = (
   usuario: Usuario,
-  atualizarUsuario: (usuario: Usuario) => void,
+  isEditando: boolean,
+  usuarioEditado: Usuario | null,
+  setUsuarioEditado: (usuario: Usuario | null) => void,
+  salvarEdicao: (usuario: Usuario) => void,
+  cancelarEdicao: (usuario: Usuario | null) => void, // Certifique-se de que cancelarEdicao está presente
   excluirUsuario: (id: number) => void
-) => ({
-  idRow: (
-    <div>
-      <p><strong>ID:</strong> {usuario.id}</p>
-    </div>
-  ),
-  col1: (
-    <div>
-      <p><strong>Nome:</strong> {usuario.nome}</p>
-      <p><strong>Email:</strong> {usuario.email}</p>
-    </div>
-  ),
-  col2: (
-    <div>
-      <p><strong>Tipo:</strong> {usuario.perfil}</p>
-      <p><strong>CPF:</strong> {usuario.cpf}</p>
-    </div>
-  ),
-  extra: [
-    <>
-      <div key="action-button">
-        <button className="btn" onClick={() => atualizarUsuario(usuario)}>Editar</button>
-      </div>,
-      <div key="delete-button">
-        <button className="btn" onClick={() => excluirUsuario(usuario.id)}>Excluir</button>
-      </div>
-    </>
-  ]
-});
+) => {
+  if (isEditando && usuarioEditado) {
+    return {
+      idRow: (
+        <div className='edicao'>
+          <p><strong>ID:</strong> {usuarioEditado.id}</p>
+        </div>
+      ),
+      col1: (
+        <div className='edicao'>
+          <p><strong>Nome:</strong>
+            <input
+              type="text"
+              value={usuarioEditado.nome}
+              onChange={(e) =>
+                setUsuarioEditado({ ...usuarioEditado, nome: e.target.value })
+              }
+            />
+          </p>
+          <p><strong>Email:</strong>
+            <input
+              type="email"
+              value={usuarioEditado.email}
+              onChange={(e) =>
+                setUsuarioEditado({ ...usuarioEditado, email: e.target.value })
+              }
+            />
+          </p>
+          <p><strong>Senha:</strong>
+            <input
+              type="text"
+              value={usuarioEditado.senha}
+              onChange={(e) =>
+                setUsuarioEditado({ ...usuarioEditado, senha: e.target.value })
+              }
+            />
+          </p>
+        </div>
+      ),
+      col2: (
+        <>
+          <div className='edicao'>
+            <p><strong>Tipo:</strong> 
+              <select
+                value={usuarioEditado.perfil}
+                onChange={(e) =>
+                  setUsuarioEditado({ ...usuarioEditado, perfil: e.target.value as Perfil })
+                }
+              >
+                <option value={Perfil.Admin}>Administrador</option>
+                <option value={Perfil.Leitor}>Leitor</option>
+              </select>
+            </p>
+            <p><strong>CPF:</strong>
+              <input
+                type="text"
+                value={usuarioEditado.cpf}
+                onChange={(e) =>
+                  setUsuarioEditado({ ...usuarioEditado, cpf: e.target.value })
+                }
+              />
+            </p>
+          </div>
+        </>
+      ),
+      extra: [
+        <>
+        <div key="save-button">
+          <button className="btn" onClick={() => salvarEdicao(usuarioEditado)}>Salvar</button>
+        </div>,
+        <div key="cancel-button">
+          <button className="btn" onClick={() => cancelarEdicao(null)}>Cancelar</button>
+        </div>
+        </>
+      ]
+    };
+  } else {
+    return {
+      idRow: (
+        <div>
+          <p><strong>ID:</strong> {usuario.id}</p>
+        </div>
+      ),
+      col1: (
+        <div>
+          <p><strong>Nome:</strong> {usuario.nome}</p>
+          <p><strong>Email:</strong> {usuario.email}</p>
+          <p><strong>Senha:</strong> {usuario.senha}</p>
+        </div>
+      ),
+      col2: (
+        <div>
+          <p><strong>Tipo:</strong> {PerfilLabel[usuario.perfil as Perfil]}</p>
+          <p><strong>CPF:</strong> {usuario.cpf}</p>
+        </div>
+      ),
+      extra: [
+        <>
+        <div key="edit-button">
+          <button className="btn" onClick={() => setUsuarioEditado(usuario)}>Editar</button>
+        </div>,
+        <div key="delete-button">
+          <button className="btn" onClick={() => excluirUsuario(usuario.id)}>Excluir</button>
+        </div>
+        </>
+      ]
+    };
+  }
+};
 
 const UsuarioTable: React.FC = () => {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]); // Estado para armazenar os usuários
-  const [loading, setLoading] = useState<boolean>(true); // Estado de loading
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [usuarioEditando, setUsuarioEditando] = useState<Usuario | null>(null);
 
   useEffect(() => {
-    // Função para buscar usuários do backend
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/usuarios'); // Substitua pela sua URL do backend
-        
-        // Mapeia os dados recebidos do backend para o formato correto
+        const response = await axios.get('http://localhost:5000/usuarios');
         const usuariosData = response.data.map((user: Usuario): Usuario => ({
           id: user.id,
           nome: user.nome,
           email: user.email,
           cpf: user.cpf,
-          perfil: user.perfil as Perfil // Mapeia o perfil para o enum `Perfil`
+          perfil: user.perfil as Perfil,
+          senha: user.senha
         }));
 
-        setUsuarios(usuariosData); // Armazena os dados recebidos
+        setUsuarios(usuariosData);
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
       } finally {
-        setLoading(false); // Finaliza o loading após a resposta
+        setLoading(false);
       }
     };
 
     fetchUsuarios();
   }, []);
 
-  const atualizarUsuario = async (usuario: Usuario) => {
+  const salvarEdicao = async (usuario: Usuario) => {
     try {
-      await axios.put('http://localhost:5000/usuario/atualizar', usuario); // Substitua pela sua URL do backend
-      alert('Usuário atualizado com sucesso!');
-      setUsuarios(usuarios.map(u => u.id === usuario.id ? usuario : u)); // Atualiza o estado dos usuários
+      await axios.put('http://localhost:5000/usuario/atualizar', usuario);
+      
+      // SweetAlert de sucesso
+      Swal.fire({
+        icon: 'success',
+        title: 'Sucesso!',
+        text: 'Usuário atualizado com sucesso!'
+      });
+
+      setUsuarios(usuarios.map(u => u.id === usuario.id ? usuario : u));
+      setUsuarioEditando(null); // Sai do modo de edição
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
     }
   };
 
+  const cancelarEdicao = () => {
+    setUsuarioEditando(null); // Sai do modo de edição
+  };  
+
   const excluirUsuario = async (id: number) => {
-    try {
-      await axios.delete('http://localhost:5000/usuario/deletar', {
-        data: { id } // Passa o ID como parte do payload
-      });
-      alert('Usuário excluído com sucesso!');
-      setUsuarios(usuarios.filter(usuario => usuario.id !== id)); // Remove o usuário da lista
-    } catch (error) {
-      console.error("Erro ao excluir usuário:", error);
-    }
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Esta ação não pode ser desfeita!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete('http://localhost:5000/usuario/deletar', {
+            data: { id }
+          });
+
+          Swal.fire('Excluído!', 'O usuário foi excluído com sucesso.', 'success');
+
+          setUsuarios(usuarios.filter(usuario => usuario.id !== id));
+        } catch (error) {
+          console.error("Erro ao excluir usuário:", error);
+        }
+      }
+    });
   };
 
-  // Define a type for the columns that includes the optional renderCell property
   type Column<T> = {
     label: string;
     key: keyof T;
-    renderCell?: (value: T[keyof T]) => JSX.Element; // Ajuste para renderizar com base no tipo da chave
+    renderCell?: (value: T[keyof T]) => JSX.Element;
   };
 
-  // Colunas que serão exibidas na tabela
   const columns: Array<Column<Usuario>> = [
     { label: 'ID', key: 'id' },
     { label: 'Nome', key: 'nome' },
-    { 
-      label: 'Tipo', 
-      key: 'perfil', 
+    {
+      label: 'Tipo',
+      key: 'perfil',
       renderCell: (value) => {
         const perfil = value as Perfil;
         return <span>{PerfilLabel[perfil] || 'Desconhecido'}</span>;
-      } // Renderiza o valor do enum
+      }
     }
   ];
 
   if (loading) {
-    return <div>Carregando...</div>; // Mostra uma mensagem enquanto os dados estão sendo carregados
+    return <div>Carregando...</div>;
   }
 
   return (
@@ -131,7 +238,6 @@ const UsuarioTable: React.FC = () => {
         <div className="adicionarUsuario">
           <button className="btn">Adicionar usuário</button>
         </div>
-        {/* Tabela genérica que recebe os dados e configurações */}
         <TabelaGenerica<Usuario>
           data={usuarios}
           columns={columns}
@@ -144,7 +250,9 @@ const UsuarioTable: React.FC = () => {
               <p><strong>CPF:</strong> {usuario.cpf}</p>
             </div>
           )}
-          dropdownContent={(usuario) => dropdownContent(usuario, atualizarUsuario, excluirUsuario)}
+          dropdownContent={(usuario) =>
+            dropdownContent(usuario, usuarioEditando?.id === usuario.id, usuarioEditando, setUsuarioEditando, salvarEdicao, cancelarEdicao, excluirUsuario) // Passando cancelarEdicao
+          }
         />
       </div>
     </div>

@@ -108,6 +108,12 @@
 
 }
 
+/* Estilização campos de edição*/
+.edicao input, select {
+  border-radius: 5px;
+  margin-left: 2%;
+}
+
 /* Estilização do botão */
 button .btnTabela {
   padding: 5px 10px;
