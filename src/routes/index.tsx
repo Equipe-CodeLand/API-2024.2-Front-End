@@ -15,8 +15,8 @@ export default function Rotas() {
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/notificacoes' element={<Notificacoes />} />
-                <Route path='/estacao' element={<DropdownEstacao />} />
-                <Route path='/estacao/cadastro' element={<CadastroEstacao />} />
+                <Route path='/estacoes' element={<DropdownEstacao />} />
+                <Route path='/estacoes/cadastro' element={<CadastroEstacao />} />
                 <Route path='/dropdown-exemplo' element={<DropdownExample />} />
                 <Route path='/usuarios' element={<DropdownUsuario />} />
                 <Route path='/usuario/cadastro' element={<CadastroUsuario />} />
