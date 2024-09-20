@@ -118,7 +118,7 @@ const dropdownContent = (
           <p><strong style={{ color: 'var(--main-purple)' }}>Email:</strong></p>
           <p>{usuario.email}</p>
           <p><strong style={{ color: 'var(--main-purple)' }}>Senha:</strong></p>
-          <p>{usuario.senha}</p>
+          <p>{usuario.senha ? '*'.repeat(usuario.senha.length) : 'Senha não definida'}</p>        
         </div>
       ),
       col2: (
@@ -199,23 +199,24 @@ const UsuarioTable: React.FC = () => {
     setUsuarioEditando(null); // Sai do modo de edição
   };  
 
-  const excluirUsuario = async (id: number) => {
+    const excluirUsuario = async (id: number) => {
     Swal.fire({
       title: 'Tem certeza?',
       text: 'Esta ação não pode ser desfeita!',
       icon: 'warning',
       showCancelButton: true,
+      cancelButtonText: 'Cancelar',
       confirmButtonText: 'Sim, excluir!',
-      cancelButtonText: 'Cancelar'
+      reverseButtons: true, // Inverte a ordem dos botões
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await axios.delete('http://localhost:5000/usuario/deletar', {
             data: { id }
           });
-
+  
           Swal.fire('Excluído!', 'O usuário foi excluído com sucesso.', 'success');
-
+  
           setUsuarios(usuarios.filter(usuario => usuario.id !== id));
         } catch (error) {
           console.error("Erro ao excluir usuário:", error);
