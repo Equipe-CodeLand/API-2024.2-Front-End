@@ -5,5 +5,7 @@ export default interface InputCampo {
     value?: string;
     placeholder?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    options? :string []
+    options?: string[]
+    height: number;
+    width: number;
 }

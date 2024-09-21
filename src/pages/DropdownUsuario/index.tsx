@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'; // Importe o SweetAlert2
 import TabelaGenerica from '../../components/tabelaDropdown';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Perfil, Usuario } from '../../interface/usuario';
+import { Link } from 'react-router-dom'; // Importar o componente Link
 import './style.css';
 
 const PerfilLabel: { [key in Perfil]: string } = {
@@ -259,8 +260,8 @@ const UsuarioTable: React.FC = () => {
         <h2 className="title-text">Usuários</h2>
       </div>
       <div className="content">
-        <div className="adicionarUsuario">
-          <button className="btn">Adicionar usuário</button>
+        <div className='adicionarUsuario'>
+          <Link to="/usuario/cadastro" className='btn'>Adicionar usuário</Link> 
         </div>
         <TabelaGenerica<Usuario>
           data={usuarios}
