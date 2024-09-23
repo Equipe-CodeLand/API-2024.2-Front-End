@@ -9,6 +9,7 @@ import Home from "../pages/Home/home";
 import AprendaMais from "../pages/AprendaMais/aprendaMais";
 import CadastroUsuario from "../pages/CadastroUsuario";
 import CadastroParametro from "../pages/CadastroParametro";
+import { DropdownEstacao } from "../pages/Estacao/estacao";
 
 export default function Rotas() {
     return(
@@ -17,7 +18,8 @@ export default function Rotas() {
                 <Route path='/' element={<Login />} />
                 <Route path='/home' element={<Home />} />
                 <Route path='/notificacoes' element={<Notificacoes />} />
-                <Route path='/estacao/cadastro' element={<CadastroEstacao />} />
+                <Route path='/estacoes' element={<DropdownEstacao />} />
+                <Route path='/estacoes/cadastro' element={<CadastroEstacao />} />
                 <Route path='/dropdown-exemplo' element={<DropdownExample />} />
                 <Route path='/usuarios' element={<DropdownUsuario />} />
                 <Route path='/aprenda-mais' element={<AprendaMais />} />

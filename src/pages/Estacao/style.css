@@ -1,0 +1,14 @@
+.parametros{
+    background-color: #ffffff;
+    padding: 1%;
+    margin: 1%;
+    border: 2px solid var(--main-purple);
+    border-radius: 10px;
+    color: var(--main-purple)
+}
+
+.parametros-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

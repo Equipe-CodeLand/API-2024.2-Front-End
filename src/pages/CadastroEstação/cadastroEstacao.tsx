@@ -2,21 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
 import { formatCep } from '../../utils/formatters';
+import api from '../../config';
 
 const CadastroEstacao: React.FC = () => {
     const [nome, setNome] = useState('');
-    const [macAddress, setMacAddress] = useState('');
+    const [uid, setUid] = useState('');
     const [cep, setCep] = useState('');
     const [rua, setRua] = useState('');
     const [numero, setNumero] = useState('');
     const [bairro, setBairro] = useState('');
     const [cidade, setCidade] = useState('');
-    const [selectedParametros, setSelectedParametros] = useState<string[]>([]);
-    const [parametroSelecionado, setParametroSelecionado] = useState<string>('');
+    const [selectedParametros, setSelectedParametros] = useState<any[]>([]);
+    const [parametroSelecionado, setParametroSelecionado] = useState<number>(0);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [successMessage, setSuccessMessage] = useState('');
 
-    const parametrosOptions = ['Parâmetro 1', 'Parâmetro 2', 'Parâmetro 3'];
+    const [parametrosOptions, setParametrosOptions] = useState<any[]>([])
 
     useEffect(() => {
         if (successMessage) {
@@ -26,17 +27,43 @@ const CadastroEstacao: React.FC = () => {
             return () => clearTimeout(timer);
         }
     }, [successMessage]);
-    
-    const handleSelectParametro = (parametro: string) => {
-        if (!selectedParametros.includes(parametro)) {
-            setSelectedParametros([...selectedParametros, parametro]);
-            setParametroSelecionado('');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setErrors({});
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, [errors]);
+
+    useEffect(() => {
+        const fetchParametros = async () => {
+            try {
+                const response = await api.get('/parametro');
+                setParametrosOptions(response.data);
+            } catch (err) {
+                console.log('Erro ao buscar as estações' + err);
+            }
+        };
+
+        fetchParametros();
+    }, []);
+
+    const handleSelectParametro = (parametroId: number) => {
+
+        if (!selectedParametros.includes(parametroId)) {
+            setSelectedParametros([...selectedParametros, parametroId]);
+            setParametroSelecionado(0);
         }
     };
 
-    const handleRemoveParametro = (parametro: string) => {
-        setSelectedParametros(selectedParametros.filter(item => item !== parametro));
+
+    const handleRemoveParametro = (parametroId: number) => {
+        // Remove o parâmetro selecionado pelo ID
+        setSelectedParametros(selectedParametros.filter(id => id !== parametroId));
     };
+
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,8 +76,8 @@ const CadastroEstacao: React.FC = () => {
         }
 
         // validação de Mac Address
-        if (!macAddress) {
-            formErrors.macAddress = 'Mac Address é obrigatório';
+        if (!uid) {
+            formErrors.uid = 'Mac Address é obrigatório';
         }
 
         // validação de CEP
@@ -86,25 +113,35 @@ const CadastroEstacao: React.FC = () => {
         setErrors(formErrors);
         if (Object.keys(formErrors).length === 0) {
             // adicionar aqui a rota para o cadastro, igual foi feito no cadastro de usuario
-            console.log('Dados enviados:', {
-                nome,
-                macAddress,
-                cep,
-                rua,
-                numero,
-                bairro,
-                cidade,
-                parametros: selectedParametros
-            });
-            setSuccessMessage('Cadastro realizado com sucesso!');
-            setNome('');
-            setMacAddress('');
-            setCep('');
-            setRua('');
-            setNumero('');
-            setBairro('');
-            setCidade('');
-            setSelectedParametros([]);
+            try {
+                const response = await api.post("/estacao/cadastro",
+                    {
+                        nome,
+                        uid,
+                        cep,
+                        rua,
+                        numero,
+                        bairro,
+                        cidade,
+                        parametros: selectedParametros
+                    })
+
+                if (response.data.success) {
+
+                    setSuccessMessage('Cadastro realizado com sucesso!');
+                    setNome('');
+                    setUid('');
+                    setCep('');
+                    setRua('');
+                    setNumero('');
+                    setBairro('');
+                    setCidade('');
+                    setSelectedParametros([]);
+                }
+            } catch (error) {
+                console.error('Erro ao cadastrar estação:', error);
+                setErrors({ ...errors, form: 'Erro ao cadastrar estação' });
+            }
         }
     };
 
@@ -112,9 +149,9 @@ const CadastroEstacao: React.FC = () => {
         <div>
             <Sidebar />
             <div className='container'>
-                    <div className="title-box">
-                        <h2 className="title-text">Cadastro de Estações</h2>
-                    </div>
+                <div className="title-box">
+                    <h2 className="title-text">Cadastro de Estações</h2>
+                </div>
                 <div className="content">
 
                     <form className="signin-container" onSubmit={handleSubmit}>
@@ -141,15 +178,15 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="mac-address"
-                                    name="macAddress"
+                                    name="uid"
                                     className='input-full-size'
-                                    value={macAddress}
+                                    value={uid}
                                     onChange={(e) => {
-                                        setMacAddress(e.target.value);
-                                        setErrors({ ...errors, macAddress: '' });
+                                        setUid(e.target.value);
+                                        setErrors({ ...errors, uid: '' });
                                     }}
                                 />
-                                {errors.macAddress && <span className="error">{errors.macAddress}</span>}
+                                {errors.uid && <span className="error">{errors.uid}</span>}
                             </div>
                         </div>
 
@@ -163,18 +200,18 @@ const CadastroEstacao: React.FC = () => {
                                     className='input-full-size'
                                     value={parametroSelecionado}
                                     onChange={(e) => {
-                                        setParametroSelecionado(e.target.value);
-                                        handleSelectParametro(e.target.value);
+                                        setParametroSelecionado(parseInt(e.target.value));
+                                        handleSelectParametro(parseInt(e.target.value));
                                     }}
                                 >
                                     <option value="">Selecione um parâmetro</option>
                                     {parametrosOptions.map((parametro, index) => (
                                         <option
                                             key={index}
-                                            value={parametro}
+                                            value={parametro.id}
                                             disabled={selectedParametros.includes(parametro)}
                                         >
-                                            {parametro}
+                                            {parametro.nome}
                                         </option>
                                     ))}
                                 </select>
@@ -198,14 +235,22 @@ const CadastroEstacao: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="parametros">
-                            {selectedParametros.map((parametro, index) => (
-                                <div key={index} className="selected-parametro">
-                                    {parametro}
-                                    <p onClick={() => handleRemoveParametro(parametro)} className='close'>x</p>
-                                </div>
-                            ))}
-                        </div>
+                        {selectedParametros.length > 0 ? (
+                            <div className="parametros">
+                                {selectedParametros.map((parametroId) => {
+                                    // Busca o objeto completo com base no ID
+                                    const parametro = parametrosOptions.find(p => p.id === parametroId);
+                                    return (
+                                        <div key={parametroId} className="selected-parametro">
+                                            {parametro?.nome}
+                                            <p onClick={() => handleRemoveParametro(parametroId)} className="close"> x </p>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
 
                         <div className="signin-item-row">
                             <div className="signin-row">
