@@ -129,7 +129,7 @@ export const DropdownEstacao: React.FC = () => {
                 </div>
                 <div className="content">
                     <div className='adicionarUsuario'>
-                        <Link to="/estacao/cadastro" className='btn'>Adicionar estação</Link>
+                        <Link to="/estacoes/cadastro" className='btn'>Adicionar estação</Link>
                     </div>            
                     <TabelaGenerica<Estacao>
                         data={estacoes}
