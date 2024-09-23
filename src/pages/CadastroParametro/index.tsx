@@ -21,15 +21,6 @@ const CadastroParametros: React.FC = () => {
     }
   }, [successMessage]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setErrors({});
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [errors]);
-
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const formErrors: { [key: string]: string } = {};

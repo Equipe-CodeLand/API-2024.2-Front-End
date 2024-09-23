@@ -22,7 +22,8 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
     "recharts": "^2.12.7",
-    "tailwindcss": "^3.4.10"
+    "tailwindcss": "^3.4.10",
+    "tecsus": "file:"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
