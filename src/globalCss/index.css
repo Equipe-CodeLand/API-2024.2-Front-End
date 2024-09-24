@@ -140,6 +140,7 @@ com display:flex e use o gap para dar espaço entre eles.
   width: 100%;
   padding: 6px 8px;
   border-radius: 8px;
+  background: white;
   border: none;
 }
 /* classe para 1/2 input, dois por linha, pode ser alterado */

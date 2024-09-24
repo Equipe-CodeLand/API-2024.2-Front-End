@@ -236,7 +236,7 @@ const CadastroEstacao: React.FC = () => {
                         </div>
 
                         {selectedParametros.length > 0 ? (
-                            <div className="parametros">
+                            <div className="parametros-list">
                                 {selectedParametros.map((parametroId) => {
                                     // Busca o objeto completo com base no ID
                                     const parametro = parametrosOptions.find(p => p.id === parametroId);

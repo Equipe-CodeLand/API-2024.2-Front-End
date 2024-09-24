@@ -2,6 +2,10 @@
   display: flex;
   gap: 12px;
 }
+.parametros-list{
+  display: flex;
+  gap: 12px;
+}
 .selected-parametro{
   display: flex;
   align-items: center;
