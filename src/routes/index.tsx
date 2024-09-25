@@ -8,6 +8,7 @@ import AprendaMais from "../pages/AprendaMais/aprendaMais";
 import CadastroUsuario from "../pages/CadastroUsuario";
 import CadastroParametro from "../pages/CadastroParametro";
 import Alertas from "../pages/Alertas";
+import ParametroTable from "../pages/Parametros";
 
 export default function Rotas() {
     return(
@@ -21,6 +22,7 @@ export default function Rotas() {
                 <Route path='/usuario/cadastro' element={<CadastroUsuario />} />
                 <Route path='/parametro/cadastro' element={<CadastroParametro />} />
                 <Route path='/alertas' element={<Alertas/>}/>
+                <Route path='parametros' element={<ParametroTable/>}/>
             </Routes>
         </BrowserRouter>
     )
