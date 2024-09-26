@@ -53,19 +53,26 @@ export const DropdownEstacao: React.FC = () => {
     // Corrigido: salvarEdicao agora usa selectedParametros
     const salvarEdicao = async (estacao: Estacao) => {
         try {
-            // Busca os parâmetros selecionados pelos IDs
-            const parametros = parametrosOptions.filter(p => selectedParametros.includes(p.id));
-            
-            // Atualiza o estado da estação editando com os parâmetros selecionados
-            const updatedEstacao = { ...estacao, parametros };
-
-            await api.put(`/estacao/atualizar`, updatedEstacao);
-            setEstacoes(estacoes.map(e => e.id === estacao.id ? updatedEstacao : e));
+            // Extrai os IDs dos parâmetros selecionados
+            const parametrosIds = selectedParametros;
+    
+            // Atualiza a estação com os IDs dos parâmetros
+            const updatedEstacao = { ...estacao, parametros: parametrosIds };
+    
+            await api.put(`/estacao/atualizar/${estacao.id}`, updatedEstacao);
+    
+            // Aqui, vamos buscar os objetos completos dos parâmetros novamente
+            const parametrosCompletos = parametrosOptions.filter(p => parametrosIds.includes(p.id));
+    
+            // Atualiza o estado da estação editada com os objetos completos dos parâmetros
+            const estacaoComParametrosCompletos = { ...updatedEstacao, parametros: parametrosCompletos };
+    
+            setEstacoes(estacoes.map(e => e.id === estacao.id ? estacaoComParametrosCompletos : e));
             setEstacaoEditando(null);
             setSelectedParametros([]); // Limpa a seleção de parâmetros
             alert('Estação atualizada com sucesso!');
         } catch (error) {
-            console.error("Erro ao atualizar estação:", error);
+            console.error("Erro ao atualizar estação e parâmetros:", error);
         }
     };
 
@@ -240,8 +247,8 @@ export const DropdownEstacao: React.FC = () => {
                         <p><strong>Parâmetros:</strong></p>
                         {estacao.parametros && estacao.parametros.length > 0 ? (
                         <div className='parametros-container'>
-                        {estacao.parametros.map(parametro => (
-                            <p className='parametros'key={parametro.id}> <strong> {parametro.descricao}  - {parametro.unidade}</strong></p>
+                        {estacao.parametros.map(parametros => (
+                            <p className='parametros'key={parametros.id}> <strong> {parametros.descricao}  - {parametros.unidade}</strong></p>
                         ))}
                     </div>
                 ) : (
