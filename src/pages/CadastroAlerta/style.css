@@ -1,0 +1,25 @@
+.parametros{
+  display: flex;
+  gap: 12px;
+}
+.selected-parametro{
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  color: var(--main-purplew);
+  border: 1px solid var(--main-purple);
+  gap: 6px;
+  padding: 6px 8px;
+  cursor: default;
+}
+.close{
+  color: var(--main-purple);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 1rem;
+}
+.signin-row-submit{
+  display: flex;
+  justify-content: center;
+  padding-top: 12px;
+}

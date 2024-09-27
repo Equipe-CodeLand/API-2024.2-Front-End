@@ -3,12 +3,14 @@ import './style.css';
 
 export interface Alerta {
   id: number;
-  localEstacao: string,
+  local: string;
   gravidade: string;
-  mensagemAlerta: string;
+  descricao: string;
   valor: number;
-  tipoParametro: string;
-  condicao: string; // Adicionamos o campo condicao aqui.
+  parametro: string;
+  condicao: string;
+  nomeParametro: string;
+  nomeEstacao: string;
 }
 
 interface AlertaCardProps {
@@ -41,15 +43,16 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta }) => {
           {alerta.gravidade === 'Atenção' ? 'ATENÇÃO' : 'PERIGO'}: {isEditing ? (
             <input
               type="text"
-              name="descrição"
-              value={editAlerta.mensagemAlerta}
+              name="descricao"
+              value={editAlerta.descricao}
               onChange={handleInputChange}
               className="edit-input"
             />
           ) : (
-            alerta.mensagemAlerta
+            alerta.descricao
           )}
         </p>
+        <p className="text">{alerta.local}</p>
         <img
           src="https://img.icons8.com/ios/50/000000/expand-arrow.png"
           alt="expand-arrow"
@@ -62,13 +65,13 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta }) => {
             {isEditing ? (
               <input
                 type="text"
-                name="mensagemAlerta"
-                value={editAlerta.mensagemAlerta}
+                name="descricao"
+                value={editAlerta.descricao}
                 onChange={handleInputChange}
                 className="edit-input"
               />
             ) : (
-              <span>{alerta.mensagemAlerta}</span>
+              <span>{alerta.descricao}</span>
             )}
           </div>
         </div>
@@ -116,12 +119,12 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta }) => {
               <input
                 type="text"
                 name="parametro"
-                value={editAlerta.tipoParametro}
+                value={editAlerta.parametro}
                 onChange={handleInputChange}
                 className="edit-input"
               />
             ) : (
-              <span>{alerta.tipoParametro}</span>
+              <span>{alerta.parametro}</span>
             )}
           </div>
         </div>
