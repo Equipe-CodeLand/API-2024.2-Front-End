@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './style.css';
+import { IoIosArrowDown } from 'react-icons/io';
 
 interface TableProps<T> {
   data: T[];
@@ -19,6 +20,9 @@ const TabelaGenerica = <T,>({ data, columns, dropdownContent }: TableProps<T>): 
     setSelectedItemId((prevId) => (prevId === itemId ? null : itemId));
   };
 
+  // Transformar data em um array vazio se não for um array
+  const validData = Array.isArray(data) ? data : [];
+
   return (
     <div className='container-tabela'>
       <table className='tabela'>
@@ -27,21 +31,25 @@ const TabelaGenerica = <T,>({ data, columns, dropdownContent }: TableProps<T>): 
             {columns.map((column) => (
               <th key={String(column.key)}>{column.label}</th>
             ))}
+            <th></th> {/* Coluna vazia para alinhar com o ícone */}
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
-            <>
-              <tr key={index} onClick={() => handleRowClick(index)}>
+          {validData.map((item, index) => (
+            <React.Fragment key={index}>
+              <tr className='linha' onClick={() => handleRowClick(index)}>
                 {columns.map((column) => (
                   <td key={String(column.key)}>
                     {column.renderCell ? column.renderCell(item[column.key]) : String(item[column.key])}
                   </td>
                 ))}
+                <td>
+                  <IoIosArrowDown />
+                </td>
               </tr>
               {selectedItemId === index && (
                 <tr className='dropdown-tabela'>
-                  <td colSpan={columns.length}>
+                  <td colSpan={columns.length + 1}>
                     <div className='dropdown-content'>
                       <div className='id-row'>
                         {dropdownContent(item).idRow}
@@ -67,7 +75,7 @@ const TabelaGenerica = <T,>({ data, columns, dropdownContent }: TableProps<T>): 
                   </td>
                 </tr>
               )}
-            </>
+            </React.Fragment>
           ))}
         </tbody>
       </table>

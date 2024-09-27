@@ -3,11 +3,11 @@ import './style.css';
 
 export interface Alerta {
   id: number;
-  local: string;
+  localEstacao: string,
   gravidade: string;
-  descricao: string;
+  mensagemAlerta: string;
   valor: number;
-  parametro: string;
+  tipoParametro: string;
   condicao: string; // Adicionamos o campo condicao aqui.
 }
 
@@ -41,16 +41,15 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta }) => {
           {alerta.gravidade === 'Atenção' ? 'ATENÇÃO' : 'PERIGO'}: {isEditing ? (
             <input
               type="text"
-              name="descricao"
-              value={editAlerta.descricao}
+              name="descrição"
+              value={editAlerta.mensagemAlerta}
               onChange={handleInputChange}
               className="edit-input"
             />
           ) : (
-            alerta.descricao
+            alerta.mensagemAlerta
           )}
         </p>
-        <p className="text">{alerta.local}</p>
         <img
           src="https://img.icons8.com/ios/50/000000/expand-arrow.png"
           alt="expand-arrow"
@@ -63,13 +62,13 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta }) => {
             {isEditing ? (
               <input
                 type="text"
-                name="descricao"
-                value={editAlerta.descricao}
+                name="mensagemAlerta"
+                value={editAlerta.mensagemAlerta}
                 onChange={handleInputChange}
                 className="edit-input"
               />
             ) : (
-              <span>{alerta.descricao}</span>
+              <span>{alerta.mensagemAlerta}</span>
             )}
           </div>
         </div>
@@ -117,12 +116,12 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta }) => {
               <input
                 type="text"
                 name="parametro"
-                value={editAlerta.parametro}
+                value={editAlerta.tipoParametro}
                 onChange={handleInputChange}
                 className="edit-input"
               />
             ) : (
-              <span>{alerta.parametro}</span>
+              <span>{alerta.tipoParametro}</span>
             )}
           </div>
         </div>

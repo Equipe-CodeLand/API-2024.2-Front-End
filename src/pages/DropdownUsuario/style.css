@@ -9,29 +9,42 @@
   .adicionarUsuario .btn {
     margin: var(--mg-2);
   }
-  
-/* Estiliza o contêiner que envolve o status e a bolinha */
-.status-container {
+
+  .listagem p{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 2%;
+  }
+
+  .listagem strong{
+    margin-right: 2%;
+  }
+
+.botoes {
   display: flex;
+  justify-content: space-between; /* Espaça os botões ao máximo */
+  margin-top: 10px; /* Adiciona um espaçamento acima dos botões */
+  width: 80%;
+  margin-bottom: 1.5%;
+}
+
+.botoes button {
   justify-content: center;
-  align-items: center;
 }
 
-/* Estiliza a bolinha ao lado do status */
-.status-bullet {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-left: 8px; /* Espaçamento entre a frase e a bolinha */
+.btn {
+  padding: 5px 10px;
+  background-color: var(--main-purple);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
-/* Cor da bolinha para status ativo */
-.status-active {
-  background-color: #00FD00;
-}
-
-/* Cor da bolinha para status inativo */
-.status-inactive {
-  background-color: #FD0000;
+.btn:hover {
+  background-color: var(--main-white);
+  color: black;
+  border: 3px solid var(--main-purple);
 }

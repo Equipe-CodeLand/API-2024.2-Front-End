@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { formatCpf, validateCpf, validateEmail } from '../../utils/formatters';
 import axios from 'axios';
 import './style.css';
-import { Sidebar } from '../../components/sidebar/sidebar'; 
-import { Usuario } from '../../interface/usuario'; 
+import { Sidebar } from '../../components/sidebar/sidebar';
+import { Usuario } from '../../interface/usuario';
 
 const CadastroUsuario: React.FC = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
+  const [cargo, setCargo] = useState('visualizador');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [successMessage, setSuccessMessage] = useState('');
@@ -83,6 +84,7 @@ const CadastroUsuario: React.FC = () => {
           nome,
           email,
           senha,
+          cargo,
           cpf
         });
 
@@ -93,6 +95,7 @@ const CadastroUsuario: React.FC = () => {
           setCpf('');
           setSenha('');
           setConfirmarSenha('');
+          setCargo('visualizador');
         } else {
           setErrors({ ...errors, form: response.data.message });
         }
@@ -105,7 +108,7 @@ const CadastroUsuario: React.FC = () => {
 
   return (
     <div className='container'>
-      <Sidebar /> 
+      <Sidebar />
       <div className="content">
         <div className="title-box">
           <h2 className="title-text">Cadastro de Usuários</h2>
@@ -193,7 +196,30 @@ const CadastroUsuario: React.FC = () => {
               {errors.confirmarSenha && <span className="error">{errors.confirmarSenha}</span>}
             </div>
           </div>
-          <div className="signin-item-last"> 
+          <div className="signin-item-row">
+            <div className="signin-row">
+              <label>Cargo:</label>
+              <select
+                id="cargo"
+                name="cargo"
+                title='cargo'
+                style={{background: 'white'}}
+                className='input-full-size'
+                value={cargo}
+                onChange={(e) => {
+                  setCargo(e.target.value);
+                  setErrors({ ...errors, cargo: '' });
+                }}
+              >
+                <option value="visualizador">Visualizador</option>
+                <option value="administrador">Administrador</option>
+              </select>
+              {errors.cargo && <span className="error">{errors.cargo}</span>}
+
+              {errors.cargo && <span className="error">{errors.cargo}</span>}
+            </div>
+          </div>
+          <div className="signin-item-last">
             <div className="signin-row">
               <input type="submit" className='btn' value="Cadastrar" />
             </div>
