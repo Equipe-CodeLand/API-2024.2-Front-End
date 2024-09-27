@@ -40,7 +40,6 @@ const CadastroEstacao: React.FC = () => {
         const fetchParametros = async () => {
             try {
                 const response = await api.get('/parametro');
-                console.log(response.data);
                 setParametrosOptions(response.data);
             } catch (err) {
                 console.log('Erro ao buscar as estações' + err);
@@ -51,7 +50,6 @@ const CadastroEstacao: React.FC = () => {
     }, []);
 
     const handleSelectParametro = (parametroId: number) => {
-        console.log(parametroId);
 
         if (!selectedParametros.includes(parametroId)) {
             setSelectedParametros([...selectedParametros, parametroId]);
@@ -116,7 +114,6 @@ const CadastroEstacao: React.FC = () => {
         if (Object.keys(formErrors).length === 0) {
             // adicionar aqui a rota para o cadastro, igual foi feito no cadastro de usuario
             try {
-                console.log(selectedParametros);
                 const response = await api.post("/estacao/cadastro",
                     {
                         nome,

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CadastroEstacao from "../pages/CadastroEstação/cadastroEstacao";
 import DropdownUsuario from "../pages/DropdownUsuario";
 import Notificacoes from "../pages/Notificações";
+import Login from "../pages/Login/login";
 import '../globalCss/index.css'
 import Home from "../pages/Home/home";
 import AprendaMais from "../pages/AprendaMais/aprendaMais";
@@ -16,7 +17,8 @@ export default function Rotas() {
     return(
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Home />} />
+                <Route path='/' element={<Login />} />
+                <Route path='/home' element={<Home />} />
                 <Route path='/notificacoes' element={<Notificacoes />} />
                 <Route path='/estacoes' element={<DropdownEstacao />} />
                 <Route path='/estacoes/cadastro' element={<CadastroEstacao />} />

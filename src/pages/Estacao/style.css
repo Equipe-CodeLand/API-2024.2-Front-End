@@ -12,3 +12,14 @@
     flex-direction: row;
     flex-wrap: wrap;
 }
+
+.input-edicao {
+    border: none;
+    padding: var(--pd-2);
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 2%;
+    background-color: var(--main-white);
+    box-sizing: border-box; 
+    width: 100%;
+  }

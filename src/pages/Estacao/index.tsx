@@ -28,6 +28,7 @@ export const DropdownEstacao: React.FC = () => {
     const [selectedParametros, setSelectedParametros] = useState<number[]>([]);
     const [parametroSelecionado, setParametroSelecionado] = useState<number>(0);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
     const [parametrosOptions, setParametrosOptions] = useState<any[]>([])
 
     // Função para renderizar o status com bolinha colorida
@@ -52,75 +53,19 @@ export const DropdownEstacao: React.FC = () => {
     // Corrigido: salvarEdicao agora usa selectedParametros
     const salvarEdicao = async (estacao: Estacao) => {
         try {
-            // Validação dos campos
-            let hasErrors = false;
-            const newErrors: { [key: string]: string } = {};
+            // Busca os parâmetros selecionados pelos IDs
+            const parametros = parametrosOptions.filter(p => selectedParametros.includes(p.id));
+            
+            // Atualiza o estado da estação editando com os parâmetros selecionados
+            const updatedEstacao = { ...estacao, parametros };
 
-            if (!estacao.nome) {
-                newErrors.nome = "Nome é obrigatório";
-                hasErrors = true;
-            }
-
-            if (!estacao.uid) {
-                newErrors.uid = "MAC é obrigatório";
-                hasErrors = true;
-            }
-
-            if (!estacao.cep) {
-                newErrors.cep = "CEP é obrigatório";
-                hasErrors = true;
-            }
-
-            if (!estacao.rua) {
-                newErrors.rua = "Rua é obrigatória";
-                hasErrors = true;
-            }
-
-            if (!estacao.numero) {
-                newErrors.numero = "Número é obrigatório";
-                hasErrors = true;
-            }
-
-            if (!estacao.bairro) {
-                newErrors.bairro = "Bairro é obrigatório";
-                hasErrors = true;
-            }
-
-            if (!estacao.cidade) {
-                newErrors.cidade = "Cidade é obrigatória";
-                hasErrors = true;
-            }
-
-            if (selectedParametros.length === 0) {
-                newErrors.parametros = "Selecione pelo menos um parâmetro";
-                hasErrors = true;
-            }
-
-            if (hasErrors) {
-                setErrors(newErrors);
-                return;
-            }
-
-            // Extrai os IDs dos parâmetros selecionados
-            const parametrosIds = selectedParametros;
-
-            // Atualiza a estação com os IDs dos parâmetros
-            const updatedEstacao = { ...estacao, parametros: parametrosIds };
-
-            await api.put(`/estacao/atualizar/${estacao.id}`, updatedEstacao);
-
-            // Aqui, vamos buscar os objetos completos dos parâmetros novamente
-            const parametrosCompletos = parametrosOptions.filter(p => parametrosIds.includes(p.id));
-
-            // Atualiza o estado da estação editada com os objetos completos dos parâmetros
-            const estacaoComParametrosCompletos = { ...updatedEstacao, parametros: parametrosCompletos };
-
-            setEstacoes(estacoes.map(e => e.id === estacao.id ? estacaoComParametrosCompletos : e));
+            await api.put(`/estacao/atualizar`, updatedEstacao);
+            setEstacoes(estacoes.map(e => e.id === estacao.id ? updatedEstacao : e));
             setEstacaoEditando(null);
             setSelectedParametros([]); // Limpa a seleção de parâmetros
             alert('Estação atualizada com sucesso!');
         } catch (error) {
-            console.error("Erro ao atualizar estação e parâmetros:", error);
+            console.error("Erro ao atualizar estação:", error);
         }
     };
 
@@ -179,7 +124,6 @@ export const DropdownEstacao: React.FC = () => {
                             value={estacaoEditando.uid}
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, uid: e.target.value })}
                         />
-                        {errors.uid && <span className="error">{errors.uid}</span>}
                         <p><strong>Nome:</strong></p>
                         <input
                             className="input-edicao"
@@ -187,7 +131,6 @@ export const DropdownEstacao: React.FC = () => {
                             value={estacaoEditando.nome}
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, nome: e.target.value })}
                         />
-                        {errors.nome && <span className="error">{errors.nome}</span>}
                         <p><strong>CEP:</strong></p>
                         <input
                             className="input-edicao"
@@ -195,49 +138,48 @@ export const DropdownEstacao: React.FC = () => {
                             value={estacaoEditando.cep}
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, cep: e.target.value })}
                         />
-                        {errors.cep && <span className="error">{errors.cep}</span>}
                         <div className="signin-row">
-                            <label htmlFor="parametros">Parâmetros:</label>
-                            <select
-                                id="parametros"
-                                className="input-full-size"
-                                value={parametroSelecionado}
-                                onChange={(e) => {
-                                    setParametroSelecionado(parseInt(e.target.value));
-                                    handleSelectParametro(parseInt(e.target.value));
-                                }}
-                            >
-                                <option value="">Selecione um parâmetro</option>
-                                {parametrosOptions.map((parametro) => (
-                                    <option
-                                        key={parametro.id}
-                                        value={parametro.id}
-                                        disabled={selectedParametros.includes(parametro.id)}
-                                    >
-                                        {parametro.nome}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.parametros && <span className="error">{errors.parametros}</span>}
-                        </div>
-
-                        {/* Renderização dos parâmetros selecionados, tanto já cadastrados quanto novos */}
-                        {selectedParametros.length > 0 ? (
-                            <div className="parametros">
-                                {selectedParametros.map((parametroId) => {
-                                    const parametro = parametrosOptions.find(p => p.id === parametroId);
-                                    return (
-                                        <div key={parametroId} className="selected-parametro">
-                                            {parametro?.nome}
-                                            <p onClick={() => handleRemoveParametro(parametroId)} className="close"> x </p>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <></>
-                        )}
+                        <label htmlFor="parametros">Parâmetros:</label>
+                        <select
+                            id="parametros"
+                            className="input-full-size"
+                            value={parametroSelecionado}
+                            onChange={(e) => {
+                                setParametroSelecionado(parseInt(e.target.value));
+                                handleSelectParametro(parseInt(e.target.value));
+                            }}
+                        >
+                            <option value="">Selecione um parâmetro</option>
+                            {parametrosOptions.map((parametro) => (
+                                <option
+                                    key={parametro.id}
+                                    value={parametro.id}
+                                    disabled={selectedParametros.includes(parametro.id)}
+                                >
+                                    {parametro.nome}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.parametros && <span className="error">{errors.parametros}</span>}
                     </div>
+
+                    {/* Renderização dos parâmetros selecionados, tanto já cadastrados quanto novos */}
+                    {selectedParametros.length > 0 ? (
+                        <div className="parametros">
+                            {selectedParametros.map((parametroId) => {
+                                const parametro = parametrosOptions.find(p => p.id === parametroId);
+                                return (
+                                    <div key={parametroId} className="selected-parametro">
+                                        {parametro?.nome}
+                                        <p onClick={() => handleRemoveParametro(parametroId)} className="close"> x </p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                </div>
                     
                 ),
                 col2: (
@@ -249,14 +191,12 @@ export const DropdownEstacao: React.FC = () => {
                             value={estacaoEditando.rua}
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, rua: e.target.value })}
                         />
-                        {errors.rua && <span className="error">{errors.rua}</span>}
                         <input
                             className="input-edicao"
                             type="number"
                             value={estacaoEditando.numero}
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, numero: Number(e.target.value) })}
                         />
-                        {errors.numero && <span className="error">{errors.numero}</span>}
                         <p><strong>Bairro:</strong></p>
                         <input
                             className="input-edicao"
@@ -264,7 +204,6 @@ export const DropdownEstacao: React.FC = () => {
                             value={estacaoEditando.bairro}
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, bairro: e.target.value })}
                         />
-                        {errors.bairro && <span className="error">{errors.bairro}</span>}
                         <p><strong>Cidade:</strong></p>
                         <input
                             className="input-edicao"
@@ -272,16 +211,15 @@ export const DropdownEstacao: React.FC = () => {
                             value={estacaoEditando.cidade}
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, cidade: e.target.value })}
                         />
-                        {errors.cidade && <span className="error">{errors.cidade}</span>}
                     </div>
                 ),
                 extra: [
                     <div className='botoes'>
-                        <div key="cancel-button">
-                            <button className='btn' onClick={cancelarEdicao}>Cancelar</button>
-                        </div>
                         <div key="save-button">
                             <button className='btn' onClick={() => salvarEdicao(estacaoEditando)}>Salvar</button>
+                        </div>
+                        <div key="cancel-button">
+                            <button className='btn' onClick={cancelarEdicao}>Cancelar</button>
                         </div>
                     </div>
                 ]
@@ -302,24 +240,13 @@ export const DropdownEstacao: React.FC = () => {
                         <p><strong>Parâmetros:</strong></p>
                         {estacao.parametros && estacao.parametros.length > 0 ? (
                         <div className='parametros-container'>
-                            {estacao.parametros.map((parametro) => {
-                                // Buscar o parâmetro completo a partir dos parâmetrosOptions
-                                const parametroCompleto = parametrosOptions.find(p => p.id === parametro.id);
-                                return (
-                                    <p className='parametros' key={parametro.id}>
-                                        <strong>
-                                            {parametroCompleto 
-                                                ? `${parametroCompleto.nome} - ${parametroCompleto.unidade}` 
-                                                : "Nome e unidade não disponíveis"
-                                            }
-                                        </strong>
-                                    </p>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        <p>Nenhum parâmetro disponível</p>
-                    )}
+                        {estacao.parametros.map(parametro => (
+                            <p className='parametros'key={parametro.id}> <strong> {parametro.descricao}  - {parametro.unidade}</strong></p>
+                        ))}
+                    </div>
+                ) : (
+                    <p>Nenhum parâmetro disponível</p>
+                )}
                     </div>
                 ),
                 col2: (
