@@ -1,5 +1,5 @@
 .notification-container{
-  width: 100%;
+  width: 80%;
   padding: 0 var(--pd-4);
   margin: var(--mg-1) 0;
 }

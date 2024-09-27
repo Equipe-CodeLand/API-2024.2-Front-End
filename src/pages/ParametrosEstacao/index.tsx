@@ -16,7 +16,7 @@ const ParametrosEstação: React.FC = () => {
     {
       local: "Escola Elmano Ferreira Veloso",
       parametros: [
-        "umidade", "Temperatura", "Pluviosidade"
+        "Umidade", "Temperatura", "Pluviosidade"
       ],
       porcentage: "70%",
       descricao: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi itaque nulla ea debitis quis. Laudantium voluptate possimus voluptates totam nemo, sunt rerum corporis deserunt saepe incidunt fugit ducimus nobis provident.Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi itaque nulla ea debitis quis. Laudantium voluptate possimus voluptates totam nemo, sunt rerum corporis deserunt saepe incidunt fugit ducimus nobis provident."
