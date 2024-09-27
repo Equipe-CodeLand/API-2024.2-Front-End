@@ -1,18 +1,30 @@
+.alert-card-container {
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center;     /* Centraliza verticalmente */
+  flex-direction: column;  /* Coloca os cards em coluna */
+  width: 100%;             /* Faz o contêiner ocupar 100% da largura */
+}
+
+
+
 .alert-card {
-    width: 75%;
-    background: #FFF;
-    cursor: pointer;
-    border-radius: 18px;
-    transition: 200ms ease-in-out;
-    border: 3px solid transparent;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
+  margin: 10px 0; /* Adiciona espaço entre os cards */; 
+  width: 100%;     /* Faz com que os cards ocupem a largura disponível */
+  border: 1px solid #ff0000; /* Adiciona borda vermelha ao card */
+  border-radius: 8px; /* Bordas arredondadas */
+  background-color: #ffe5e5; /* Fundo do card */
+  padding: 15px; /* Espaço interno do card */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+.text {
+  margin: 0; /* Remove margens */
+  font-size: 16px; /* Tamanho da fonte */
+}
   /* Alert colors based on severity */
   .alert-card.atencao {
     border-color: #ffeb3b;
-    background-color: #fffde7;
   }
   
   .alert-card.perigo {
@@ -108,6 +120,7 @@
     }
   }
   
+  
   /* Additions for gravidade styles */
   .alert-card.atencao .alert-card-header p:first-of-type {
     color: #ff9800;
@@ -120,11 +133,17 @@
   .text-atencao {
     color: #ff9800;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
   
   .text-perigo {
     color: #d32f2f;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
   
   

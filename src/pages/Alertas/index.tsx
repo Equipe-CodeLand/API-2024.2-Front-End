@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import AlertaCard, { Alerta } from '../../components/alertaCard';
+
 import './style.css';
 
 const Alertas: React.FC = () => {
@@ -60,12 +61,21 @@ const Alertas: React.FC = () => {
     fetchAlertas();
   }, []);
 
+  // Função para redirecionar para a página de cadastro de novo alerta
+  const handleNewAlert = () => {
+    // Você pode usar o history do React Router para redirecionar
+    window.location.href = '/alerta/cadastro';
+  };
+
   return (
     <div className='container'>
       <Sidebar />
       <div> 
         <div className="title-box">
           <h2 className='title-text'>Alertas cadastrados</h2>
+          <button className="new-alert-button" onClick={handleNewAlert}>
+            + Novo Alerta
+          </button>
         </div>
         <div className="content">
           {loading ? (
@@ -75,12 +85,12 @@ const Alertas: React.FC = () => {
           ) : (
             alerts.map((location, index) => (
               <div className="alert-container" key={index}>
-                <h2 className="small-title-text">{location.nomeEstacao}</h2>
+                <h2 className="alert-title-text">{location.nomeEstacao}</h2>
                 {location.alerts.length === 0 ? (
                   <p className="no-alert-text">Sem alertas na região</p>
                 ) : (
                   location.alerts.map((alerta) => (
-                    <AlertaCard alerta={alerta} key={alerta.id} />
+                  <AlertaCard  alerta={alerta} key={alerta.id} />
                   ))
                 )}
               </div>
