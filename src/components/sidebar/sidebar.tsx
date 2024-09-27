@@ -9,6 +9,7 @@ import Estacoes from '../../assets/Estacoes.png';
 import Usuario from '../../assets/Usuario.png';
 import Notificacoes from '../../assets/Notificacoes.png';
 import Relatorio from '../../assets/Relatorio.png';
+import Parametros from '../../assets/Parametros.png';
 import Menu from '../../assets/Menu.png';
 import X from '../../assets/X.png';
 
@@ -26,6 +27,7 @@ const links: SidebarLinkProps[] = [
   { label: 'Usuários', href: '/usuarios', icon: Usuario },
   { label: 'Notificações', href: '/notificacoes', icon: Notificacoes },
   { label: 'Relatórios', href: '/relatorios', icon: Relatorio },
+  { label: 'Parâmetros', href: '/parametros', icon: Parametros },
 ];
 
 export const Sidebar: React.FC = () => {

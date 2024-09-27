@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from '../../components/navbar/navbar';
+import {Sidebar} from '../../components/sidebar/sidebar';
 import './style.css'
 import Grafico from '../../components/grafico';
 
@@ -16,7 +16,7 @@ const ParametrosEstação: React.FC = () => {
     {
       local: "Escola Elmano Ferreira Veloso",
       parametros: [
-        "umidade", "Temperatura", "Pluviosidade"
+        "Umidade", "Temperatura", "Pluviosidade"
       ],
       porcentage: "70%",
       descricao: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi itaque nulla ea debitis quis. Laudantium voluptate possimus voluptates totam nemo, sunt rerum corporis deserunt saepe incidunt fugit ducimus nobis provident.Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi itaque nulla ea debitis quis. Laudantium voluptate possimus voluptates totam nemo, sunt rerum corporis deserunt saepe incidunt fugit ducimus nobis provident."
@@ -32,7 +32,7 @@ const ParametrosEstação: React.FC = () => {
 
   return (
     <div className='container'>
-      <Navbar />
+      <Sidebar />
       {stations.map((stations, index) => (
         <div key={index} className="station">
           <div className="title-box">
