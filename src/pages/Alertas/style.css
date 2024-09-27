@@ -10,7 +10,6 @@
   transition: background-color 0.3s ease;
   margin-left: 20px; /* Distância do título */
 }
-
 .new-alert-button:hover {
   background-color: #6a1b9a; /* Escurecendo o botão no hover */
 }
