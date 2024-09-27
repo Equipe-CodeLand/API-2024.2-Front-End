@@ -64,19 +64,18 @@ export const DropdownEstacao: React.FC = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete('http://localhost:5000/estacao/deletar', {
-                        data: { id }
-                    });
-
+                    await axios.delete(`http://localhost:5000/estacao/deletar/${id}`); // Passa o ID na URL
+    
                     Swal.fire('Excluído!', 'A estação foi excluída com sucesso.', 'success');
-
-                    setEstacoes(estacoes.filter(estacoes => estacoes.id !== id));
+    
+                    setEstacoes(estacoes.filter(estacao => estacao.id !== id));
                 } catch (error) {
                     console.error("Erro ao excluir estação:", error);
                 }
             }
         });
     };
+    
 
     // Corrigido: salvarEdicao agora usa selectedParametros
     const salvarEdicao = async (estacao: Estacao) => {
