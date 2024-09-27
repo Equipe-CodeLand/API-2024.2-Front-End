@@ -1,0 +1,130 @@
+.alert-card {
+    width: 100%;
+    background: #FFF;
+    cursor: pointer;
+    border-radius: 18px;
+    transition: 200ms ease-in-out;
+    border: 3px solid transparent;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Alert colors based on severity */
+  .alert-card.atencao {
+    border-color: #ffeb3b;
+    background-color: #fffde7;
+  }
+  
+  .alert-card.perigo {
+    border-color: #f44336;
+    background-color: #ffebee;
+  }
+  
+  .alert-card-header {
+    padding: var(--pd-4);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .alert-card-header p {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .alert-card-header img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  
+  .inside-box {
+    background: var(--main-second-purple);
+    padding: var(--pd-3);
+    border-radius: 0 0 12px 12px;
+  }
+  
+  .inside-box .information-box-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: var(--pd-3);
+  }
+  
+  .inside-box .information-box-row .information-box-item {
+    display: flex;
+    width: 50%;
+  }
+  
+  .inside-box .information-box-row .information-box-desc {
+    display: flex;
+    width: 100%;
+  }
+  
+  .inside-box .information-box-row .information-box-item h4,
+  .inside-box .information-box-row .information-box-desc h4 {
+    color: var(--main-purple);
+  }
+  
+  /* Buttons */
+  .box-btn {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+  }
+  
+  .btn {
+    background-color: #6a1b9a;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #4a148c;
+  }
+  
+  @media(max-width: 553px) {
+    .inside-box .information-box-row {
+      flex-direction: column;
+    }
+    .inside-box .information-box-row .information-box-item {
+      justify-content: center;
+      width: 100%;
+    }
+    .inside-box .information-box-row .information-box-desc {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .outside-wait img {
+      display: none;
+    }
+  }
+  
+  /* Additions for gravidade styles */
+  .alert-card.atencao .alert-card-header p:first-of-type {
+    color: #ff9800;
+  }
+  
+  .alert-card.perigo .alert-card-header p:first-of-type {
+    color: #d32f2f;
+  }
+  
+  .text-atencao {
+    color: #ff9800;
+    font-weight: bold;
+  }
+  
+  .text-perigo {
+    color: #d32f2f;
+    font-weight: bold;
+  }
+  
+  
