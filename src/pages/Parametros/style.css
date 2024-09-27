@@ -7,10 +7,8 @@
 }
 
 .adicionarParametro{
-  width: 50%;
   margin-top: 12px;
   padding: var(--pd-4);
-  /* margin-left: 50%; */
   margin-left: auto;
 }
 
@@ -100,6 +98,60 @@
   justify-content: flex-end;
   margin-bottom: 15px;
 } */
+
+/* Estilos para os botões */
+.btn-salvar {
+  background-color: #7e57c2;
+  color: white;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-salvar:hover {
+  background-color: #6a4c93;
+}
+
+.btn-cancelar {
+  background-color: #7e57c2; 
+  color: white;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-cancelar:hover {
+  background-color: #6a4c93;
+}
+
+.input-field {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  box-sizing: border-box;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+}
+
+.adicionarParametro {
+  background-color: #7e57c2;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  margin-right: 10%; /* Move o botão para a direita */
+}
+
+.adicionarParametro:hover {
+  background-color: #6a4c93;
+}
 
 @media screen and (max-width: 768px){
 

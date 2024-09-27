@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import TabelaGenerica from '../../components/tabelaDropdown';
 import { Link } from 'react-router-dom'; 
+import Swal from 'sweetalert2';
 import './style.css';
 
 interface Parametro {
@@ -17,12 +18,14 @@ interface Parametro {
 const Parametros: React.FC = () => {
   const [parametros, setParametros] = useState<Parametro[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [editando, setEditando] = useState<number | null>(null);
+  const [parametroEditado, setParametroEditado] = useState<Partial<Parametro>>({});
 
   const fetchParametros = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/parametro'); // Atualize a URL
+      const response = await axios.get('http://localhost:5000/parametros'); // Atualize a URL
       console.log('Dados recebidos:', response.data); // Adicione este log para verificar os dados recebidos
-      setParametros(response.data); // Ajuste conforme a estrutura dos dados
+      setParametros(response.data.parametros); // Ajuste conforme a estrutura dos dados
     } catch (err) {
       console.error('Erro ao buscar parâmetros:', err); // Mude para console.error para erros
       if (axios.isAxiosError(err) && err.response) {
@@ -37,9 +40,15 @@ const Parametros: React.FC = () => {
     fetchParametros();
   }, []);
 
-  const handleEdit = async (parametro: Parametro) => {
+  const handleEdit = (parametro: Parametro) => {
+    setEditando(parametro.id);
+    setParametroEditado(parametro);
+  };
+
+  const handleSave = async () => {
     try {
-      await axios.put(`http://localhost:5000/parametro/${parametro.id}`, parametro);
+      await axios.put(`http://localhost:5000/parametro/${parametroEditado.id}`, parametroEditado);
+      setEditando(null);
       fetchParametros(); // Atualiza a lista após a edição
     } catch (err) {
       console.error('Erro ao atualizar parâmetro:', err);
@@ -56,33 +65,91 @@ const Parametros: React.FC = () => {
     }
   };
 
+  const confirmDelete = (id: number) => {
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: "Você não poderá reverter isso!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#7e57c2',
+      cancelButtonColor: '#969696',
+      confirmButtonText: 'Sim, deletar!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id);
+        Swal.fire(
+          'Deletado!',
+          'O parâmetro foi deletado.',
+          'success'
+        );
+      }
+    });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setParametroEditado(prev => ({ ...prev, [name]: value }));
+  };
+
   // Função para gerar o conteúdo em duas colunas + o extra no dropdown
-  const dropdownContent = (parametro: Parametro) => ({
-    idRow: (
-      <div>
-        <p><strong>ID:</strong> {parametro.id}</p>
-      </div>
-    ),
-    col1: (
-      <div>
-        <p><strong>Parametro:</strong> {parametro.nome}</p>
-        <p><strong>Fator:</strong> {parametro.fator}</p>
-        <p><strong>Descrição:</strong> {parametro.descricao}</p>
-      </div>
-    ),
-    col2: (
-      <div>
-        <p><strong>Unidade:</strong> {parametro.unidade}</p>
-        <p><strong>Offset:</strong> {parametro.offset}</p>
-      </div>
-    ),
-    extra: [
-      <div key="action-button" className="button-group">
-        <button className='btn-editar' onClick={() => handleEdit(parametro)}>Editar</button>
-        <button className='btn-deletar' onClick={() => handleDelete(parametro.id)}>Deletar</button>
-      </div>
-    ]
-  });
+  const dropdownContent = (parametro: Parametro) => {
+    if (editando === parametro.id) {
+      return {
+        idRow: (
+          <div>
+            <p><strong>ID:</strong> {parametro.id}</p>
+          </div>
+        ),
+        col1: (
+          <div>
+            <p><strong>Parametro:</strong> <input className="input-field" type="text" name="nome" value={parametroEditado.nome || ''} onChange={handleChange} /></p>
+            <p><strong>Fator:</strong> <input className="input-field" type="number" name="fator" value={parametroEditado.fator || ''} onChange={handleChange} /></p>
+            <p><strong>Descrição:</strong> <input className="input-field" type="text" name="descricao" value={parametroEditado.descricao || ''} onChange={handleChange} /></p>
+          </div>
+        ),
+        col2: (
+          <div>
+            <p><strong>Unidade:</strong> <input className="input-field" type="text" name="unidade" value={parametroEditado.unidade || ''} onChange={handleChange} /></p>
+            <p><strong>Offset:</strong> <input className="input-field" type="number" name="offset" value={parametroEditado.offset || ''} onChange={handleChange} /></p>
+          </div>
+        ),
+        extra: [
+          <div key="action-button" className="button-group">
+            <button className='btn-salvar' onClick={handleSave}>Salvar</button>
+            <button className='btn-cancelar' onClick={() => setEditando(null)}>Cancelar</button>
+          </div>
+        ]
+      };
+    } else {
+      return {
+        idRow: (
+          <div>
+            <p><strong>ID:</strong> {parametro.id}</p>
+          </div>
+        ),
+        col1: (
+          <div>
+            <p><strong>Parametro:</strong> {parametro.nome}</p>
+            <p><strong>Fator:</strong> {parametro.fator}</p>
+            <p><strong>Descrição:</strong> {parametro.descricao}</p>
+          </div>
+        ),
+        col2: (
+          <div>
+            <p><strong>Unidade:</strong> {parametro.unidade}</p>
+            <p><strong>Offset:</strong> {parametro.offset}</p>
+          </div>
+        ),
+        extra: [
+          <div key="action-button" className="button-group">
+            <button className='btn-editar' onClick={() => handleEdit(parametro)}>Editar</button>
+            <button className='btn-deletar' onClick={() => confirmDelete(parametro.id)}>Deletar</button>
+          </div>
+        ]
+      };
+    }
+  };
 
   // Define a type for the columns that includes the optional renderCell property
   type Column<T> = {
@@ -106,13 +173,11 @@ const Parametros: React.FC = () => {
       <div className="title-box">
         <h2 className='title-text'>Parâmetros</h2>
         <p className='text'>Aqui você pode ver todos os parâmetros!</p>
+        <br />
         <div className="button-container">
-          <button className='btn-filtro'>Filtro</button>
-          <Link to="/parametro/cadastro" className='btn'>Adicionar Parâmetro</Link>
+          {/* <button className='btn-filtro'>Filtro</button> */}
+          <Link to="/parametro/cadastro" className='adicionarParametro'>Adicionar Parâmetro</Link>
         </div>
-      </div>
-      <div className='adicionarParametro'>
-        <Link to="/parametro/cadastro" className='btn'>Adicionar parâmetro</Link>
       </div>
       <div className="content">
         {error && <p className='error-text'>{error}</p>}
