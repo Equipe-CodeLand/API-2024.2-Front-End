@@ -172,7 +172,6 @@ const Parametros: React.FC = () => {
       <Sidebar />
       <div className="title-box">
         <h2 className='title-text'>Parâmetros</h2>
-        <p className='text'>Aqui você pode ver todos os parâmetros!</p>
         <br />
         <div className="button-container">
           {/* <button className='btn-filtro'>Filtro</button> */}

@@ -36,7 +36,11 @@ const CadastroParametros: React.FC = () => {
 
     if (Object.keys(formErrors).length === 0) {
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/parametro/cadastro`, {
+        const apiUrl = `${import.meta.env.VITE_API_URL}/parametro/cadastro`;
+        console.log('Enviando dados para:', apiUrl); // Adicione este log
+        console.log('Dados:', { nome, descricao, fator, offset, unidade }); // Adicione este log
+
+        const response = await axios.post(apiUrl, {
           nome,
           descricao,
           fator,
