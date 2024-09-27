@@ -211,7 +211,7 @@ const CadastroEstacao: React.FC = () => {
                                             value={parametro.id}
                                             disabled={selectedParametros.includes(parametro)}
                                         >
-                                            {parametro.nome}
+                                            {parametro.nome} - {parametro.unidade}
                                         </option>
                                     ))}
                                 </select>
