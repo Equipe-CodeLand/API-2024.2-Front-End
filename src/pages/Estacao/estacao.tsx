@@ -6,6 +6,7 @@ import "../DropdownUsuario/style.css"
 import "./style.css"
 import api from '../../config';
 import "../../components/tabelaDropdown/style.css"
+import Swal from 'sweetalert2';
 
 interface Estacao {
     id: number;
@@ -118,9 +119,19 @@ export const DropdownEstacao: React.FC = () => {
             setEstacoes(estacoes.map(e => e.id === estacao.id ? estacaoComParametrosCompletos : e));
             setEstacaoEditando(null);
             setSelectedParametros([]); // Limpa a seleção de parâmetros
-            alert('Estação atualizada com sucesso!');
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: 'Estação atualizada com sucesso!'
+            });
         } catch (error) {
             console.error("Erro ao atualizar estação e parâmetros:", error);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oooops...',
+                text: 'Algo deu errado! Tente novamente mais tarde.'
+            });
         }
     };
 
@@ -228,7 +239,7 @@ export const DropdownEstacao: React.FC = () => {
                                     const parametro = parametrosOptions.find(p => p.id === parametroId);
                                     return (
                                         <div key={parametroId} className="selected-parametro">
-                                            {parametro?.nome}
+                                            {parametro?.nome} - {parametro?.unidade}
                                             <p onClick={() => handleRemoveParametro(parametroId)} className="close"> x </p>
                                         </div>
                                     );
