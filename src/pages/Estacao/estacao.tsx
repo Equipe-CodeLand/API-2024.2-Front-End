@@ -6,6 +6,8 @@ import "../DropdownUsuario/style.css"
 import "./style.css"
 import api from '../../config';
 import "../../components/tabelaDropdown/style.css"
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 interface Estacao {
     id: number;
@@ -47,6 +49,33 @@ export const DropdownEstacao: React.FC = () => {
                 <span className={`status-bullet ${statusClass}`}></span>
             </span>
         );
+    };
+
+
+    const excluirEstacao = async (id: number) => {
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: 'Esta ação não pode ser desfeita!',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sim, excluir!',
+            reverseButtons: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.delete('http://localhost:5000/estacao/deletar', {
+                        data: { id }
+                    });
+
+                    Swal.fire('Excluído!', 'A estação foi excluída com sucesso.', 'success');
+
+                    setEstacoes(estacoes.filter(estacoes => estacoes.id !== id));
+                } catch (error) {
+                    console.error("Erro ao excluir estação:", error);
+                }
+            }
+        });
     };
 
     // Corrigido: salvarEdicao agora usa selectedParametros
@@ -238,7 +267,7 @@ export const DropdownEstacao: React.FC = () => {
                             <></>
                         )}
                     </div>
-                    
+
                 ),
                 col2: (
                     <div>
@@ -301,25 +330,25 @@ export const DropdownEstacao: React.FC = () => {
                         <p><strong>CEP:</strong> {estacao.cep}</p>
                         <p><strong>Parâmetros:</strong></p>
                         {estacao.parametros && estacao.parametros.length > 0 ? (
-                        <div className='parametros-container'>
-                            {estacao.parametros.map((parametro) => {
-                                // Buscar o parâmetro completo a partir dos parâmetrosOptions
-                                const parametroCompleto = parametrosOptions.find(p => p.id === parametro.id);
-                                return (
-                                    <p className='parametros' key={parametro.id}>
-                                        <strong>
-                                            {parametroCompleto 
-                                                ? `${parametroCompleto.nome} - ${parametroCompleto.unidade}` 
-                                                : "Nome e unidade não disponíveis"
-                                            }
-                                        </strong>
-                                    </p>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        <p>Nenhum parâmetro disponível</p>
-                    )}
+                            <div className='parametros-container'>
+                                {estacao.parametros.map((parametro) => {
+                                    // Buscar o parâmetro completo a partir dos parâmetrosOptions
+                                    const parametroCompleto = parametrosOptions.find(p => p.id === parametro.id);
+                                    return (
+                                        <p className='parametros' key={parametro.id}>
+                                            <strong>
+                                                {parametroCompleto
+                                                    ? `${parametroCompleto.nome} - ${parametroCompleto.unidade}`
+                                                    : "Nome e unidade não disponíveis"
+                                                }
+                                            </strong>
+                                        </p>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p>Nenhum parâmetro disponível</p>
+                        )}
                     </div>
                 ),
                 col2: (
@@ -330,8 +359,13 @@ export const DropdownEstacao: React.FC = () => {
                     </div>
                 ),
                 extra: [
-                    <div key="action-button">
-                        <button className='btn' onClick={() => setEstacaoEditando(estacao)}>Editar</button>
+                    <div className='botoes'>
+                        <div key="edit-button">
+                            <button className="btn" onClick={() => setEstacaoEditando(estacao)}>Editar</button>
+                        </div>
+                        <div key="delete-button">
+                            <button className="btn" onClick={() => excluirEstacao(estacao.id)}>Excluir</button>
+                        </div>
                     </div>
                 ]
             };
@@ -344,7 +378,7 @@ export const DropdownEstacao: React.FC = () => {
             setSelectedParametros(estacaoEditando.parametros.map(parametro => parametro.id));
         }
     }, [estacaoEditando]);
-    
+
     useEffect(() => {
         const fetchEstacoes = async () => {
             try {

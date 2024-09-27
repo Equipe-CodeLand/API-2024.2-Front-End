@@ -87,10 +87,10 @@ const dropdownContent = (
             />
           </p>
           <p>
-            <div style={{background: 'white', padding: '1.25rem'}} />
+            <div style={{ background: 'white', padding: '1.25rem' }} />
           </p>
           <p>
-            <div style={{background: 'white', padding: 'var(--pd-3)'}} />
+            <div style={{ background: 'white', padding: 'var(--pd-3)' }} />
           </p>
         </div>
       ),
@@ -105,7 +105,7 @@ const dropdownContent = (
         </div>
       ]
     }
-  }else {
+  } else {
     return {
       idRow: (
         <div>
@@ -119,7 +119,7 @@ const dropdownContent = (
           <p><strong style={{ color: 'var(--main-purple)' }}>Email:</strong></p>
           <p>{usuario.email}</p>
           <p><strong style={{ color: 'var(--main-purple)' }}>Senha:</strong></p>
-          <p>{usuario.senha ? '*'.repeat(usuario.senha.length) : 'Senha não definida'}</p>        
+          <p>{usuario.senha ? '*'.repeat(usuario.senha.length) : 'Senha não definida'}</p>
         </div>
       ),
       col2: (
@@ -129,20 +129,20 @@ const dropdownContent = (
           <p><strong style={{ color: 'var(--main-purple)' }}>CPF:</strong></p>
           <p>{usuario.cpf}</p>
           <p>
-            <div style={{background: 'white', padding: '2rem'}} />
+            <div style={{ background: 'white', padding: '2rem' }} />
           </p>
         </div>
       ),
       extra: [
         <>
-        <div className='botoes'>
-          <div key="edit-button">
-            <button className="btn" onClick={() => setUsuarioEditado(usuario)}>Editar</button>
+          <div className='botoes'>
+            <div key="edit-button">
+              <button className="btn" onClick={() => setUsuarioEditado(usuario)}>Editar</button>
+            </div>
+            <div key="delete-button">
+              <button className="btn" onClick={() => excluirUsuario(usuario.id)}>Excluir</button>
+            </div>
           </div>
-          <div key="delete-button">
-            <button className="btn" onClick={() => excluirUsuario(usuario.id)}>Excluir</button>
-          </div>
-        </div>
         </>
       ]
     };
@@ -181,7 +181,7 @@ const UsuarioTable: React.FC = () => {
   const salvarEdicao = async (usuario: Usuario) => {
     try {
       await axios.put('http://localhost:5000/usuario/atualizar', usuario);
-      
+
       // SweetAlert de sucesso
       Swal.fire({
         icon: 'success',
@@ -198,9 +198,9 @@ const UsuarioTable: React.FC = () => {
 
   const cancelarEdicao = () => {
     setUsuarioEditando(null); // Sai do modo de edição
-  };  
+  };
 
-    const excluirUsuario = async (id: number) => {
+  const excluirUsuario = async (id: number) => {
     Swal.fire({
       title: 'Tem certeza?',
       text: 'Esta ação não pode ser desfeita!',
@@ -215,9 +215,9 @@ const UsuarioTable: React.FC = () => {
           await axios.delete('http://localhost:5000/usuario/deletar', {
             data: { id }
           });
-  
+
           Swal.fire('Excluído!', 'O usuário foi excluído com sucesso.', 'success');
-  
+
           setUsuarios(usuarios.filter(usuario => usuario.id !== id));
         } catch (error) {
           console.error("Erro ao excluir usuário:", error);
@@ -261,14 +261,14 @@ const UsuarioTable: React.FC = () => {
       </div>
       <div className="content">
         <div className='adicionarUsuario'>
-          <Link to="/usuario/cadastro" className='btn'>Adicionar usuário</Link> 
+          <Link to="/usuario/cadastro" className='btn'>Adicionar usuário</Link>
         </div>
         <TabelaGenerica<Usuario>
           data={usuarios}
           columns={columns}
           detailExtractor={(usuario) => (
             <div className="usuario-detalhes">
-              <p><strong>ID:</strong> {usuario.id}</p>              
+              <p><strong>ID:</strong> {usuario.id}</p>
               <p><strong>Nome:</strong> {usuario.nome}</p>
               <p><strong>Email:</strong> {usuario.email}</p>
               <p><strong>Tipo:</strong> {PerfilLabel[usuario.perfil as Perfil]}</p>
