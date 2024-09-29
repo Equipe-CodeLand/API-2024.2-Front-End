@@ -21,18 +21,20 @@
 
 
 .btn {
-  background-color: #7e57c2;
+  background-color: #5751d3 !important;
   color: white;
   padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  border: none;
-  font-size: 14px;
+  border: none !important;
+  font-size: 16px;
+  font-weight: 600;
   transition: background-color 0.3s ease;
 }
 
 .btn:hover {
-  background-color: #6a4c93;
+  background-color: #4a1990 !important;
+  color: white !important;
 }
 
 .button-container {
@@ -50,30 +52,31 @@
 }
 
 .btn-editar, .btn-deletar {
-  font-size: 12px;
-  padding: 8px 13px;
-  border-radius: 4px;
+  font-size: 16px;
+  padding: 10px 25px;
+  border-radius: 5px;
   cursor: pointer;
   border: none;
+  font-weight: 600;
   transition: background-color 0.3s ease;
 }
 
 .btn-editar {
-  background-color: #7e57c2;
+  background-color: #5751d3;
   color: white;
 }
 
 .btn-editar:hover {
-  background-color: #6a4c93;
+  background-color: #4a1990;
 }
 
 .btn-deletar {
-  background-color: #7e57c2;
+  background-color: #5751d3;
   color: white;
 }
 
 .btn-deletar:hover {
-  background-color: #6a4c93;
+  background-color: #4a1990;
 }
 
 /* Botão de filtro */
@@ -83,7 +86,7 @@
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   margin-left: auto;
   border: none;
 }
@@ -100,32 +103,19 @@
 } */
 
 /* Estilos para os botões */
-.btn-salvar {
-  background-color: #7e57c2;
-  color: white;
-  padding: 10px 20px;
-  margin: 5px;
+.btn-salvar, .btn-deletar {
+  background-color: #5751d3; /* Cor de fundo */
+  color: white; /* Cor do texto */
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-salvar:hover {
-  background-color: #6a4c93;
-}
-
-.btn-cancelar {
-  background-color: #7e57c2; 
-  color: white;
   padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 16px;
 }
 
-.btn-cancelar:hover {
-  background-color: #6a4c93;
+.btn-salvar:hover, .btn-deletar:hover {
+  background-color: #4a1990; /* Cor de fundo ao passar o mouse */
 }
 
 .input-field {
@@ -133,24 +123,45 @@
   padding: 8px;
   margin: 5px 0;
   box-sizing: border-box;
-  border: 2px solid #efefef;
+  border: none;
+  background-color: var(--main-white);
   border-radius: 4px;
 }
 
 .adicionarParametro {
-  background-color: #7e57c2;
+  background-color: #5751d3;
   color: white;
   padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   border: none;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 600;
   transition: background-color 0.3s ease;
   margin-right: 10%; /* Move o botão para a direita */
 }
 
 .adicionarParametro:hover {
-  background-color: #6a4c93;
+  background-color: #4a1990;
+}
+
+.field-label {
+  display: block;
+  font-weight: bold;
+  color: #5751d3;
+}
+
+.field-value {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  width: 90%;
+  margin-bottom: 1.5%;
 }
 
 @media screen and (max-width: 768px){

@@ -98,26 +98,31 @@ const Parametros: React.FC = () => {
       return {
         idRow: (
           <div>
-            <p><strong>ID:</strong> {parametro.id}</p>
+            <p className="field-label">ID: {parametro.id}</p>
           </div>
         ),
         col1: (
           <div>
-            <p><strong>Parametro:</strong> <input className="input-field" type="text" name="nome" value={parametroEditado.nome || ''} onChange={handleChange} /></p>
-            <p><strong>Fator:</strong> <input className="input-field" type="number" name="fator" value={parametroEditado.fator || ''} onChange={handleChange} /></p>
-            <p><strong>Descrição:</strong> <input className="input-field" type="text" name="descricao" value={parametroEditado.descricao || ''} onChange={handleChange} /></p>
+            <p className="field-label">Parametro:</p>
+            <input className="input-field" type="text" name="nome" value={parametroEditado.nome || ''} onChange={handleChange} />
+            <p className="field-label">Fator:</p>
+            <input className="input-field" type="number" name="fator" value={parametroEditado.fator || ''} onChange={handleChange} />
+            <p className="field-label">Descrição:</p>
+            <input className="input-field" type="text" name="descricao" value={parametroEditado.descricao || ''} onChange={handleChange} />
           </div>
         ),
         col2: (
           <div>
-            <p><strong>Unidade:</strong> <input className="input-field" type="text" name="unidade" value={parametroEditado.unidade || ''} onChange={handleChange} /></p>
-            <p><strong>Offset:</strong> <input className="input-field" type="number" name="offset" value={parametroEditado.offset || ''} onChange={handleChange} /></p>
+            <p className="field-label">Unidade:</p>
+            <input className="input-field" type="text" name="unidade" value={parametroEditado.unidade || ''} onChange={handleChange} />
+            <p className="field-label">Offset:</p>
+            <input className="input-field" type="number" name="offset" value={parametroEditado.offset || ''} onChange={handleChange} />
           </div>
         ),
         extra: [
           <div key="action-button" className="button-group">
             <button className='btn-salvar' onClick={handleSave}>Salvar</button>
-            <button className='btn-cancelar' onClick={() => setEditando(null)}>Cancelar</button>
+            <button className='btn-deletar' onClick={() => setEditando(null)}>Cancelar</button>
           </div>
         ]
       };
@@ -125,20 +130,25 @@ const Parametros: React.FC = () => {
       return {
         idRow: (
           <div>
-            <p><strong>ID:</strong> {parametro.id}</p>
+            <p className="field-label">ID: {parametro.id}</p>
           </div>
         ),
         col1: (
           <div>
-            <p><strong>Parametro:</strong> {parametro.nome}</p>
-            <p><strong>Fator:</strong> {parametro.fator}</p>
-            <p><strong>Descrição:</strong> {parametro.descricao}</p>
+            <p className="field-label">Parametro:</p>
+            <p className="field-value">{parametro.nome}</p>
+            <p className="field-label">Fator:</p>
+            <p className="field-value">{parametro.fator}</p>
+            <p className="field-label">Descrição:</p>
+            <p className="field-value">{parametro.descricao}</p>
           </div>
         ),
         col2: (
           <div>
-            <p><strong>Unidade:</strong> {parametro.unidade}</p>
-            <p><strong>Offset:</strong> {parametro.offset}</p>
+            <p className="field-label">Unidade:</p>
+            <p className="field-value">{parametro.unidade}</p>
+            <p className="field-label">Offset:</p>
+            <p className="field-value">{parametro.offset}</p>
           </div>
         ),
         extra: [
@@ -185,9 +195,11 @@ const Parametros: React.FC = () => {
           columns={columns} 
           detailExtractor={(parametro) => (
             <div className="parametro-detalhes">
-              <p><strong>ID:</strong> {parametro.id}</p>
-              <p><strong>Nome:</strong> {parametro.nome}</p>
-              <p><strong>Fator:</strong> {parametro.fator}</p>
+              <p className="field-label">ID: {parametro.id}</p>
+              <p className="field-label">Nome:</p>
+              <p className="field-value">{parametro.nome}</p>
+              <p className="field-label">Fator:</p>
+              <p className="field-value">{parametro.fator}</p>
             </div>
           )}
           dropdownContent={dropdownContent} 
