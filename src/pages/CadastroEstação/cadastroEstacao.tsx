@@ -3,6 +3,8 @@ import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
 import { formatCep } from '../../utils/formatters';
 import api from '../../config';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const CadastroEstacao: React.FC = () => {
     const [nome, setNome] = useState('');
@@ -16,6 +18,7 @@ const CadastroEstacao: React.FC = () => {
     const [parametroSelecionado, setParametroSelecionado] = useState<number>(0);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate()
 
     const [parametrosOptions, setParametrosOptions] = useState<any[]>([])
 
@@ -128,7 +131,11 @@ const CadastroEstacao: React.FC = () => {
 
                 if (response.data.success) {
 
-                    setSuccessMessage('Cadastro realizado com sucesso!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sucesso!',
+                        text: 'Estação cadastrada com sucesso!'
+                    });
                     setNome('');
                     setUid('');
                     setCep('');
@@ -137,6 +144,7 @@ const CadastroEstacao: React.FC = () => {
                     setBairro('');
                     setCidade('');
                     setSelectedParametros([]);
+                    navigate('/estacoes')
                 }
             } catch (error) {
                 console.error('Erro ao cadastrar estação:', error);

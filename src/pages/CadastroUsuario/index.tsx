@@ -5,6 +5,7 @@ import './style.css';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Usuario } from '../../interface/usuario';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const CadastroUsuario: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -15,6 +16,7 @@ const CadastroUsuario: React.FC = () => {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (successMessage) {
@@ -106,6 +108,7 @@ const CadastroUsuario: React.FC = () => {
           setSenha('');
           setConfirmarSenha('');
           setPerfil('');
+          navigate('/usuarios')
         } else {
           setErrors({ form: response.data.message });
         }
