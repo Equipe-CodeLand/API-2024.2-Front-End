@@ -23,11 +23,11 @@ const links: SidebarLinkProps[] = [
   { label: 'Home', href: '/', icon: Home },
   { label: 'Dashboard', href: '/dashboard', icon: Dashboard },
   { label: 'Aprenda Mais', href: '/aprenda-mais', icon: AprendaMais },
-  { label: 'Estações', href: '/estacoes', icon: Estacoes },
   { label: 'Usuários', href: '/usuarios', icon: Usuario },
+  { label: 'Parâmetros', href: '/parametros', icon: Parametros },
+  { label: 'Estações', href: '/estacoes', icon: Estacoes },
   { label: 'Notificações', href: '/notificacoes', icon: Notificacoes },
   { label: 'Relatórios', href: '/relatorios', icon: Relatorio },
-  { label: 'Parâmetros', href: '/parametros', icon: Parametros },
 ];
 
 export const Sidebar: React.FC = () => {
