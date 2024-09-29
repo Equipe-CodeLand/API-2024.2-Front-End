@@ -11,7 +11,7 @@ const CadastroUsuario: React.FC = () => {
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
-  const [cargo, setCargo] = useState('visualizador'); // Definir o valor inicial como "visualizador"
+  const [perfil, setPerfil] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [successMessage, setSuccessMessage] = useState('');
@@ -26,15 +26,25 @@ const CadastroUsuario: React.FC = () => {
   }, [successMessage]);
 
   const checkExistingEmail = async (email: string) => {
-    const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
-    const usuarios = response.data;
-    return usuarios.some((usuario) => usuario.email === email);
+    try {
+      const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
+      const usuarios = response.data;
+      return usuarios.some((usuario) => usuario.email === email);
+    } catch (error) {
+      console.error('Erro ao verificar email existente:', error);
+      return false;
+    }
   };
 
   const checkExistingCpf = async (cpf: string) => {
-    const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
-    const usuarios = response.data;
-    return usuarios.some((usuario) => usuario.cpf === cpf);
+    try {
+      const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
+      const usuarios = response.data;
+      return usuarios.some((usuario) => usuario.cpf === cpf);
+    } catch (error) {
+      console.error('Erro ao verificar CPF existente:', error);
+      return false;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,12 +52,7 @@ const CadastroUsuario: React.FC = () => {
     const formErrors: { [key: string]: string } = {};
     setSuccessMessage('');
 
-    // Validação de nome
-    if (!nome) {
-      formErrors.nome = 'Nome é obrigatório';
-    }
-
-    // Validação de email
+    if (!nome) formErrors.nome = 'Nome é obrigatório';
     if (!email) {
       formErrors.email = 'Email é obrigatório';
     } else if (!validateEmail(email)) {
@@ -56,7 +61,6 @@ const CadastroUsuario: React.FC = () => {
       formErrors.email = 'Email já cadastrado';
     }
 
-    // Validação de CPF
     const cpfUnformatted = cpf.replace(/\D/g, '');
     if (!cpf) {
       formErrors.cpf = 'CPF é obrigatório';
@@ -66,12 +70,7 @@ const CadastroUsuario: React.FC = () => {
       formErrors.cpf = 'CPF já cadastrado';
     }
 
-    // Validação de senha
-    if (!senha) {
-      formErrors.senha = 'Senha é obrigatória';
-    }
-
-    // Confirmar senha
+    if (!senha) formErrors.senha = 'Senha é obrigatória';
     if (!confirmarSenha) {
       formErrors.confirmarSenha = 'Confirmação de senha é obrigatória';
     } else if (senha !== confirmarSenha) {
@@ -80,36 +79,39 @@ const CadastroUsuario: React.FC = () => {
 
     setErrors(formErrors);
 
-    // Se não houver erros
     if (Object.keys(formErrors).length === 0) {
       try {
-        console.log('Enviando dados para API...');
-        const usuarioData = { nome, email, senha, cargo, cpf };
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/usuario/cadastro`, usuarioData);
+        const apiUrl = `${import.meta.env.VITE_API_URL}/usuario/cadastro`;
+        console.log('Enviando dados para:', apiUrl);
+        console.log('Dados:', { nome, email, senha, perfil, cpf: cpfUnformatted });
+
+        const response = await axios.post(apiUrl, {
+          nome,
+          email,
+          cpf: cpfUnformatted,
+          senha,
+          perfil
+        });
 
         if (response.data.success) {
           Swal.fire({
+            title: 'Sucesso!',
+            text: 'Usuário cadastrado com sucesso',
             icon: 'success',
-            title: 'Usuário cadastrado com sucesso!',
-            showConfirmButton: true,
-          });
+            confirmButtonText: 'OK'
+          })
           setNome('');
           setEmail('');
           setCpf('');
           setSenha('');
           setConfirmarSenha('');
-          setCargo('Leitor'); // Resetar para o valor padrão
+          setPerfil('');
         } else {
-          setErrors({ ...errors, form: response.data.message });
+          setErrors({ form: response.data.message });
         }
       } catch (error) {
-        // Log do erro caso a requisição falhe
-        if (axios.isAxiosError(error)) {
-          console.error('Erro ao cadastrar usuário:', error.response ? error.response.data : error.message);
-        } else {
-          console.error('Erro ao cadastrar usuário:', error);
-        }
-        setErrors({ ...errors, form: 'Erro ao cadastrar usuário' });
+        console.error('Erro ao cadastrar usuário:', error);
+        setErrors({ form: 'Erro ao cadastrar usuário' });
       }
     }
   };
@@ -122,7 +124,7 @@ const CadastroUsuario: React.FC = () => {
           <h2 className="title-text">Cadastro de Usuários</h2>
         </div>
         <form className="signin-container" onSubmit={handleSubmit}>
-          <div className="signin-item">
+          <div className="signin-item-row">
             <div className="signin-row">
               <label htmlFor="nome">Nome:</label>
               <input
@@ -133,7 +135,7 @@ const CadastroUsuario: React.FC = () => {
                 value={nome}
                 onChange={(e) => {
                   setNome(e.target.value);
-                  setErrors({ ...errors, nome: '' });
+                  setErrors((prevErrors) => ({ ...prevErrors, nome: '' }));
                 }}
               />
               {errors.nome && <span className="error">{errors.nome}</span>}
@@ -150,11 +152,13 @@ const CadastroUsuario: React.FC = () => {
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  setErrors({ ...errors, email: '' });
+                  setErrors((prevErrors) => ({ ...prevErrors, email: '' }));
                 }}
               />
               {errors.email && <span className="error">{errors.email}</span>}
             </div>
+          </div>
+          <div className="signin-item-row">
             <div className="signin-row">
               <label htmlFor="cpf">CPF:</label>
               <input
@@ -166,7 +170,7 @@ const CadastroUsuario: React.FC = () => {
                 maxLength={11}
                 onChange={(e) => {
                   setCpf(e.target.value);
-                  setErrors({ ...errors, cpf: '' });
+                  setErrors((prevErrors) => ({ ...prevErrors, cpf: '' }));
                 }}
               />
               {errors.cpf && <span className="error">{errors.cpf}</span>}
@@ -174,7 +178,7 @@ const CadastroUsuario: React.FC = () => {
           </div>
           <div className="signin-item-row">
             <div className="signin-row">
-              <label htmlFor="senha">Digite a nova senha:</label>
+              <label htmlFor="senha">Senha:</label>
               <input
                 type="password"
                 id="senha"
@@ -183,22 +187,22 @@ const CadastroUsuario: React.FC = () => {
                 value={senha}
                 onChange={(e) => {
                   setSenha(e.target.value);
-                  setErrors({ ...errors, senha: '' });
+                  setErrors((prevErrors) => ({ ...prevErrors, senha: '' }));
                 }}
               />
               {errors.senha && <span className="error">{errors.senha}</span>}
             </div>
             <div className="signin-row">
-              <label htmlFor="confirm-senha">Confirmar senha:</label>
+              <label htmlFor="confirmarSenha">Confirmar senha:</label>
               <input
                 type="password"
-                id="confirm-senha"
-                name="confirm-senha"
+                id="confirmarSenha"
+                name="confirmarSenha"
                 className='input-full-size'
                 value={confirmarSenha}
                 onChange={(e) => {
                   setConfirmarSenha(e.target.value);
-                  setErrors({ ...errors, confirmarSenha: '' });
+                  setErrors((prevErrors) => ({ ...prevErrors, confirmarSenha: '' }));
                 }}
               />
               {errors.confirmarSenha && <span className="error">{errors.confirmarSenha}</span>}
@@ -206,33 +210,29 @@ const CadastroUsuario: React.FC = () => {
           </div>
           <div className="signin-item-row">
             <div className="signin-row">
-              <label>Cargo:</label>
+              <label htmlFor="perfil">Perfil:</label>
               <select
-                id="cargo"
-                name="cargo"
-                title='cargo'
-                style={{ background: 'white' }}
+                id="perfil"
+                name="perfil"
                 className='input-full-size'
-                value={cargo}
+                value={perfil}
                 onChange={(e) => {
-                  const selectedCargo = e.target.value;
-                  setCargo(selectedCargo); // Atualiza corretamente o cargo selecionado
-                  setErrors({ ...errors, cargo: '' });
-                  console.log('Cargo selecionado:', selectedCargo); // Verificar o valor do cargo
+                  setPerfil(e.target.value);
+                  setErrors((prevErrors) => ({ ...prevErrors, perfil: '' }));
                 }}
               >
-                <option value="Leitor">Visualizador</option>
+                <option value="">Selecione um perfil</option>
+                <option value="Leitor">Leitor</option>
                 <option value="Administrador">Administrador</option>
               </select>
-              {errors.cargo && <span className="error">{errors.cargo}</span>}
+              {errors.perfil && <span className="error">{errors.perfil}</span>}
             </div>
           </div>
-          <div className="signin-item-last">
-            <div className="signin-row">
-              <input type="submit" className='btn' value="Cadastrar" />
-            </div>
+          <div className="signin-row-submit">
+            <input type="submit" className='btn' value="Cadastrar" />
           </div>
           {successMessage && <div className="success-message">{successMessage}</div>}
+          {errors.form && <div className="error-message">{errors.form}</div>}
         </form>
       </div>
     </div>
