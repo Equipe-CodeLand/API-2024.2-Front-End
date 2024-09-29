@@ -4,7 +4,7 @@ import './styles.css';
 import Logo from '../../../public/images/Logo.png';
 import AprendaMais from '../../assets/AprendaMais.png';
 import Home from '../../assets/Home.png';
-import Dashboard from '../../assets/Dashboard.png';
+// import Dashboard from '../../assets/Dashboard.png';
 import Estacoes from '../../assets/Estacoes.png';
 import Usuario from '../../assets/Usuario.png';
 import Notificacoes from '../../assets/Notificacoes.png';
@@ -22,7 +22,7 @@ interface SidebarLinkProps {
 
 const links: SidebarLinkProps[] = [
   { label: 'Home', href: '/', icon: Home },
-  { label: 'Dashboard', href: '/dashboard', icon: Dashboard },
+  // { label: 'Dashboard', href: '/dashboard', icon: Dashboard },
   { label: 'Aprenda Mais', href: '/aprenda-mais', icon: AprendaMais },
   { label: 'Usuários', href: '/usuarios', icon: Usuario },
   { label: 'Parâmetros', href: '/parametros', icon: Parametros },

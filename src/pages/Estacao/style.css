@@ -23,3 +23,8 @@
     box-sizing: border-box; 
     width: 100%;
   }
+  .estacao-flex{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+  }
