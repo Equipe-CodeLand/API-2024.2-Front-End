@@ -46,12 +46,20 @@ const Parametros: React.FC = () => {
     setParametroEditado(parametro);
   };
 
-  const handleSave = async () => {
+    const handleSave = async () => {
     try {
       await api.put(`http://localhost:5000/parametro/atualizar/${parametroEditado.id}`, parametroEditado);
-      setEditando(null);
-      fetchParametros(); // Atualiza a lista após a edição
-      setError(null)
+      Swal.fire({
+        icon: 'success',
+        title: 'Parâmetro atualizado com sucesso!',
+        showConfirmButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setEditando(null);
+          fetchParametros(); // Atualiza a lista após a edição
+          setError(null);
+        }
+      });
     } catch (err) {
       console.error('Erro ao atualizar parâmetro:', err);
       setError('Erro ao atualizar parâmetro.');
