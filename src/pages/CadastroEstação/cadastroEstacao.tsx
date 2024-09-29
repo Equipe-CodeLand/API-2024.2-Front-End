@@ -39,8 +39,8 @@ const CadastroEstacao: React.FC = () => {
     useEffect(() => {
         const fetchParametros = async () => {
             try {
-                const response = await api.get('/parametro');
-                setParametrosOptions(response.data);
+                const response = await api.get('/parametros');
+                setParametrosOptions(response.data.parametros);
             } catch (err) {
                 console.log('Erro ao buscar as estações' + err);
             }
