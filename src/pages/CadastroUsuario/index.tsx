@@ -4,13 +4,14 @@ import axios from 'axios';
 import './style.css';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Usuario } from '../../interface/usuario';
+import Swal from 'sweetalert2';
 
 const CadastroUsuario: React.FC = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
-  const [cargo, setCargo] = useState('visualizador');
+  const [cargo, setCargo] = useState('visualizador'); // Definir o valor inicial como "visualizador"
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [successMessage, setSuccessMessage] = useState('');
@@ -41,12 +42,12 @@ const CadastroUsuario: React.FC = () => {
     const formErrors: { [key: string]: string } = {};
     setSuccessMessage('');
 
-    // validação do nome
+    // Validação de nome
     if (!nome) {
       formErrors.nome = 'Nome é obrigatório';
     }
 
-    // validação de email
+    // Validação de email
     if (!email) {
       formErrors.email = 'Email é obrigatório';
     } else if (!validateEmail(email)) {
@@ -55,7 +56,7 @@ const CadastroUsuario: React.FC = () => {
       formErrors.email = 'Email já cadastrado';
     }
 
-    // validação de cpf
+    // Validação de CPF
     const cpfUnformatted = cpf.replace(/\D/g, '');
     if (!cpf) {
       formErrors.cpf = 'CPF é obrigatório';
@@ -65,12 +66,12 @@ const CadastroUsuario: React.FC = () => {
       formErrors.cpf = 'CPF já cadastrado';
     }
 
-    // validação de senha
+    // Validação de senha
     if (!senha) {
       formErrors.senha = 'Senha é obrigatória';
     }
 
-    // confirmar a senha
+    // Confirmar senha
     if (!confirmarSenha) {
       formErrors.confirmarSenha = 'Confirmação de senha é obrigatória';
     } else if (senha !== confirmarSenha) {
@@ -78,29 +79,36 @@ const CadastroUsuario: React.FC = () => {
     }
 
     setErrors(formErrors);
+
+    // Se não houver erros
     if (Object.keys(formErrors).length === 0) {
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/usuario/cadastro`, {
-          nome,
-          email,
-          senha,
-          cargo,
-          cpf
-        });
+        console.log('Enviando dados para API...');
+        const usuarioData = { nome, email, senha, cargo, cpf };
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/usuario/cadastro`, usuarioData);
 
         if (response.data.success) {
-          setSuccessMessage('Cadastro realizado com sucesso!');
+          Swal.fire({
+            icon: 'success',
+            title: 'Usuário cadastrado com sucesso!',
+            showConfirmButton: true,
+          });
           setNome('');
           setEmail('');
           setCpf('');
           setSenha('');
           setConfirmarSenha('');
-          setCargo('visualizador');
+          setCargo('Leitor'); // Resetar para o valor padrão
         } else {
           setErrors({ ...errors, form: response.data.message });
         }
       } catch (error) {
-        console.error('Erro ao cadastrar usuário:', error);
+        // Log do erro caso a requisição falhe
+        if (axios.isAxiosError(error)) {
+          console.error('Erro ao cadastrar usuário:', error.response ? error.response.data : error.message);
+        } else {
+          console.error('Erro ao cadastrar usuário:', error);
+        }
         setErrors({ ...errors, form: 'Erro ao cadastrar usuário' });
       }
     }
@@ -203,19 +211,19 @@ const CadastroUsuario: React.FC = () => {
                 id="cargo"
                 name="cargo"
                 title='cargo'
-                style={{background: 'white'}}
+                style={{ background: 'white' }}
                 className='input-full-size'
                 value={cargo}
                 onChange={(e) => {
-                  setCargo(e.target.value);
+                  const selectedCargo = e.target.value;
+                  setCargo(selectedCargo); // Atualiza corretamente o cargo selecionado
                   setErrors({ ...errors, cargo: '' });
+                  console.log('Cargo selecionado:', selectedCargo); // Verificar o valor do cargo
                 }}
               >
-                <option value="visualizador">Visualizador</option>
-                <option value="administrador">Administrador</option>
+                <option value="Leitor">Visualizador</option>
+                <option value="Administrador">Administrador</option>
               </select>
-              {errors.cargo && <span className="error">{errors.cargo}</span>}
-
               {errors.cargo && <span className="error">{errors.cargo}</span>}
             </div>
           </div>
@@ -228,7 +236,7 @@ const CadastroUsuario: React.FC = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default CadastroUsuario;
