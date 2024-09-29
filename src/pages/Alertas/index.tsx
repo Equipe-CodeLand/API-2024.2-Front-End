@@ -12,10 +12,10 @@ const Alertas: React.FC = () => {
   useEffect(() => {
     const fetchAlertas = async () => {
       setLoading(true);
-      setError(null); 
+      setError(null);
       try {
         const response = await fetch('http://localhost:5000/alertas'); // ajuste a URL conforme necessário
-        const data = await response.json();        
+        const data = await response.json();
 
         console.log('Dados recebidos:', data);
 
@@ -25,7 +25,7 @@ const Alertas: React.FC = () => {
 
           data.alertas.forEach((alerta: any) => {
             const estacao = groupedAlerts.find(loc => loc.nomeEstacao === alerta.nomeEstacao);
-            
+
             const formattedAlert = {
               id: alerta.id,
               gravidade: alerta.tipoAlerta === 'perigo' ? 'Perigo' : 'Atenção',
@@ -44,10 +44,10 @@ const Alertas: React.FC = () => {
                 idEstacao: alerta.estacaoId,
                 alerts: [formattedAlert],
               });
-            }            
+            }
           });
           console.log('Alertas agrupados:', groupedAlerts);
-          
+
           setAlerts(groupedAlerts);
         } else {
           console.error('A resposta da API não contém alertas válidos:', data);
@@ -74,30 +74,32 @@ const Alertas: React.FC = () => {
       alerts: location.alerts.filter(alerta => alerta.id !== id),
     })).filter(location => location.alerts.length > 0);
 
-    setAlerts(updatedAlerts); 
+    setAlerts(updatedAlerts);
   };
 
   const handleUpdate = (updatedAlerta: Alerta) => {
     const updatedAlerts = alerts.map(location => ({
       ...location,
-      alerts: location.alerts.map(alerta => 
+      alerts: location.alerts.map(alerta =>
         alerta.id === updatedAlerta.id ? updatedAlerta : alerta
       ),
     }));
-  
+
     setAlerts(updatedAlerts);
   };
-  
-  
+
+
   return (
     <div className='container'>
       <Sidebar />
-      <div> 
+      <div>
         <div className="title-box">
           <h2 className='title-text'>Alertas cadastrados</h2>
-          <button className="new-alert-button" onClick={handleNewAlert}>
-            + Novo Alerta
-          </button>
+          <div className='new-alert-container'>
+            <button className="new-alert-button" onClick={handleNewAlert}>
+              + Novo Alerta
+            </button>
+          </div>
         </div>
         <div className="content">
           {loading ? (
@@ -112,7 +114,7 @@ const Alertas: React.FC = () => {
                   <p className="no-alert-text">Sem alertas na região</p>
                 ) : (
                   location.alerts.map((alerta) => (
-                    <AlertaCard alerta={alerta} key={alerta.id} idEstacao={location.idEstacao}  idParametro={location.idParametro} onDelete={handleDelete} onUpdate={handleUpdate} />
+                    <AlertaCard alerta={alerta} key={alerta.id} idEstacao={location.idEstacao} idParametro={location.idParametro} onDelete={handleDelete} onUpdate={handleUpdate} />
                   ))
                 )}
               </div>
