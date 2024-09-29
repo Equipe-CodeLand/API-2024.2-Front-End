@@ -1,12 +1,15 @@
 .parameter-estacao-container{
   width: 100%;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: var(--pd-4) var(--pd-8);
+  flex-direction: column;
+  padding: var(--pd-4) 0;
   gap: 12px;
 }
-
+.parameter-estacao-container .parameter-content-station{
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
 .parameter-estacao-container .parameter{
   padding: var(--pd-2);
   color: whiteblack;
@@ -23,14 +26,15 @@
 .middle-container{
   padding: var(--pd-4) var(--pd-8);
   display: flex;
-  gap: 36px;
+  flex-direction: column;
+
 }
 
 .middle-container .description-container{
   width: 50%;
   background: white;
   border: 1px solid var(--main-purple);
-  padding: var(--pd-8);
+  padding: var(--pd-4);
   border-radius: 12px;
 }
 .middle-container .description-container .description-title{
@@ -49,9 +53,12 @@
   margin-left: var(--mg-2);
   border-radius: 8px;
 }
-
+.middle-container-info{
+  display: flex;
+    gap: 36px;
+}
 .middle-container .graphs-container{
-  width: 50%;
+  width: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,6 +67,16 @@
   border: 1px solid var(--main-purple);
   border-radius: 12px;
 }
+.back-button{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.back-arrow{
+  width: 20px;
+  height: 20px;
+}
+
 
 @media (max-width: 1118px){
   .middle-container {

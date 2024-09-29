@@ -180,6 +180,7 @@ export const DropdownEstacao: React.FC = () => {
                     <div>
                         <p><strong>ID:</strong> {estacao.id}</p>
                     </div>
+
                 ),
                 col1: (
                     <div>
@@ -249,7 +250,7 @@ export const DropdownEstacao: React.FC = () => {
                             <></>
                         )}
                     </div>
-                    
+
                 ),
                 col2: (
                     <div>
@@ -312,25 +313,25 @@ export const DropdownEstacao: React.FC = () => {
                         <p><strong>CEP:</strong> {estacao.cep}</p>
                         <p><strong>Parâmetros:</strong></p>
                         {estacao.parametros && estacao.parametros.length > 0 ? (
-                        <div className='parametros-container'>
-                            {estacao.parametros.map((parametro) => {
-                                // Buscar o parâmetro completo a partir dos parâmetrosOptions
-                                const parametroCompleto = parametrosOptions.find(p => p.id === parametro.id);
-                                return (
-                                    <p className='parametros' key={parametro.id}>
-                                        <strong>
-                                            {parametroCompleto 
-                                                ? `${parametroCompleto.nome} - ${parametroCompleto.unidade}` 
-                                                : "Nome e unidade não disponíveis"
-                                            }
-                                        </strong>
-                                    </p>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        <p>Nenhum parâmetro disponível</p>
-                    )}
+                            <div className='parametros-container'>
+                                {estacao.parametros.map((parametro) => {
+                                    // Buscar o parâmetro completo a partir dos parâmetrosOptions
+                                    const parametroCompleto = parametrosOptions.find(p => p.id === parametro.id);
+                                    return (
+                                        <p className='parametros' key={parametro.id}>
+                                            <strong>
+                                                {parametroCompleto
+                                                    ? `${parametroCompleto.nome} - ${parametroCompleto.unidade}`
+                                                    : "Nome e unidade não disponíveis"
+                                                }
+                                            </strong>
+                                        </p>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p>Nenhum parâmetro disponível</p>
+                        )}
                     </div>
                 ),
                 col2: (
@@ -341,8 +342,9 @@ export const DropdownEstacao: React.FC = () => {
                     </div>
                 ),
                 extra: [
-                    <div key="action-button">
+                    <div key="action-button" className='estacao-flex'>
                         <button className='btn' onClick={() => setEstacaoEditando(estacao)}>Editar</button>
+                        <Link to={`/estacao/${estacao.id}`} className='btn'>Dashboard</Link>
                     </div>
                 ]
             };
@@ -355,7 +357,7 @@ export const DropdownEstacao: React.FC = () => {
             setSelectedParametros(estacaoEditando.parametros.map(parametro => parametro.id));
         }
     }, [estacaoEditando]);
-    
+
     useEffect(() => {
         const fetchEstacoes = async () => {
             try {
