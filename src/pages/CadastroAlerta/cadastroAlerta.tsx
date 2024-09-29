@@ -48,6 +48,7 @@ const CadastroAlerta: React.FC = () => {
             try {
                 if (estacaoSelecionada !== 0) {
                     const response = await api.get(`/parametro/estacao/${estacaoSelecionada}`);
+                    console.log(response.data, 'parametros');
                     setParametrosOptions(response.data);
                 }
             } catch (err) {
@@ -187,7 +188,7 @@ const CadastroAlerta: React.FC = () => {
                                         <option value="">Selecione um parâmetro</option>
                                         {parametrosOptions.map((parametro, index) => (
                                             <option key={index} value={parametro.id}>
-                                                {parametro.unidade}
+                                                {parametro.nome}
                                             </option>
                                         ))}
                                     </select>

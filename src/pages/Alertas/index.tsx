@@ -5,27 +5,27 @@ import AlertaCard, { Alerta } from '../../components/alertaCard';
 import './style.css';
 
 const Alertas: React.FC = () => {
-  const [alerts, setAlerts] = useState<{ nomeEstacao: string; alerts: Alerta[] }[]>([]);
+  const [alerts, setAlerts] = useState<{ nomeEstacao: string; idEstacao: number, idParametro: number, alerts: Alerta[] }[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAlertas = async () => {
       setLoading(true);
-      setError(null); // Reseta o erro antes de uma nova requisição
+      setError(null); 
       try {
         const response = await fetch('http://localhost:5000/alertas'); // ajuste a URL conforme necessário
-        const data = await response.json();
-    
+        const data = await response.json();        
+
         console.log('Dados recebidos:', data);
-    
-        // Verifique se a resposta contém alertas
+
         if (data.success && Array.isArray(data.alertas)) {
           // Agrupar alertas por estação
-          const groupedAlerts: { nomeEstacao: string; alerts: Alerta[] }[] = [];
+          const groupedAlerts: { nomeEstacao: string; idEstacao: number, idParametro: number, alerts: Alerta[] }[] = [];
 
           data.alertas.forEach((alerta: any) => {
             const estacao = groupedAlerts.find(loc => loc.nomeEstacao === alerta.nomeEstacao);
+            
             const formattedAlert = {
               id: alerta.id,
               gravidade: alerta.tipoAlerta === 'perigo' ? 'Perigo' : 'Atenção',
@@ -40,11 +40,14 @@ const Alertas: React.FC = () => {
             } else {
               groupedAlerts.push({
                 nomeEstacao: alerta.nomeEstacao,
+                idParametro: alerta.parametroId,
+                idEstacao: alerta.estacaoId,
                 alerts: [formattedAlert],
               });
-            }
+            }            
           });
-
+          console.log('Alertas agrupados:', groupedAlerts);
+          
           setAlerts(groupedAlerts);
         } else {
           console.error('A resposta da API não contém alertas válidos:', data);
@@ -61,12 +64,31 @@ const Alertas: React.FC = () => {
     fetchAlertas();
   }, []);
 
-  // Função para redirecionar para a página de cadastro de novo alerta
   const handleNewAlert = () => {
-    // Você pode usar o history do React Router para redirecionar
     window.location.href = '/alerta/cadastro';
   };
 
+  const handleDelete = (id: number) => {
+    const updatedAlerts = alerts.map(location => ({
+      ...location,
+      alerts: location.alerts.filter(alerta => alerta.id !== id),
+    })).filter(location => location.alerts.length > 0);
+
+    setAlerts(updatedAlerts); 
+  };
+
+  const handleUpdate = (updatedAlerta: Alerta) => {
+    const updatedAlerts = alerts.map(location => ({
+      ...location,
+      alerts: location.alerts.map(alerta => 
+        alerta.id === updatedAlerta.id ? updatedAlerta : alerta
+      ),
+    }));
+  
+    setAlerts(updatedAlerts);
+  };
+  
+  
   return (
     <div className='container'>
       <Sidebar />
@@ -90,7 +112,7 @@ const Alertas: React.FC = () => {
                   <p className="no-alert-text">Sem alertas na região</p>
                 ) : (
                   location.alerts.map((alerta) => (
-                  <AlertaCard  alerta={alerta} key={alerta.id} />
+                    <AlertaCard alerta={alerta} key={alerta.id} idEstacao={location.idEstacao}  idParametro={location.idParametro} onDelete={handleDelete} onUpdate={handleUpdate} />
                   ))
                 )}
               </div>
