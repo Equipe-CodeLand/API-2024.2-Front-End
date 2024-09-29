@@ -157,8 +157,6 @@ const CadastroUsuario: React.FC = () => {
               />
               {errors.email && <span className="error">{errors.email}</span>}
             </div>
-          </div>
-          <div className="signin-item-row">
             <div className="signin-row">
               <label htmlFor="cpf">CPF:</label>
               <input

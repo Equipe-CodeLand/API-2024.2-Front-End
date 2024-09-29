@@ -12,6 +12,7 @@ import Relatorio from '../../assets/Relatorio.png';
 import Parametros from '../../assets/Parametros.png';
 import Menu from '../../assets/Menu.png';
 import X from '../../assets/X.png';
+import Alertas from '../../assets/Alerta.png';
 
 interface SidebarLinkProps {
   label: string;
@@ -28,6 +29,8 @@ const links: SidebarLinkProps[] = [
   { label: 'Estações', href: '/estacoes', icon: Estacoes },
   { label: 'Notificações', href: '/notificacoes', icon: Notificacoes },
   { label: 'Relatórios', href: '/relatorios', icon: Relatorio },
+  { label: 'Alertas', href: '/alertas', icon: Alertas },
+
 ];
 
 export const Sidebar: React.FC = () => {
