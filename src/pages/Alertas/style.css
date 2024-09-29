@@ -18,7 +18,13 @@
   background-color: 6a1b9a; /* Cor mais escura quando clicado */
   transform: scale(0.98); /* Leve efeito de clique */
 }
-
+.new-alert-container{
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 1rem;
+  max-width: 1200px;
+  width: 100%;
+}
 
 .alert-container{
     max-width: 1200px;

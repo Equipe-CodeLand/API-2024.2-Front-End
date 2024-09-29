@@ -6,6 +6,7 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import { Perfil, Usuario } from '../../interface/usuario';
 import { Link } from 'react-router-dom'; // Importar o componente Link
 import './style.css';
+import { formatCpf } from '../../utils/formatters';
 
 const PerfilLabel: { [key in Perfil]: string } = {
   [Perfil.Admin]: 'Administrador',
@@ -95,7 +96,8 @@ const UsuarioTable: React.FC = () => {
             <p>
               <input
                 type="text"
-                value={usuarioEditado.cpf}
+                value={formatCpf(usuarioEditado.cpf)}
+                maxLength={11}
                 onChange={(e) => {
                   setUsuarioEditado({ ...usuarioEditado, cpf: e.target.value });
                   setErrors((prevErrors) => ({ ...prevErrors, cpf: '' }));
@@ -145,7 +147,7 @@ const UsuarioTable: React.FC = () => {
             <p><strong style={{ color: 'var(--main-purple)' }}>Tipo:</strong></p>
             <p>{PerfilLabel[usuario.perfil as Perfil]}</p>
             <p><strong style={{ color: 'var(--main-purple)' }}>CPF:</strong></p>
-            <p>{usuario.cpf}</p>
+            <p>{formatCpf(usuario.cpf)}</p>
             <p>
               <div style={{background: 'white', padding: '2rem'}} />
             </p>

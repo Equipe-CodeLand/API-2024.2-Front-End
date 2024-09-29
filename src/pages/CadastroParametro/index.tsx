@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import './style.css';
+import { useNavigate } from 'react-router-dom';
 
 const CadastroParametros: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -11,6 +13,7 @@ const CadastroParametros: React.FC = () => {
   const [unidade, setUnidade] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (successMessage) {
@@ -49,13 +52,18 @@ const CadastroParametros: React.FC = () => {
         });
 
         if (response.data.success) {
-          setSuccessMessage('Cadastro realizado com sucesso!');
+          Swal.fire({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'Parâmetro criado com sucesso!'
+          });
           // Resetar o formulário após envio bem-sucedido
           setNome('');
           setDescricao('');
           setFator('');
           setOffset('');
           setUnidade('');
+          navigate('/parametros')
         } else {
           setErrors({ form: response.data.message });
         }

@@ -28,7 +28,7 @@ const links: SidebarLinkProps[] = [
   { label: 'Parâmetros', href: '/parametros', icon: Parametros },
   { label: 'Estações', href: '/estacoes', icon: Estacoes },
   { label: 'Notificações', href: '/notificacoes', icon: Notificacoes },
-  { label: 'Relatórios', href: '/relatorios', icon: Relatorio },
+  // { label: 'Relatórios', href: '/relatorios', icon: Relatorio },
   { label: 'Alertas', href: '/alertas', icon: Alertas },
 
 ];

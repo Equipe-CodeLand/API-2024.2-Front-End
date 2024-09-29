@@ -5,6 +5,7 @@ import TabelaGenerica from '../../components/tabelaDropdown';
 import { Link } from 'react-router-dom'; 
 import Swal from 'sweetalert2';
 import './style.css';
+import api from '../../config';
 
 interface Parametro {
   id: number;
@@ -23,7 +24,7 @@ const Parametros: React.FC = () => {
 
   const fetchParametros = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/parametros'); // Atualize a URL
+      const response = await api.get('http://localhost:5000/parametros'); // Atualize a URL
       console.log('Dados recebidos:', response.data); // Adicione este log para verificar os dados recebidos
       setParametros(response.data.parametros); // Ajuste conforme a estrutura dos dados
     } catch (err) {
@@ -45,11 +46,20 @@ const Parametros: React.FC = () => {
     setParametroEditado(parametro);
   };
 
-  const handleSave = async () => {
+    const handleSave = async () => {
     try {
-      await axios.put(`http://localhost:5000/parametro/${parametroEditado.id}`, parametroEditado);
-      setEditando(null);
-      fetchParametros(); // Atualiza a lista após a edição
+      await api.put(`http://localhost:5000/parametro/atualizar/${parametroEditado.id}`, parametroEditado);
+      Swal.fire({
+        icon: 'success',
+        title: 'Parâmetro atualizado com sucesso!',
+        showConfirmButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setEditando(null);
+          fetchParametros(); // Atualiza a lista após a edição
+          setError(null);
+        }
+      });
     } catch (err) {
       console.error('Erro ao atualizar parâmetro:', err);
       setError('Erro ao atualizar parâmetro.');
@@ -58,7 +68,7 @@ const Parametros: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await axios.delete(`http://localhost:5000/parametro/${id}`);
+      await api.delete(`http://localhost:5000/parametro/${id}`);
       fetchParametros(); // Atualiza a lista após deletar
     } catch (err) {
       console.error('Erro ao deletar parâmetro:', err);
@@ -103,20 +113,15 @@ const Parametros: React.FC = () => {
         ),
         col1: (
           <div>
-            <p className="field-label">Parametro:</p>
-            <input className="input-field" type="text" name="nome" value={parametroEditado.nome || ''} onChange={handleChange} />
-            <p className="field-label">Fator:</p>
-            <input className="input-field" type="number" name="fator" value={parametroEditado.fator || ''} onChange={handleChange} />
-            <p className="field-label">Descrição:</p>
-            <input className="input-field" type="text" name="descricao" value={parametroEditado.descricao || ''} onChange={handleChange} />
+            <p><strong>Parametro:</strong> <input className="input-field" type="text" name="nome" value={parametroEditado.nome || ''} onChange={handleChange} /></p>
+            <p><strong>Fator:</strong> <input className="input-field" type="number" name="fator" value={parametroEditado.fator || 0} onChange={handleChange} /></p>
+            <p><strong>Descrição:</strong> <input className="input-field" type="text" name="descricao" value={parametroEditado.descricao || ''} onChange={handleChange} /></p>
           </div>
         ),
         col2: (
           <div>
-            <p className="field-label">Unidade:</p>
-            <input className="input-field" type="text" name="unidade" value={parametroEditado.unidade || ''} onChange={handleChange} />
-            <p className="field-label">Offset:</p>
-            <input className="input-field" type="number" name="offset" value={parametroEditado.offset || ''} onChange={handleChange} />
+            <p><strong>Unidade:</strong> <input className="input-field" type="text" name="unidade" value={parametroEditado.unidade || ''} onChange={handleChange} /></p>
+            <p><strong>Offset:</strong> <input className="input-field" type="number" name="offset" value={parametroEditado.offset || 0} onChange={handleChange} /></p>
           </div>
         ),
         extra: [
