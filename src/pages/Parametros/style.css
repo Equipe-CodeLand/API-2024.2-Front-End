@@ -350,6 +350,13 @@ button .btnTabela:hover {
   margin-bottom: 1.5%;
 }
 
+.error-text {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  font-weight: 700 !important;
+}
+
 @media screen and (max-width: 768px){
 
   .adicionarParametro{

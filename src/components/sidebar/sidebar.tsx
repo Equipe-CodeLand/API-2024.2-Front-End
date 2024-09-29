@@ -8,7 +8,7 @@ import Dashboard from '../../assets/Dashboard.png';
 import Estacoes from '../../assets/Estacoes.png';
 import Usuario from '../../assets/Usuario.png';
 import Notificacoes from '../../assets/Notificacoes.png';
-import Relatorio from '../../assets/Relatorio.png';
+// import Relatorio from '../../assets/Relatorio.png';
 import Parametros from '../../assets/Parametros.png';
 import Menu from '../../assets/Menu.png';
 import X from '../../assets/X.png';

@@ -21,6 +21,7 @@ const Parametros: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [editando, setEditando] = useState<number | null>(null);
   const [parametroEditado, setParametroEditado] = useState<Partial<Parametro>>({});
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
   const fetchParametros = async () => {
     try {
@@ -46,7 +47,19 @@ const Parametros: React.FC = () => {
     setParametroEditado(parametro);
   };
 
-    const handleSave = async () => {
+  const handleSave = async () => {
+    const errors: { [key: string]: string } = {};
+    if (!parametroEditado.nome) errors.nome = 'O campo nome é obrigatório.';
+    if (!parametroEditado.unidade) errors.unidade = 'O campo unidade é obrigatório.';
+    if (parametroEditado.fator === undefined) errors.fator = 'O campo fator é obrigatório.';
+    if (parametroEditado.offset === undefined) errors.offset = 'O campo offset é obrigatório.';
+    if (!parametroEditado.descricao) errors.descricao = 'O campo descrição é obrigatório.';
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
     try {
       await api.put(`http://localhost:5000/parametro/atualizar/${parametroEditado.id}`, parametroEditado);
       Swal.fire({
@@ -58,6 +71,7 @@ const Parametros: React.FC = () => {
           setEditando(null);
           fetchParametros(); // Atualiza a lista após a edição
           setError(null);
+          setValidationErrors({});
         }
       });
     } catch (err) {
@@ -100,6 +114,7 @@ const Parametros: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setParametroEditado(prev => ({ ...prev, [name]: value }));
+    setValidationErrors(prev => ({ ...prev, [name]: '' })); // Limpa o erro de validação ao alterar o campo
   };
 
   // Função para gerar o conteúdo em duas colunas + o extra no dropdown
@@ -114,14 +129,19 @@ const Parametros: React.FC = () => {
         col1: (
           <div>
             <p><strong>Parametro:</strong> <input className="input-field" type="text" name="nome" value={parametroEditado.nome || ''} onChange={handleChange} /></p>
+            {validationErrors.nome && <p className="error-text">{validationErrors.nome}</p>}
             <p><strong>Fator:</strong> <input className="input-field" type="number" name="fator" value={parametroEditado.fator || 0} onChange={handleChange} /></p>
+            {validationErrors.fator && <p className="error-text">{validationErrors.fator}</p>}
             <p><strong>Descrição:</strong> <input className="input-field" type="text" name="descricao" value={parametroEditado.descricao || ''} onChange={handleChange} /></p>
+            {validationErrors.descricao && <p className="error-text">{validationErrors.descricao}</p>}
           </div>
         ),
         col2: (
           <div>
             <p><strong>Unidade:</strong> <input className="input-field" type="text" name="unidade" value={parametroEditado.unidade || ''} onChange={handleChange} /></p>
+            {validationErrors.unidade && <p className="error-text">{validationErrors.unidade}</p>}
             <p><strong>Offset:</strong> <input className="input-field" type="number" name="offset" value={parametroEditado.offset || 0} onChange={handleChange} /></p>
+            {validationErrors.offset && <p className="error-text">{validationErrors.offset}</p>}
           </div>
         ),
         extra: [
@@ -194,7 +214,7 @@ const Parametros: React.FC = () => {
         </div>
       </div>
       <div className="content">
-        {error && <p className='error-text'>{error}</p>}
+        {error && <strong className='error-text'>{error}</strong>}
         <TabelaGenerica<Parametro> 
           data={parametros} 
           columns={columns} 
