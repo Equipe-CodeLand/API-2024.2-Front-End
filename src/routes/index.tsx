@@ -3,7 +3,7 @@ import CadastroEstacao from "../pages/CadastroEstação/cadastroEstacao";
 import DropdownUsuario from "../pages/DropdownUsuario";
 import Notificacoes from "../pages/Notificações";
 import Login from "../pages/Login/login";
-import '../globalCss/index.css'
+import '../globalCss/index.css';
 import Home from "../pages/Home/home";
 import AprendaMais from "../pages/AprendaMais/aprendaMais";
 import CadastroUsuario from "../pages/CadastroUsuario";
@@ -12,6 +12,7 @@ import { DropdownEstacao } from "../pages/Estacao/estacao";
 import ParametrosEstação from "../pages/ParametrosEstacao";
 import Parametros from "../pages/Parametros";
 import Alertas from "../pages/Alertas";
+import CadastroAlerta from "../pages/CadastroAlerta/cadastroAlerta";
 
 export default function Rotas() {
     return (
@@ -30,6 +31,7 @@ export default function Rotas() {
                 <Route path='/parametro/cadastro' element={<CadastroParametro />} />
                 <Route path='/parametros' element={<Parametros />} />
                 <Route path='/alertas' element={<Alertas />} />
+                <Route path='/alerta/cadastro' element={<CadastroAlerta />} />
             </Routes>
         </BrowserRouter>
     );

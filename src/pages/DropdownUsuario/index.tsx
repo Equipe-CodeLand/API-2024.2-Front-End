@@ -96,10 +96,13 @@ const UsuarioTable: React.FC = () => {
               <input
                 type="text"
                 value={usuarioEditado.cpf}
-                onChange={(e) =>
-                  setUsuarioEditado({ ...usuarioEditado, cpf: e.target.value })
-                }
+                onChange={(e) => {
+                  setUsuarioEditado({ ...usuarioEditado, cpf: e.target.value });
+                  setErrors((prevErrors) => ({ ...prevErrors, cpf: '' }));
+                }}
+                onFocus={() => setErrors((prevErrors) => ({ ...prevErrors, cpf: '' }))} // Limpa o erro no foco
               />
+              {errors.cpf && <span className="error">{errors.cpf}</span>}
             </p>
             <p>
               <div style={{background: 'white', padding: '1.25rem'}} />
@@ -189,42 +192,50 @@ const UsuarioTable: React.FC = () => {
   }, []);
 
   const salvarEdicao = async (usuario: Usuario) => {
-    setErrors({}); // Limpa os erros antes de verificar novamente
+    // Limpa os erros antes de verificar novamente
+    setErrors({});
+  
     // Verifica se os campos obrigatórios estão preenchidos
+    let hasErrors = false; // Variável para controlar se houve erros
+  
     if (!usuario.nome) {
       setErrors((prev) => ({ ...prev, nome: 'Nome é obrigatório.' }));
+      hasErrors = true; // Marca que houve um erro
     }
     if (!usuario.email) {
       setErrors((prev) => ({ ...prev, email: 'Email é obrigatório.' }));
+      hasErrors = true; // Marca que houve um erro
     }
     if (!usuario.senha) {
       setErrors((prev) => ({ ...prev, senha: 'Senha é obrigatória.' }));
+      hasErrors = true; // Marca que houve um erro
     }
     if (!usuario.cpf) {
       setErrors((prev) => ({ ...prev, cpf: 'CPF é obrigatório.' }));
+      hasErrors = true; // Marca que houve um erro
     }
-
+  
     // Se houver erros, não continua com a requisição
-    if (Object.keys(errors).length > 0) {
+    if (hasErrors) {
       return; // Retorna se houver erros
     }
-
+  
     try {
       await axios.put('http://localhost:5000/usuario/atualizar', usuario);
-
+  
       Swal.fire({
         icon: 'success',
         title: 'Sucesso!',
         text: 'Usuário atualizado com sucesso!',
       });
-
+  
       setUsuarios(usuarios.map(u => u.id === usuario.id ? usuario : u));
       setUsuarioEditando(null);
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
     }
-  };
-  
+  };  
+
   const cancelarEdicao = () => {
     setUsuarioEditando(null); // Sai do modo de edição
   };  

@@ -7,6 +7,7 @@ import "./style.css"
 import api from '../../config';
 import "../../components/tabelaDropdown/style.css"
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 interface Estacao {
     id: number;
@@ -49,6 +50,32 @@ export const DropdownEstacao: React.FC = () => {
             </span>
         );
     };
+
+
+    const excluirEstacao = async (id: number) => {
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: 'Esta ação não pode ser desfeita!',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sim, excluir!',
+            reverseButtons: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.delete(`http://localhost:5000/estacao/deletar/${id}`); // Passa o ID na URL
+
+                    Swal.fire('Excluído!', 'A estação foi excluída com sucesso.', 'success');
+
+                    setEstacoes(estacoes.filter(estacao => estacao.id !== id));
+                } catch (error) {
+                    console.error("Erro ao excluir estação:", error);
+                }
+            }
+        });
+    };
+
 
     // Corrigido: salvarEdicao agora usa selectedParametros
     const salvarEdicao = async (estacao: Estacao) => {
@@ -342,9 +369,16 @@ export const DropdownEstacao: React.FC = () => {
                     </div>
                 ),
                 extra: [
-                    <div key="action-button" className='estacao-flex'>
-                        <button className='btn' onClick={() => setEstacaoEditando(estacao)}>Editar</button>
-                        <Link to={`/estacao/${estacao.id}`} className='btn'>Dashboard</Link>
+                    <div className='botoes'>
+                        <div key="edit-button">
+                            <button className="btn" onClick={() => setEstacaoEditando(estacao)}>Editar</button>
+                        </div>
+                        <div key="delete-button">
+                            <button className="btn" onClick={() => excluirEstacao(estacao.id)}>Excluir</button>
+                        </div>
+                        <div>
+                            <Link to={`/estacao/${estacao.id}`} className='btn'>Dashboard</Link>
+                        </div>
                     </div>
                 ]
             };
