@@ -1,20 +1,28 @@
 .parametros{
-    background-color: #ffffff;
+    background-color: white;
     padding: 1%;
     margin: 1%;
     border: 2px solid var(--main-purple);
-    border-radius: 10px;
+    border-radius: 5px;
     color: var(--main-purple)
+}
+.input-full-size {
+  background-color: var(--main-white) !important;
 }
 
 .parametros-container{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    background-color: white;
+}
+
+.parametros-editar {
+  border: none;
 }
 
 .input-edicao {
-    border: none;
+    border: none !important;
     padding: var(--pd-2);
     border-radius: 5px;
     margin-top: 5px;

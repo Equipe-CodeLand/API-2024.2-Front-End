@@ -11,8 +11,8 @@
   width: 100%;
   border: 1px solid #ff0000;
   border-radius: 8px;
-  background-color: #ffe5e5;
-  padding: 15px;
+  background-color: #fff9e5;
+  padding: 20x;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -31,7 +31,7 @@
 }
 
 .alert-card-header {
-  padding: var(--pd-4);
+  padding: var(--pd-5);
   display: flex;
   flex-direction: row;
   align-items: center;

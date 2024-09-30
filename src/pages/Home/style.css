@@ -1,0 +1,51 @@
+.titulo{
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.header-home {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px;
+    width: 60%;
+    text-align: center;
+    color: #333;
+  }
+  
+  .card-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  
+.intro {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  
+  .intro-text {
+    width: 80%;
+    font-size: 15px;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    display: block;
+  }

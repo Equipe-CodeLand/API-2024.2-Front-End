@@ -21,7 +21,7 @@ interface SidebarLinkProps {
 }
 
 const links: SidebarLinkProps[] = [
-  { label: 'Home', href: '/', icon: Home },
+  { label: 'Home', href: '/home', icon: Home },
   // { label: 'Dashboard', href: '/dashboard', icon: Dashboard },
   { label: 'Aprenda Mais', href: '/aprenda-mais', icon: AprendaMais },
   { label: 'Usuários', href: '/usuarios', icon: Usuario },

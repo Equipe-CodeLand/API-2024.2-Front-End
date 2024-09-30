@@ -254,6 +254,7 @@ button .btnTabela:hover {
 
 .btn-editar:hover {
   background-color: #4a1990;
+  transform: scale(1.05); /* Aumenta o botão em 5% */
 }
 
 .btn-deletar {
@@ -263,6 +264,7 @@ button .btnTabela:hover {
 
 .btn-deletar:hover {
   background-color: #4a1990;
+  transform: scale(1.05); /* Aumenta o botão em 5% */
 }
 
 /* Botão de filtro */
@@ -302,6 +304,7 @@ button .btnTabela:hover {
 
 .btn-salvar:hover, .btn-deletar:hover {
   background-color: #4a1990; /* Cor de fundo ao passar o mouse */
+  transform: scale(1.05); /* Aumenta o botão em 5% */
 }
 
 .input-field {
@@ -311,24 +314,26 @@ button .btnTabela:hover {
   box-sizing: border-box;
   border: none;
   background-color: var(--main-white);
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .adicionarParametro {
   background-color: #5751d3;
   color: white;
   padding: 10px 15px;
-  border-radius: 10px;
+  border-radius: 5px;
   cursor: pointer;
   border: none;
   font-size: 16px;
   font-weight: 600;
   transition: background-color 0.3s ease;
-  margin-right: 10%; /* Move o botão para a direita */
+  margin-right: 8%; /* Move o botão para a direita */
 }
 
 .adicionarParametro:hover {
   background-color: #4a1990;
+  color: white;
+  transform: scale(1.05);
 }
 
 .field-label {

@@ -128,19 +128,19 @@ const Parametros: React.FC = () => {
         ),
         col1: (
           <div>
-            <p><strong>Parametro:</strong> <input className="input-field" type="text" name="nome" value={parametroEditado.nome || ''} onChange={handleChange} /></p>
+            <p><strong className="field-label">Parametro:</strong> <input className="input-field" type="text" name="nome" value={parametroEditado.nome || ''} onChange={handleChange} /></p>
             {validationErrors.nome && <p className="error-text">{validationErrors.nome}</p>}
-            <p><strong>Fator:</strong> <input className="input-field" type="number" name="fator" value={parametroEditado.fator || 0} onChange={handleChange} /></p>
+            <p><strong className="field-label">Fator:</strong> <input className="input-field" type="number" name="fator" value={parametroEditado.fator || 0} onChange={handleChange} /></p>
             {validationErrors.fator && <p className="error-text">{validationErrors.fator}</p>}
-            <p><strong>Descrição:</strong> <input className="input-field" type="text" name="descricao" value={parametroEditado.descricao || ''} onChange={handleChange} /></p>
+            <p><strong className="field-label">Descrição:</strong> <input className="input-field" type="text" name="descricao" value={parametroEditado.descricao || ''} onChange={handleChange} /></p>
             {validationErrors.descricao && <p className="error-text">{validationErrors.descricao}</p>}
           </div>
         ),
         col2: (
           <div>
-            <p><strong>Unidade:</strong> <input className="input-field" type="text" name="unidade" value={parametroEditado.unidade || ''} onChange={handleChange} /></p>
+            <p><strong className="field-label">Unidade:</strong> <input className="input-field" type="text" name="unidade" value={parametroEditado.unidade || ''} onChange={handleChange} /></p>
             {validationErrors.unidade && <p className="error-text">{validationErrors.unidade}</p>}
-            <p><strong>Offset:</strong> <input className="input-field" type="number" name="offset" value={parametroEditado.offset || 0} onChange={handleChange} /></p>
+            <p><strong className="field-label">Offset:</strong> <input className="input-field" type="number" name="offset" value={parametroEditado.offset || 0} onChange={handleChange} /></p>
             {validationErrors.offset && <p className="error-text">{validationErrors.offset}</p>}
           </div>
         ),
