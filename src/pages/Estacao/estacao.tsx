@@ -205,21 +205,23 @@ export const DropdownEstacao: React.FC = () => {
             return {
                 idRow: (
                     <div>
-                        <p><strong>ID:</strong> {estacao.id}</p>
+                        <p style={{ color: 'var(--main-purple)' }}><strong>ID:</strong> {estacao.id}</p>
                     </div>
 
                 ),
                 col1: (
                     <div>
-                        <p><strong>MAC:</strong></p>
-                        <input
-                            className="input-edicao"
-                            type="text"
-                            value={estacaoEditando.uid}
-                            onChange={(e) => setEstacaoEditando({ ...estacaoEditando, uid: e.target.value })}
-                        />
-                        {errors.uid && <span className="error">{errors.uid}</span>}
-                        <p><strong>Nome:</strong></p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>MAC:</strong></p>
+                        <p>
+                            <input
+                                className="input-edicao"
+                                type="text"
+                                value={estacaoEditando.uid}
+                                onChange={(e) => setEstacaoEditando({ ...estacaoEditando, uid: e.target.value })}
+                            />
+                            {errors.uid && <span className="error">{errors.uid}</span>}
+                        </p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>Nome:</strong></p>
                         <input
                             className="input-edicao"
                             type="text"
@@ -227,7 +229,7 @@ export const DropdownEstacao: React.FC = () => {
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, nome: e.target.value })}
                         />
                         {errors.nome && <span className="error">{errors.nome}</span>}
-                        <p><strong>CEP:</strong></p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>CEP:</strong></p>
                         <input
                             className="input-edicao"
                             type="text"
@@ -236,7 +238,7 @@ export const DropdownEstacao: React.FC = () => {
                         />
                         {errors.cep && <span className="error">{errors.cep}</span>}
                         <div className="signin-row">
-                            <label htmlFor="parametros">Parâmetros:</label>
+                            <label htmlFor="parametros" >Parâmetros:</label>
                             <select
                                 id="parametros"
                                 className="input-full-size"
@@ -281,7 +283,7 @@ export const DropdownEstacao: React.FC = () => {
                 ),
                 col2: (
                     <div>
-                        <p><strong>Endereço:</strong></p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>Endereço:</strong></p>
                         <input
                             className="input-edicao"
                             type="text"
@@ -296,7 +298,7 @@ export const DropdownEstacao: React.FC = () => {
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, numero: Number(e.target.value) })}
                         />
                         {errors.numero && <span className="error">{errors.numero}</span>}
-                        <p><strong>Bairro:</strong></p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>Bairro:</strong></p>
                         <input
                             className="input-edicao"
                             type="text"
@@ -304,7 +306,7 @@ export const DropdownEstacao: React.FC = () => {
                             onChange={(e) => setEstacaoEditando({ ...estacaoEditando, bairro: e.target.value })}
                         />
                         {errors.bairro && <span className="error">{errors.bairro}</span>}
-                        <p><strong>Cidade:</strong></p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>Cidade:</strong></p>
                         <input
                             className="input-edicao"
                             type="text"
@@ -330,15 +332,18 @@ export const DropdownEstacao: React.FC = () => {
             return {
                 idRow: (
                     <div>
-                        <p><strong>ID:</strong> {estacao.id}</p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>ID:</strong> {estacao.id}</p>
                     </div>
                 ),
                 col1: (
-                    <div>
-                        <p><strong>MAC:</strong> {estacao.uid}</p>
-                        <p><strong>Nome:</strong> {estacao.nome}</p>
-                        <p><strong>CEP:</strong> {estacao.cep}</p>
-                        <p><strong>Parâmetros:</strong></p>
+                    <div className='listagem'>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>MAC:</strong> </p>
+                        <p>{estacao.uid}</p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>Nome:</strong> </p>
+                        <p>{estacao.nome}</p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>CEP:</strong> </p>
+                        <p>{estacao.cep}</p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>Parâmetros:</strong></p>
                         {estacao.parametros && estacao.parametros.length > 0 ? (
                             <div className='parametros-container'>
                                 {estacao.parametros.map((parametro) => {
@@ -362,10 +367,16 @@ export const DropdownEstacao: React.FC = () => {
                     </div>
                 ),
                 col2: (
-                    <div>
-                        <p><strong>Endereço:</strong> {estacao.rua} n° {estacao.numero}</p>
-                        <p><strong>Bairro:</strong> {estacao.bairro}</p>
-                        <p><strong>Cidade:</strong> {estacao.cidade}</p>
+                    <div className='listagem'>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>Endereço:</strong></p>
+                        <p>{estacao.rua} n° {estacao.numero}</p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>Bairro:</strong></p>
+                        <p>{estacao.bairro}</p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>Cidade:</strong> </p>
+                        <p>{estacao.cidade}</p>
+                        <p>
+                            <div style={{ background: 'white', padding: '2rem' }} />
+                        </p>
                     </div>
                 ),
                 extra: [

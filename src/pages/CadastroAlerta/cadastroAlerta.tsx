@@ -3,6 +3,7 @@ import Swal from 'sweetalert2'; // Importa o SweetAlert2
 import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
 import api from '../../config';
+import { useNavigate } from 'react-router-dom';
 
 const CadastroAlerta: React.FC = () => {
     const [estacaoSelecionada, setEstacaoSelecionada] = useState<number>(0);
@@ -14,6 +15,7 @@ const CadastroAlerta: React.FC = () => {
     const [estacoesOptions, setEstacoesOptions] = useState<any[]>([]);
     const [parametrosOptions, setParametrosOptions] = useState<any[]>([]);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const navigate = useNavigate();
 
     const alertaOptions = [
         { value: 'Atencao', label: 'Atenção' },
@@ -111,7 +113,7 @@ const CadastroAlerta: React.FC = () => {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                        window.location.href = '/alertas';
+                       navigate('/alertas')
                     });
 
                     // limpar os campos

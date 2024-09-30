@@ -51,7 +51,7 @@ const Alertas: React.FC = () => {
           setAlerts(groupedAlerts);
         } else {
           console.error('A resposta da API não contém alertas válidos:', data);
-          setError('Erro: A resposta da API não contém alertas válidos.');
+          setError('Sem alertas cadastrados no momento.');
         }
       } catch (error) {
         console.error('Erro ao buscar alertas:', error);
@@ -96,7 +96,7 @@ const Alertas: React.FC = () => {
         <div className="title-box">
           <h2 className='title-text'>Alertas cadastrados</h2>
           <div className='new-alert-container'>
-            <button className="new-alert-button" onClick={handleNewAlert}>
+            <button className="btn" onClick={handleNewAlert}>
               + Novo Alerta
             </button>
           </div>

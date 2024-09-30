@@ -161,9 +161,7 @@ const CadastroEstacao: React.FC = () => {
                     <h2 className="title-text">Cadastro de Estações</h2>
                 </div>
                 <div className="content">
-
                     <form className="signin-container" onSubmit={handleSubmit}>
-
                         <div className="signin-item-row">
                             <div className="signin-row">
                                 <label htmlFor="nome">Nome:</label>
