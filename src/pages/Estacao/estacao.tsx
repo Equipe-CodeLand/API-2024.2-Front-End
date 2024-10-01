@@ -264,7 +264,7 @@ export const DropdownEstacao: React.FC = () => {
 
                         {/* Renderização dos parâmetros selecionados, tanto já cadastrados quanto novos */}
                         {selectedParametros.length > 0 ? (
-                            <div className="parametros">
+                            <div className="parametros-selecionados">
                                 {selectedParametros.map((parametroId) => {
                                     const parametro = parametrosOptions.find(p => p.id === parametroId);
                                     return (

@@ -6,6 +6,10 @@
     border-radius: 5px;
     color: var(--main-purple)
 }
+.parametros-selecionados{
+  display: flex;
+  gap: 5px;
+}
 .input-full-size {
   background-color: var(--main-white) !important;
 }

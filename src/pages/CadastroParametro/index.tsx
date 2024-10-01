@@ -51,7 +51,7 @@ const CadastroParametros: React.FC = () => {
           unidade
         });
 
-        if (response.data.success) {
+        if (response.status === 201) {
           Swal.fire({
             icon: 'success',
             title: 'Sucesso!',

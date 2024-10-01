@@ -95,7 +95,7 @@ const CadastroUsuario: React.FC = () => {
           perfil
         });
 
-        if (response.data.success) {
+        if (response.status == 201){
           Swal.fire({
             title: 'Sucesso!',
             text: 'Usuário cadastrado com sucesso',

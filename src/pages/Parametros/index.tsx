@@ -25,11 +25,11 @@ const Parametros: React.FC = () => {
 
   const fetchParametros = async () => {
     try {
-      const response = await api.get('http://localhost:5000/parametros'); // Atualize a URL
-      console.log('Dados recebidos:', response.data); // Adicione este log para verificar os dados recebidos
-      setParametros(response.data.parametros); // Ajuste conforme a estrutura dos dados
+      const response = await api.get('http://localhost:5000/parametros');
+      console.log('Dados recebidos:', response.data); 
+      setParametros(response.data);
     } catch (err) {
-      console.error('Erro ao buscar parâmetros:', err); // Mude para console.error para erros
+      console.error('Erro ao buscar parâmetros:', err);
       if (axios.isAxiosError(err) && err.response) {
         setError(`Erro ao buscar parâmetros: ${err.response.status} - ${err.response.statusText}`);
       } else {
