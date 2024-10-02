@@ -7,10 +7,19 @@ import "./style.css"
 import api from '../../config';
 import "../../components/tabelaDropdown/style.css"
 import Swal from 'sweetalert2';
-import axios from 'axios';
+
+interface Parametro {
+    id: string;
+    nome: string;
+    unidade: string;
+    fator: number;
+    offset: number;
+    descricao: string;
+}
+
 
 interface Estacao {
-    id: number;
+    id: string;
     nome: string;
     uid: string;
     cep: string;
@@ -18,7 +27,7 @@ interface Estacao {
     numero: number;
     bairro: string;
     cidade: string;
-    parametros: any[]; // Corrigido: use any[] para o tipo de parâmetro
+    parametros: string[];
     status: string;
 }
 
@@ -27,10 +36,10 @@ export const DropdownEstacao: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [estacaoEditando, setEstacaoEditando] = useState<Estacao | null>(null);
-    const [selectedParametros, setSelectedParametros] = useState<number[]>([]);
-    const [parametroSelecionado, setParametroSelecionado] = useState<number>(0);
+    const [selectedParametros, setSelectedParametros] = useState<string[]>([]);
+    const [parametroSelecionado, setParametroSelecionado] = useState<string>('');
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [parametrosOptions, setParametrosOptions] = useState<any[]>([])
+    const [parametrosOptions, setParametrosOptions] = useState<Parametro[]>([])
 
     // Função para renderizar o status com bolinha colorida
     const renderStatus = (value: string | number | any[]) => {
@@ -52,7 +61,8 @@ export const DropdownEstacao: React.FC = () => {
     };
 
 
-    const excluirEstacao = async (id: number) => {
+    const excluirEstacao = async (id: string) => {
+        console.log("id da estação para deletar:",id)
         Swal.fire({
             title: 'Tem certeza?',
             text: 'Esta ação não pode ser desfeita!',
@@ -64,7 +74,7 @@ export const DropdownEstacao: React.FC = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`http://localhost:5000/estacao/deletar/${id}`); // Passa o ID na URL
+                    await api.delete(`/estacao/deletar/${id}`); // Passa o ID na URL
 
                     Swal.fire('Excluído!', 'A estação foi excluída com sucesso.', 'success');
 
@@ -129,21 +139,13 @@ export const DropdownEstacao: React.FC = () => {
                 return;
             }
 
-            // Extrai os IDs dos parâmetros selecionados
-            const parametrosIds = selectedParametros;
-
             // Atualiza a estação com os IDs dos parâmetros
-            const updatedEstacao = { ...estacao, parametros: parametrosIds };
+            const updatedEstacao = { ...estacao, parametros: selectedParametros };
 
-            await api.put(`/estacao/atualizar/${estacao.id}`, updatedEstacao);
+            await api.put(`/estacao/atualizar/`, updatedEstacao);
 
             // Aqui, vamos buscar os objetos completos dos parâmetros novamente
-            const parametrosCompletos = parametrosOptions.filter(p => parametrosIds.includes(p.id));
-
-            // Atualiza o estado da estação editada com os objetos completos dos parâmetros
-            const estacaoComParametrosCompletos = { ...updatedEstacao, parametros: parametrosCompletos };
-
-            setEstacoes(estacoes.map(e => e.id === estacao.id ? estacaoComParametrosCompletos : e));
+            setEstacoes(estacoes.map(e => e.id === estacao.id ? updatedEstacao : e));
             setEstacaoEditando(null);
             setSelectedParametros([]); // Limpa a seleção de parâmetros
             Swal.fire({
@@ -179,7 +181,8 @@ export const DropdownEstacao: React.FC = () => {
         const fetchParametros = async () => {
             try {
                 const response = await api.get('/parametros');
-                setParametrosOptions(response.data.parametros);
+                console.log('parametros:',response.data);
+                setParametrosOptions(response.data);
             } catch (err) {
                 console.log('Erro ao buscar as estações' + err);
             }
@@ -189,14 +192,14 @@ export const DropdownEstacao: React.FC = () => {
     }, []);
 
     // Corrigido: handleSelectParametro agora usa selectedParametros
-    const handleSelectParametro = (parametroId: number) => {
+    const handleSelectParametro = (parametroId: string) => {
         if (!selectedParametros.includes(parametroId)) {
             setSelectedParametros([...selectedParametros, parametroId]);
-            setParametroSelecionado(0);
+            setParametroSelecionado('');
         }
     };
 
-    const handleRemoveParametro = (parametroId: number) => {
+    const handleRemoveParametro = (parametroId: string) => {
         setSelectedParametros(selectedParametros.filter(id => id !== parametroId));
     };
 
@@ -244,8 +247,9 @@ export const DropdownEstacao: React.FC = () => {
                                 className="input-full-size"
                                 value={parametroSelecionado}
                                 onChange={(e) => {
-                                    setParametroSelecionado(parseInt(e.target.value));
-                                    handleSelectParametro(parseInt(e.target.value));
+                                    const newParam = (e.target.value);
+                                    setParametroSelecionado(newParam);
+                                    handleSelectParametro(newParam);
                                 }}
                             >
                                 <option value="">Selecione um parâmetro</option>
@@ -263,7 +267,7 @@ export const DropdownEstacao: React.FC = () => {
                         </div>
 
                         {/* Renderização dos parâmetros selecionados, tanto já cadastrados quanto novos */}
-                        {selectedParametros.length > 0 ? (
+                        {selectedParametros.length > 0 && (
                             <div className="parametros-selecionados">
                                 {selectedParametros.map((parametroId) => {
                                     const parametro = parametrosOptions.find(p => p.id === parametroId);
@@ -275,8 +279,6 @@ export const DropdownEstacao: React.FC = () => {
                                     );
                                 })}
                             </div>
-                        ) : (
-                            <></>
                         )}
                     </div>
 
@@ -348,9 +350,10 @@ export const DropdownEstacao: React.FC = () => {
                             <div className='parametros-container'>
                                 {estacao.parametros.map((parametro) => {
                                     // Buscar o parâmetro completo a partir dos parâmetrosOptions
-                                    const parametroCompleto = parametrosOptions.find(p => p.id === parametro.id);
+                                    const parametroCompleto = parametrosOptions.find(p => p.id === parametro);
+                                    // console.log("id dos parametros",parametro)
                                     return (
-                                        <p className='parametros' key={parametro.id}>
+                                        <p className='parametros' key={parametro}>
                                             <strong>
                                                 {parametroCompleto
                                                     ? `${parametroCompleto.nome} - ${parametroCompleto.unidade}`
@@ -399,14 +402,15 @@ export const DropdownEstacao: React.FC = () => {
     useEffect(() => {
         if (estacaoEditando) {
             // Quando iniciar a edição, preenche o estado com os parâmetros já cadastrados
-            setSelectedParametros(estacaoEditando.parametros.map(parametro => parametro.id));
+            setSelectedParametros(estacaoEditando.parametros.map(parametro => parametro));
         }
     }, [estacaoEditando]);
 
     useEffect(() => {
         const fetchEstacoes = async () => {
             try {
-                const response = await api.get('/estacao');
+                const response = await api.get('/estacoes');
+                console.log(response.data);
                 setEstacoes(response.data);
                 setLoading(false);
             } catch (err) {

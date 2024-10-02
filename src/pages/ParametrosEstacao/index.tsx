@@ -6,6 +6,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BackArrow from '../../assets/back-arrow.png'
 import api from '../../config';
 
+interface Parametro {
+  id: number;
+  nome: string;
+  unidade: string;
+  fator: number;
+  offset: number;
+  descricao: string;
+}
+
+
 interface Estacao {
   id: number;
   nome: string;
@@ -15,7 +25,7 @@ interface Estacao {
   numero: number;
   bairro: string;
   cidade: string;
-  parametros: any[]; // Corrigido: use any[] para o tipo de parâmetro
+  parametros: Parametro[];
   status: string;
 }
 

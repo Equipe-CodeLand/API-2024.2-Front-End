@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import TabelaGenerica from '../../components/tabelaDropdown';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './style.css';
 import api from '../../config';
@@ -25,8 +25,8 @@ const Parametros: React.FC = () => {
 
   const fetchParametros = async () => {
     try {
-      const response = await api.get('http://localhost:5000/parametros');
-      console.log('Dados recebidos:', response.data); 
+      const response = await api.get('/parametros');
+      console.log('Dados recebidos:', response.data);
       setParametros(response.data);
     } catch (err) {
       console.error('Erro ao buscar parâmetros:', err);
@@ -61,7 +61,7 @@ const Parametros: React.FC = () => {
     }
 
     try {
-      await api.put(`http://localhost:5000/parametro/atualizar/${parametroEditado.id}`, parametroEditado);
+      await api.put(`/parametro/atualizar/${parametroEditado.id}`, parametroEditado);
       Swal.fire({
         icon: 'success',
         title: 'Parâmetro atualizado com sucesso!',
@@ -82,7 +82,7 @@ const Parametros: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await api.delete(`http://localhost:5000/parametro/${id}`);
+      await api.delete(`/parametro/${id}`);
       fetchParametros(); // Atualiza a lista após deletar
     } catch (err) {
       console.error('Erro ao deletar parâmetro:', err);
@@ -215,9 +215,9 @@ const Parametros: React.FC = () => {
       </div>
       <div className="content">
         {error && <strong className='error-text'>{error}</strong>}
-        <TabelaGenerica<Parametro> 
-          data={parametros} 
-          columns={columns} 
+        <TabelaGenerica<Parametro>
+          data={parametros}
+          columns={columns}
           detailExtractor={(parametro) => (
             <div className="parametro-detalhes">
               <p className="field-label">ID: {parametro.id}</p>
@@ -227,7 +227,7 @@ const Parametros: React.FC = () => {
               <p className="field-value">{parametro.fator}</p>
             </div>
           )}
-          dropdownContent={dropdownContent} 
+          dropdownContent={dropdownContent}
         />
       </div>
     </div>
