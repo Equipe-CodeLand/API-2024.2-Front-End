@@ -5,15 +5,43 @@ import './style.css';
 import api from '../../config';
 import { useNavigate } from 'react-router-dom';
 
+interface Estacao {
+    id: string;
+    nome: string;
+    uid: string;
+    cep: string;
+    rua: string;
+    numero: number;
+    bairro: string;
+    cidade: string;
+    parametros: string[];
+    status: string;
+}
+
+interface Parametro {
+    id: string;
+    nome: string;
+    unidade: string;
+    fator: number;
+    offset: number;
+    descricao: string;
+}
+
+
 const CadastroAlerta: React.FC = () => {
-    const [estacaoSelecionada, setEstacaoSelecionada] = useState<number>(0);
-    const [parametroSelecionado, setParametroSelecionado] = useState<number>(0);
+    // estados referente as estações
+    const [estacoes, setEstacoes] = useState<Estacao[]>([]);
+    const [estacaoSelecionada, setEstacaoSelecionada] = useState<string>('');
+    // estados referentes aos parametros
+    const [parametros, setParametros] = useState<Parametro[]>([]);
+    const [parametroSelecionado, setParametroSelecionado] = useState<string>('');
+    // 
     const [alertaSelecionado, setAlertaSelecionado] = useState('');
-    const [mensagem, setMensagem] = useState('');
+    // 
     const [condicaoSelecionada, setCondicaoSelecionada] = useState('');
+    // 
+    const [mensagem, setMensagem] = useState('');
     const [valor, setValor] = useState<string>('');
-    const [estacoesOptions, setEstacoesOptions] = useState<any[]>([]);
-    const [parametrosOptions, setParametrosOptions] = useState<any[]>([]);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const navigate = useNavigate();
 
@@ -34,8 +62,8 @@ const CadastroAlerta: React.FC = () => {
     useEffect(() => {
         const fetchEstacoes = async () => {
             try {
-                const response = await api.get('/estacao');
-                setEstacoesOptions(response.data);
+                const response = await api.get('/estacoes');
+                setEstacoes(response.data);
             } catch (err) {
                 console.log('Erro ao buscar as estações: ' + err);
             }
@@ -46,20 +74,23 @@ const CadastroAlerta: React.FC = () => {
 
     // busca os parâmetros quando a estação é selecionada
     useEffect(() => {
-        const fetchParametros = async () => {
-            try {
-                if (estacaoSelecionada !== 0) {
-                    const response = await api.get(`/parametro/estacao/${estacaoSelecionada}`);
-                    console.log(response.data, 'parametros');
-                    setParametrosOptions(response.data);
-                }
-            } catch (err) {
-                console.log('Erro ao buscar os parâmetros: ' + err);
-            }
-        };
+        const estacao = estacoes.find((e) => e.id === estacaoSelecionada);
+        if (estacao) {
+            setParametros(estacao.parametros);
+            console.log(parametros)
+        } else {
+            setParametros([]);
+        }
+    }, [estacaoSelecionada, estacoes, parametros]);
 
-        fetchParametros();
-    }, [estacaoSelecionada]);
+    const handleEstacaoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setEstacaoSelecionada(event.target.value);
+        setParametroSelecionado('');
+    };
+
+    const handleParametroChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setParametroSelecionado(event.target.value);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -113,12 +144,12 @@ const CadastroAlerta: React.FC = () => {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                       navigate('/alertas')
+                        navigate('/alertas')
                     });
 
                     // limpar os campos
-                    setEstacaoSelecionada(0);
-                    setParametroSelecionado(0);
+                    setEstacaoSelecionada('');
+                    setParametroSelecionado('');
                     setAlertaSelecionado('');
                     setMensagem('');
                     setCondicaoSelecionada('');
@@ -139,7 +170,6 @@ const CadastroAlerta: React.FC = () => {
         }
     };
 
-
     return (
         <div>
             <Sidebar />
@@ -156,13 +186,10 @@ const CadastroAlerta: React.FC = () => {
                                     id="estacao"
                                     className='input-full-size'
                                     value={estacaoSelecionada}
-                                    onChange={(e) => {
-                                        setEstacaoSelecionada(parseInt(e.target.value));
-                                        setParametroSelecionado(0);
-                                    }}
+                                    onChange={handleEstacaoChange}
                                 >
                                     <option value="">Selecione uma estação</option>
-                                    {estacoesOptions.map((estacao, index) => (
+                                    {estacoes.map((estacao, index) => (
                                         <option key={index} value={estacao.id}>
                                             {estacao.nome}
                                         </option>
@@ -180,13 +207,13 @@ const CadastroAlerta: React.FC = () => {
                                         id="parametro"
                                         className='input-full-size'
                                         value={parametroSelecionado}
-                                        onChange={(e) => setParametroSelecionado(parseInt(e.target.value))}
-                                        disabled={estacaoSelecionada === 0} // desabilitar se nenhuma estação estiver selecionada
+                                        onChange={handleParametroChange}
+                                        disabled={!estacaoSelecionada} // desabilitar se nenhuma estação estiver selecionada
                                     >
                                         <option value="">Selecione um parâmetro</option>
-                                        {parametrosOptions.map((parametro, index) => (
+                                        {parametros.map((parametro, index) => (
                                             <option key={index} value={parametro.id}>
-                                                {parametro.nome}
+                                                {parametro}
                                             </option>
                                         ))}
                                     </select>

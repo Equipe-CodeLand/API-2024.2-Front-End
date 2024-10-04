@@ -14,7 +14,7 @@ const Alertas: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch('http://localhost:5000/alertas'); // ajuste a URL conforme necessário
+        const response = await fetch('/alertas'); 
         const data = await response.json();
 
         console.log('Dados recebidos:', data);
