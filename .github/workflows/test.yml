@@ -1,0 +1,25 @@
+name: Run Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x' # Defina a versão do Node.js que você usa
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set environment variable for backend URL
+        run: echo "REACT_APP_BACKEND_URL=https://localhost:5000" >> .env
+
+      - name: Run tests
+        run: npm test
