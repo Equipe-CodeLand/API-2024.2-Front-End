@@ -43,6 +43,7 @@ const CadastroAlerta: React.FC = () => {
             try {
                 const response = await api.get('/estacoes');
                 setEstacoes(response.data);
+                console.log('get estações:',response.data);
             } catch (err) {
                 console.log('Erro ao buscar as estações: ' + err);
             }
@@ -64,7 +65,7 @@ const CadastroAlerta: React.FC = () => {
                 descricao: '' // Provide appropriate default or fetched values
             }));
             setParametros(parametrosEstacao);
-            // console.log(parametrosEstacao);
+            console.log('parametro da estação',parametrosEstacao);
         } else {
             setParametros([]);
         }
@@ -199,7 +200,7 @@ const CadastroAlerta: React.FC = () => {
                                     >
                                         <option value="">Selecione um parâmetro</option>
                                         {parametros.map((parametro, index) => (
-                                            <option key={index} value={parametro.id}>
+                                            <option key={index} value={parametro.nome}>
                                                 {parametro.nome}
                                             </option>
                                         ))}

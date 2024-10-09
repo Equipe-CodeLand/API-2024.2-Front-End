@@ -7,8 +7,8 @@ import api from '../../config/index'
 
 interface GroupedAlert {
   nomeEstacao: string;
-  idEstacao: number;
-  idParametro: number;
+  idEstacao: string;
+  idParametro: string;
   alerts: Alerta[];
 }
 
@@ -22,7 +22,7 @@ const Alertas: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await api.get('/alertas'); 
+        const response = await api.get('/alertas');
         const data = await response.data;
 
         console.log('Dados recebidos:', data);
@@ -30,9 +30,11 @@ const Alertas: React.FC = () => {
         if (Array.isArray(data)) {
           // Agrupar alertas por estação
           const groupedAlerts: GroupedAlert[] = [];
+          console.log('grouped alerts:',groupedAlerts)
 
           data.forEach((alerta: any) => {
             const estacao = groupedAlerts.find(loc => loc.idEstacao === alerta.estacaoId && loc.idParametro === alerta.parametroId);
+            console.log('dados da estação:', estacao)
 
             const formattedAlert = {
               id: alerta.id,
@@ -47,9 +49,10 @@ const Alertas: React.FC = () => {
               estacaoId: alerta.estacaoId,
               parametroId: alerta.parametroId,
             };
-
+            console.log('formatted alerta:', formattedAlert)
             if (estacao) {
               estacao.alerts.push(formattedAlert);
+              console.log(formattedAlert);
             } else {
               groupedAlerts.push({
                 nomeEstacao: alerta.nomeEstacao,
@@ -81,7 +84,7 @@ const Alertas: React.FC = () => {
     window.location.href = '/alerta/cadastro';
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     const updatedAlerts = alerts.map(location => ({
       ...location,
       alerts: location.alerts.filter(alerta => alerta.id !== id),

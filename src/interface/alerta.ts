@@ -1,5 +1,5 @@
 export interface Alerta {
-    id: number;
+    id: string;
     local: string;
     gravidade: string;
     descricao: string;
@@ -8,6 +8,6 @@ export interface Alerta {
     condicao: string;
     nomeParametro: string;
     nomeEstacao: string;
-    estacaoId: number;
-    parametroId: number;
+    estacaoId: string;
+    parametroId: string;
 }

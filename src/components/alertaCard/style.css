@@ -51,7 +51,6 @@
 }
 
 .inside-box {
-  background: var(--main-second-purple);
   padding: var(--pd-3);
   border-radius: 0 0 12px 12px;
 }
