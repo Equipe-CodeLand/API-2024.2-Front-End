@@ -64,11 +64,11 @@ const CadastroAlerta: React.FC = () => {
                 descricao: '' // Provide appropriate default or fetched values
             }));
             setParametros(parametrosEstacao);
-            console.log(parametrosEstacao);
+            // console.log(parametrosEstacao);
         } else {
             setParametros([]);
         }
-    }, [estacaoSelecionada, estacoes, parametros]);
+    }, [estacaoSelecionada, estacoes]);
 
     const handleEstacaoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setEstacaoSelecionada(event.target.value);
@@ -124,7 +124,7 @@ const CadastroAlerta: React.FC = () => {
                     valor: parseFloat(valor)
                 });
 
-                if (response.data.success) {
+                if (response.status === 201) {
                     Swal.fire({
                         title: 'Sucesso!',
                         text: 'O alerta foi cadastrado com sucesso!',

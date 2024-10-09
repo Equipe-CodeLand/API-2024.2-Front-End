@@ -3,9 +3,17 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import './style.css';
 import { Alerta } from '../../interface/alerta';
 import AlertaCard from '../../components/alertaCard';
+import api from '../../config/index'
+
+interface GroupedAlert {
+  nomeEstacao: string;
+  idEstacao: number;
+  idParametro: number;
+  alerts: Alerta[];
+}
 
 const Alertas: React.FC = () => {
-  const [alerts, setAlerts] = useState<{ nomeEstacao: string; idEstacao: number, idParametro: number, alerts: Alerta[] }[]>([]);
+  const [alerts, setAlerts] = useState<GroupedAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,17 +22,17 @@ const Alertas: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch('/alertas'); 
-        const data = await response.json();
+        const response = await api.get('/alertas'); 
+        const data = await response.data;
 
         console.log('Dados recebidos:', data);
 
-        if (data.success && Array.isArray(data.alertas)) {
+        if (Array.isArray(data)) {
           // Agrupar alertas por estação
-          const groupedAlerts: { nomeEstacao: string; idEstacao: number, idParametro: number, alerts: Alerta[] }[] = [];
+          const groupedAlerts: GroupedAlert[] = [];
 
-          data.alertas.forEach((alerta: any) => {
-            const estacao = groupedAlerts.find(loc => loc.nomeEstacao === alerta.nomeEstacao);
+          data.forEach((alerta: any) => {
+            const estacao = groupedAlerts.find(loc => loc.idEstacao === alerta.estacaoId && loc.idParametro === alerta.parametroId);
 
             const formattedAlert = {
               id: alerta.id,
