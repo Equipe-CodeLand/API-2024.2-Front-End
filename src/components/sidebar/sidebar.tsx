@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './styles.css';
-import Logo from '../../../public/images/Logo.png';
+import Logo from '../../assets/Logo.png';
 import AprendaMais from '../../assets/AprendaMais.png';
 import Home from '../../assets/Home.png';
 // import Dashboard from '../../assets/Dashboard.png';

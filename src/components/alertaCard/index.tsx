@@ -3,20 +3,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import './style.css';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-
-export interface Alerta {
-  id: number;
-  local: string;
-  gravidade: string;
-  descricao: string;
-  valor: number;
-  parametro: string;
-  condicao: string;
-  nomeParametro: string;
-  nomeEstacao: string;
-  estacaoId: number;
-  parametroId: number;
-}
+import { Alerta } from '../../interface/alerta';
 
 interface AlertaCardProps {
   alerta: Alerta;
@@ -45,7 +32,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
   useEffect(() => {
     const fetchParametros = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/parametro/estacao/${idEstacao}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/parametro/estacao/${idEstacao}`);
         setParametrosOptions(response.data);
         console.log(response.data);
 
@@ -97,7 +84,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:5000/alerta/deletar/${alerta.id}`);
+          await axios.delete(`${process.env.REACT_APP_API_URL}/alerta/deletar/${alerta.id}`);
           Swal.fire('Excluído!', 'O alerta foi excluído com sucesso.', 'success');
           onDelete(alerta.id);
         } catch (error) {
@@ -138,7 +125,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
         valor: editAlerta.valor
       };
 
-      const response = await axios.put(`http://localhost:5000/alerta/atualizar/${editAlerta.id}`, updatedAlerta);
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/alerta/atualizar/${editAlerta.id}`, updatedAlerta);
       onUpdate(response.data);
 
       Swal.fire({

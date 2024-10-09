@@ -23,23 +23,6 @@ const CadastroEstacao: React.FC = () => {
     const [parametrosOptions, setParametrosOptions] = useState<any[]>([]);
 
     useEffect(() => {
-        if (successMessage) {
-            const timer = setTimeout(() => {
-                setSuccessMessage('');
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [successMessage]);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setErrors({});
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, [errors]);
-
-    useEffect(() => {
         const fetchParametros = async () => {
             try {
                 const response = await api.get('/parametros');

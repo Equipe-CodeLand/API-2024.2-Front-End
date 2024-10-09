@@ -172,7 +172,7 @@ const UsuarioTable: React.FC = () => {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/usuarios');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/usuarios`);
         const usuariosData = response.data.map((user: Usuario): Usuario => ({
           id: user.id,
           nome: user.nome,
@@ -223,7 +223,7 @@ const UsuarioTable: React.FC = () => {
     }
   
     try {
-      await axios.put('http://localhost:5000/usuario/atualizar', usuario);
+      await axios.put(`${process.env.REACT_APP_API_URL}/usuario/atualizar`, usuario);
   
       Swal.fire({
         icon: 'success',
@@ -254,7 +254,7 @@ const UsuarioTable: React.FC = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete('http://localhost:5000/usuario/deletar', {
+          await axios.delete(`${process.env.REACT_APP_API_URL}/usuario/deletar`, {
             data: { id }
           });
   
@@ -275,7 +275,7 @@ const UsuarioTable: React.FC = () => {
   };
 
   const columns: Array<Column<Usuario>> = [
-    { label: 'ID', key: 'id' },
+    { label: 'CPF', key: 'cpf' },
     { label: 'Nome', key: 'nome' },
     {
       label: 'Tipo',

@@ -17,10 +17,7 @@ const CadastroParametros: React.FC = () => {
 
   useEffect(() => {
     if (successMessage) {
-      const timer = setTimeout(() => {
-        setSuccessMessage('');
-      }, 3000);
-      return () => clearTimeout(timer);
+      return () => setSuccessMessage('');;
     }
   }, [successMessage]);
 
@@ -39,7 +36,7 @@ const CadastroParametros: React.FC = () => {
 
     if (Object.keys(formErrors).length === 0) {
       try {
-        const apiUrl = `${import.meta.env.VITE_API_URL}/parametro/cadastro`;
+        const apiUrl = `${process.env.REACT_APP_API_URL}/parametro/cadastro`;
         console.log('Enviando dados para:', apiUrl); // Adicione este log
         console.log('Dados:', { nome, descricao, fator, offset, unidade }); // Adicione este log
 

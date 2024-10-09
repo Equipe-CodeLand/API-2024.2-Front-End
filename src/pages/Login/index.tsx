@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Importe o hook useNavigate
-import logo from '../../assets/Logo.png';
+import logo from '../../assets/Logo1.png';
 import './style.css'; // Importe o arquivo CSS global
 
 const Login: React.FC = () => {

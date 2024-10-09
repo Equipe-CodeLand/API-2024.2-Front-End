@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/sidebar/sidebar';
-import AlertaCard, { Alerta } from '../../components/alertaCard';
-
 import './style.css';
+import { Alerta } from '../../interface/alerta';
+import AlertaCard from '../../components/alertaCard';
 
 const Alertas: React.FC = () => {
   const [alerts, setAlerts] = useState<{ nomeEstacao: string; idEstacao: number, idParametro: number, alerts: Alerta[] }[]>([]);
@@ -33,6 +33,11 @@ const Alertas: React.FC = () => {
               valor: alerta.valor,
               parametro: alerta.nomeParametro,
               condicao: alerta.condicao,
+              local: alerta.local,
+              nomeParametro: alerta.nomeParametro,
+              nomeEstacao: alerta.nomeEstacao,
+              estacaoId: alerta.estacaoId,
+              parametroId: alerta.parametroId,
             };
 
             if (estacao) {

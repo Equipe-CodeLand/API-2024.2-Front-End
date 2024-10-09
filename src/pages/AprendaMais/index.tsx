@@ -1,14 +1,13 @@
 import React from 'react'
 import './style.css'
 import { Sidebar } from '../../components/sidebar/sidebar'
-
 // Importando as imagens
-import pluviometroImg from '../../assets/pluviometro.jpg'
-import termometroImg from '../../assets/termometro.jpg'
-import barometroImg from '../../assets/barometro.jpg'
-import anemometroImg from '../../assets/anemometro.jpg'
-import higrometroImg from '../../assets/higrometro.jpg'
-import piranometroImg from '../../assets/piranometro.jpg'
+import pluviometroImg from '../../assets/Pluviometro.jpg'
+import termometroImg from '../../assets/Termometro.jpg'
+import barometroImg from '../../assets/Barometro.jpg'
+import anemometroImg from '../../assets/Anemometro.jpg'
+import higrometroImg from '../../assets/Higrometro.jpg'
+import piranometroImg from '../../assets/Piranometro.jpg'
 
 const AprendaMais: React.FC = () => {
     return (

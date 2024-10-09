@@ -2,34 +2,12 @@ import React, { useEffect, useState } from 'react';
 import TabelaGenerica from '../../components/tabelaDropdown';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Link } from 'react-router-dom';
-import "../DropdownUsuario/style.css"
 import "./style.css"
 import api from '../../config';
 import "../../components/tabelaDropdown/style.css"
 import Swal from 'sweetalert2';
-
-interface Parametro {
-    id: string;
-    nome: string;
-    unidade: string;
-    fator: number;
-    offset: number;
-    descricao: string;
-}
-
-
-interface Estacao {
-    id: string;
-    nome: string;
-    uid: string;
-    cep: string;
-    rua: string;
-    numero: number;
-    bairro: string;
-    cidade: string;
-    parametros: string[];
-    status: string;
-}
+import { Estacao } from '../../interface/estacao';
+import { Parametro } from '../../interface/parametro';
 
 export const DropdownEstacao: React.FC = () => {
     const [estacoes, setEstacoes] = useState<Estacao[]>([]);
@@ -40,26 +18,6 @@ export const DropdownEstacao: React.FC = () => {
     const [parametroSelecionado, setParametroSelecionado] = useState<string>('');
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [parametrosOptions, setParametrosOptions] = useState<Parametro[]>([])
-
-    // Função para renderizar o status com bolinha colorida
-    const renderStatus = (value: string | number | any[]) => {
-        const status = typeof value === 'string' ? value : String(value);
-
-        const statusClasses: { [key: string]: string } = {
-            'Ok': 'status-active',
-            'Alerta': 'status-inactive',
-        };
-
-        const statusClass = statusClasses[status] || '';
-
-        return (
-            <span className='status-container'>
-                {status}
-                <span className={`status-bullet ${statusClass}`}></span>
-            </span>
-        );
-    };
-
 
     const excluirEstacao = async (id: string) => {
         console.log("id da estação para deletar:",id)
@@ -85,7 +43,6 @@ export const DropdownEstacao: React.FC = () => {
             }
         });
     };
-
 
     // Corrigido: salvarEdicao agora usa selectedParametros
     const salvarEdicao = async (estacao: Estacao) => {
@@ -170,14 +127,6 @@ export const DropdownEstacao: React.FC = () => {
     };
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setErrors({});
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, [errors]);
-
-    useEffect(() => {
         const fetchParametros = async () => {
             try {
                 const response = await api.get('/parametros');
@@ -257,7 +206,7 @@ export const DropdownEstacao: React.FC = () => {
                                     <option
                                         key={parametro.id}
                                         value={parametro.id}
-                                        disabled={selectedParametros.includes(parametro.id)}
+                                        disabled={parametro.id ? selectedParametros.includes(parametro.id) : false}
                                     >
                                         {parametro.nome}
                                     </option>
@@ -444,10 +393,9 @@ export const DropdownEstacao: React.FC = () => {
                     <TabelaGenerica<Estacao>
                         data={estacoes}
                         columns={[
-                            { label: 'ID', key: 'id' },
+                            { label: 'MAC', key: 'uid' },
                             { label: 'Nome', key: 'nome' },
-                            { label: 'CEP', key: 'cep' },
-                            { label: 'Status', key: 'status', renderCell: renderStatus }
+                            { label: 'CEP', key: 'cep' }
                         ]}
                         detailExtractor={(estacao) => (
                             <div className="estacao-detalhes">

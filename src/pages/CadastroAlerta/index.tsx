@@ -4,29 +4,8 @@ import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
 import api from '../../config';
 import { useNavigate } from 'react-router-dom';
-
-interface Estacao {
-    id: string;
-    nome: string;
-    uid: string;
-    cep: string;
-    rua: string;
-    numero: number;
-    bairro: string;
-    cidade: string;
-    parametros: string[];
-    status: string;
-}
-
-interface Parametro {
-    id: string;
-    nome: string;
-    unidade: string;
-    fator: number;
-    offset: number;
-    descricao: string;
-}
-
+import { Estacao } from '../../interface/estacao';
+import { Parametro } from '../../interface/parametro';
 
 const CadastroAlerta: React.FC = () => {
     // estados referente as estações
@@ -76,8 +55,16 @@ const CadastroAlerta: React.FC = () => {
     useEffect(() => {
         const estacao = estacoes.find((e) => e.id === estacaoSelecionada);
         if (estacao) {
-            setParametros(estacao.parametros);
-            console.log(parametros)
+            const parametrosEstacao = estacao.parametros.map(parametro => ({
+                id: parametro,
+                nome: parametro,
+                unidade: '', // Provide appropriate default or fetched values
+                fator: 1,    // Provide appropriate default or fetched values
+                offset: 0,   // Provide appropriate default or fetched values
+                descricao: '' // Provide appropriate default or fetched values
+            }));
+            setParametros(parametrosEstacao);
+            console.log(parametrosEstacao);
         } else {
             setParametros([]);
         }
@@ -213,7 +200,7 @@ const CadastroAlerta: React.FC = () => {
                                         <option value="">Selecione um parâmetro</option>
                                         {parametros.map((parametro, index) => (
                                             <option key={index} value={parametro.id}>
-                                                {parametro}
+                                                {parametro.nome}
                                             </option>
                                         ))}
                                     </select>

@@ -6,20 +6,12 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './style.css';
 import api from '../../config';
-
-interface Parametro {
-  id: number;
-  nome: string;
-  unidade: string;
-  fator: number;
-  offset: number;
-  descricao: string;
-}
+import { Parametro } from '../../interface/parametro';
 
 const Parametros: React.FC = () => {
   const [parametros, setParametros] = useState<Parametro[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [editando, setEditando] = useState<number | null>(null);
+  const [editando, setEditando] = useState<string | null>(null);
   const [parametroEditado, setParametroEditado] = useState<Partial<Parametro>>({});
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
@@ -43,7 +35,7 @@ const Parametros: React.FC = () => {
   }, []);
 
   const handleEdit = (parametro: Parametro) => {
-    setEditando(parametro.id);
+    setEditando(parametro.id || null);
     setParametroEditado(parametro);
   };
 
@@ -80,16 +72,23 @@ const Parametros: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     try {
-      await api.delete(`/parametro/${id}`);
+      await api.delete(`/parametro/deletar/${id}`);
       fetchParametros(); // Atualiza a lista após deletar
+      Swal.fire(
+        'Deletado!',
+        'O parâmetro foi deletado.',
+        'success'
+      );
     } catch (err) {
       console.error('Erro ao deletar parâmetro:', err);
+      setError('Erro ao deletar parâmetro.');
     }
   };
 
-  const confirmDelete = (id: number) => {
+  const confirmDelete = (id: string) => {
+    console.log('Deletar parâmetro com ID:', id);
     Swal.fire({
       title: 'Tem certeza?',
       text: "Você não poderá reverter isso!",
@@ -102,11 +101,7 @@ const Parametros: React.FC = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         handleDelete(id);
-        Swal.fire(
-          'Deletado!',
-          'O parâmetro foi deletado.',
-          'success'
-        );
+        console.log('Parâmetro deletado com sucesso!');
       }
     });
   };
@@ -179,7 +174,7 @@ const Parametros: React.FC = () => {
         extra: [
           <div key="action-button" className="button-group">
             <button className='btn-editar' onClick={() => handleEdit(parametro)}>Editar</button>
-            <button className='btn-deletar' onClick={() => confirmDelete(parametro.id)}>Deletar</button>
+            <button className='btn-deletar' onClick={() => parametro.id && confirmDelete(parametro.id)}>Deletar</button>
           </div>
         ]
       };
@@ -190,7 +185,7 @@ const Parametros: React.FC = () => {
   type Column<T> = {
     label: string;
     key: keyof T;
-    renderCell?: (value: string | number) => JSX.Element;
+    renderCell?: (value: string | number | undefined) => JSX.Element;
   };
 
   // Colunas que serão exibidas na tabela

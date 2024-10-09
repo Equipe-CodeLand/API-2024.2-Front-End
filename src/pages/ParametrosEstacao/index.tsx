@@ -3,31 +3,8 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import './style.css';
 import Grafico from '../../components/grafico';
 import { useNavigate, useParams } from 'react-router-dom';
-import BackArrow from '../../assets/back-arrow.png'
 import api from '../../config';
-
-interface Parametro {
-  id: number;
-  nome: string;
-  unidade: string;
-  fator: number;
-  offset: number;
-  descricao: string;
-}
-
-
-interface Estacao {
-  id: number;
-  nome: string;
-  uid: string;
-  cep: string;
-  rua: string;
-  numero: number;
-  bairro: string;
-  cidade: string;
-  parametros: Parametro[];
-  status: string;
-}
+import { Estacao } from '../../interface/estacao';
 
 const ParametrosEstacao: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -40,7 +17,7 @@ const ParametrosEstacao: React.FC = () => {
       try {
         const response = await api.get(`/parametro/estacao/${id}`);
         const stationsResponse = await api.get('/estacao');
-        const stationFound = stationsResponse.data.find((station: Estacao) => station.id === parseInt(id));
+        const stationFound = stationsResponse.data.find((station: Estacao) => station.id === id);
 
         if (stationFound) {
           setStation({ ...stationFound, parametros: response.data });
@@ -74,7 +51,7 @@ const ParametrosEstacao: React.FC = () => {
           <div className="middle-container">
             <div className="parameter-estacao-container">
               <div className="back-button" onClick={() => navigate('/estacoes')}>
-                <img src={BackArrow} alt="voltar" className='back-arrow' />
+                <img src={'../../assets/back-arrow.png'} alt="voltar" className='back-arrow' />
                 <span>Voltar </span>
               </div>
               <div className='parameter-content-station'>
@@ -82,10 +59,10 @@ const ParametrosEstacao: React.FC = () => {
                   station.parametros.map((parametro, index) => (
                     <div
                       key={index}
-                      className={`parameter ${parametro.nome === selectedParametro ? 'selected' : ''}`}
-                      onClick={() => handleParametroClick(parametro.nome)}
+                      className={`parameter ${parametro === selectedParametro ? 'selected' : ''}`}
+                      onClick={() => handleParametroClick(parametro)}
                     >
-                      <p>{parametro.nome}</p>
+                      <p>{parametro}</p>
                     </div>
                   ))
                 ) : (

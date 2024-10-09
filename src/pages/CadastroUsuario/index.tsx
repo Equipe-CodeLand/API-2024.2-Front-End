@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { formatCpf, validateCpf, validateEmail } from '../../utils/formatters';
 import axios from 'axios';
 import './style.css';
@@ -18,18 +18,9 @@ const CadastroUsuario: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (successMessage) {
-      const timer = setTimeout(() => {
-        setSuccessMessage('');
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [successMessage]);
-
   const checkExistingEmail = async (email: string) => {
     try {
-      const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
+      const response = await axios.get<Usuario[]>(`${process.env.REACT_APP_API_URL}/usuarios`);
       const usuarios = response.data;
       return usuarios.some((usuario) => usuario.email === email);
     } catch (error) {
@@ -40,7 +31,7 @@ const CadastroUsuario: React.FC = () => {
 
   const checkExistingCpf = async (cpf: string) => {
     try {
-      const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
+      const response = await axios.get<Usuario[]>(`${process.env.REACT_APP_API_URL}/usuarios`);
       const usuarios = response.data;
       return usuarios.some((usuario) => usuario.cpf === cpf);
     } catch (error) {
@@ -83,7 +74,7 @@ const CadastroUsuario: React.FC = () => {
 
     if (Object.keys(formErrors).length === 0) {
       try {
-        const apiUrl = `${import.meta.env.VITE_API_URL}/usuario/cadastro`;
+        const apiUrl = `${process.env.REACT_APP_API_URL}/usuario/cadastro`;
         console.log('Enviando dados para:', apiUrl);
         console.log('Dados:', { nome, email, senha, perfil, cpf: cpfUnformatted });
 
