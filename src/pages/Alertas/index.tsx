@@ -3,7 +3,7 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import './style.css';
 import { Alerta } from '../../interface/alerta';
 import AlertaCard from '../../components/alertaCard';
-import api from '../../config/index'
+import api from '../../config/index';
 
 interface GroupedAlert {
   nomeEstacao: string;
@@ -28,13 +28,21 @@ const Alertas: React.FC = () => {
         console.log('Dados recebidos:', data);
 
         if (Array.isArray(data)) {
-          // Agrupar alertas por estação
           const groupedAlerts: GroupedAlert[] = [];
-          console.log('grouped alerts:',groupedAlerts)
+
+          // buscar o nome das estações pelo id vindo do mapeamento dos alertas
+          const getEstacao = data.map((alerta: any) =>
+            api.get(`/estacao/${alerta.estacaoId}`)
+          );
+
+          const estacoesResponses = await Promise.all(getEstacao);
+          const estacoesData = estacoesResponses.map(res => res.data);
 
           data.forEach((alerta: any) => {
-            const estacao = groupedAlerts.find(loc => loc.idEstacao === alerta.estacaoId && loc.idParametro === alerta.parametroId);
-            console.log('dados da estação:', estacao)
+            const estacaoData = estacoesData.find(estacao => estacao.id === alerta.estacaoId);
+            const estacao = groupedAlerts.find(
+              loc => loc.idEstacao === alerta.estacaoId
+            );
 
             const formattedAlert = {
               id: alerta.id,
@@ -45,25 +53,22 @@ const Alertas: React.FC = () => {
               condicao: alerta.condicao,
               local: alerta.local,
               nomeParametro: alerta.nomeParametro,
-              nomeEstacao: alerta.nomeEstacao,
+              nomeEstacao: estacaoData.nome,
               estacaoId: alerta.estacaoId,
               parametroId: alerta.parametroId,
             };
-            console.log('formatted alerta:', formattedAlert)
+
             if (estacao) {
               estacao.alerts.push(formattedAlert);
-              console.log(formattedAlert);
             } else {
               groupedAlerts.push({
-                nomeEstacao: alerta.nomeEstacao,
+                nomeEstacao: estacaoData.nome,
                 idParametro: alerta.parametroId,
                 idEstacao: alerta.estacaoId,
                 alerts: [formattedAlert],
               });
             }
           });
-          console.log('Alertas agrupados:', groupedAlerts);
-
           setAlerts(groupedAlerts);
         } else {
           console.error('A resposta da API não contém alertas válidos:', data);
@@ -85,10 +90,12 @@ const Alertas: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    const updatedAlerts = alerts.map(location => ({
-      ...location,
-      alerts: location.alerts.filter(alerta => alerta.id !== id),
-    })).filter(location => location.alerts.length > 0);
+    const updatedAlerts = alerts
+      .map(location => ({
+        ...location,
+        alerts: location.alerts.filter(alerta => alerta.id !== id),
+      }))
+      .filter(location => location.alerts.length > 0);
 
     setAlerts(updatedAlerts);
   };
@@ -103,7 +110,6 @@ const Alertas: React.FC = () => {
 
     setAlerts(updatedAlerts);
   };
-
 
   return (
     <div className='container'>
@@ -123,18 +129,29 @@ const Alertas: React.FC = () => {
           ) : error ? (
             <p className="error-text">{error}</p>
           ) : (
-            alerts.map((location, index) => (
-              <div className="alert-container" key={index}>
-                <h2 className="alert-title-text">{location.nomeEstacao}</h2>
-                {location.alerts.length === 0 ? (
-                  <p className="no-alert-text">Sem alertas na região</p>
-                ) : (
-                  location.alerts.map((alerta) => (
-                    <AlertaCard alerta={alerta} key={alerta.id} idEstacao={location.idEstacao} idParametro={location.idParametro} onDelete={handleDelete} onUpdate={handleUpdate} />
-                  ))
-                )}
-              </div>
-            ))
+            alerts.length === 0 ? (
+              <p className="no-alert-text">Nenhum alerta cadastrado no momento.</p>
+            ) : (
+              alerts.map((location, index) => (
+                <div className="alert-container" key={index}>
+                  <h2 className="alert-title-text">{location.nomeEstacao}</h2>
+                  {location.alerts.length === 0 ? (
+                    <p className="no-alert-text">Sem alertas na região</p>
+                  ) : (
+                    location.alerts.map((alerta) => (
+                      <AlertaCard
+                        alerta={alerta}
+                        key={alerta.id}
+                        idEstacao={location.idEstacao}
+                        idParametro={location.idParametro}
+                        onDelete={handleDelete}
+                        onUpdate={handleUpdate}
+                      />
+                    ))
+                  )}
+                </div>
+              ))
+            )
           )}
         </div>
       </div>
