@@ -46,7 +46,7 @@ const Alertas: React.FC = () => {
 
             const formattedAlert = {
               id: alerta.id,
-              gravidade: alerta.tipoAlerta === 'perigo' ? 'Perigo' : 'Atenção',
+              gravidade: alerta.tipoAlerta === 'Perigo' ? 'Perigo' : 'Atenção',
               descricao: alerta.mensagemAlerta,
               valor: alerta.valor,
               parametro: alerta.nomeParametro,
