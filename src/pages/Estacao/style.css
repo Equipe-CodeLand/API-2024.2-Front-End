@@ -1,24 +1,35 @@
-.parametros{
-    background-color: white;
-    padding: 1%;
-    margin: 1%;
-    border: 2px solid var(--main-purple);
-    border-radius: 5px;
-    color: var(--main-purple)
+.parametro {
+  background-color: white!important;
+  padding: 5px 10px!important;
+  margin: 5px!important;
+  border: 2px solid var(--main-purple)!important;
+  border-radius: 12px!important;
+  color: var(--main-purple)!important;
+  display: inline-flex!important; /* Ajusta ao tamanho do conteúdo */
+  white-space: nowrap!important; /* Impede quebra de linha dentro do parâmetro */
+  width: auto!important; /* Tamanho se ajusta ao texto */
 }
-.parametros-selecionados{
+
+.parametros-selecionados {
   display: flex;
-  gap: 5px;
+  gap: 10px;
+  flex-wrap: nowrap; /* Mantém os parâmetros em uma linha */
+  overflow-x: auto; /* Adiciona barra de rolagem horizontal se necessário */
+  align-items: center;
+  padding: 5px;
 }
+
 .input-full-size {
   background-color: var(--main-white) !important;
 }
 
-.parametros-container{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    background-color: white;
+.parametro-container {
+  display: flex!important;
+  flex-wrap: nowrap!important; /* Impede quebra de linha entre os parâmetros */
+  gap: 10px!important;
+  background-color: white!important;
+  padding: 10px!important;
+  overflow-x: auto!important; /* Permite barra de rolagem horizontal */
 }
 
 .parametros-editar {
@@ -26,17 +37,18 @@
 }
 
 .input-edicao {
-    border: none !important;
-    padding: var(--pd-2);
-    border-radius: 5px;
-    margin-top: 5px;
-    margin-bottom: 2%;
-    background-color: var(--main-white);
-    box-sizing: border-box; 
-    width: 100%;
-  }
-  .estacao-flex{
-    display: flex;
-    justify-content: space-evenly;
-    width: 100%;
-  }
+  border: none !important;
+  padding: var(--pd-2);
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-bottom: 2%;
+  background-color: var(--main-white);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.estacao-flex {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}

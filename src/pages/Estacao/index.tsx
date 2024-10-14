@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TabelaGenerica from '../../components/tabelaDropdown';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Link } from 'react-router-dom';
-import "./style.css"
+import './style.css'
 import api from '../../config';
 import "../../components/tabelaDropdown/style.css"
 import Swal from 'sweetalert2';
@@ -157,7 +157,7 @@ export const DropdownEstacao: React.FC = () => {
             return {
                 idRow: (
                     <div>
-                        <p style={{ color: 'var(--main-purple)' }}><strong>ID:</strong> {estacao.id}</p>
+                        <p><strong style={{ color: 'var(--main-purple)' }}>ID:</strong> {estacao.id}</p>
                     </div>
 
                 ),
@@ -190,7 +190,7 @@ export const DropdownEstacao: React.FC = () => {
                         />
                         {errors.cep && <span className="error">{errors.cep}</span>}
                         <div className="signin-row">
-                            <label htmlFor="parametros" >Parâmetros:</label>
+                            <p><strong style={{ color: 'var(--main-purple)' }}>Parâmetros:</strong></p>
                             <select
                                 id="parametros"
                                 className="input-full-size"
@@ -284,7 +284,7 @@ export const DropdownEstacao: React.FC = () => {
                 idRow: (
                     <div>
                         <p><strong style={{ color: 'var(--main-purple)' }}>ID:</strong> {estacao.id}</p>
-                    </div>
+                        </div>
                 ),
                 col1: (
                     <div className='listagem'>
@@ -296,13 +296,13 @@ export const DropdownEstacao: React.FC = () => {
                         <p>{estacao.cep}</p>
                         <p><strong style={{ color: 'var(--main-purple)' }}>Parâmetros:</strong></p>
                         {estacao.parametros && estacao.parametros.length > 0 ? (
-                            <div className='parametros-container'>
+                            <div className='parametro-container'>
                                 {estacao.parametros.map((parametro) => {
                                     // Buscar o parâmetro completo a partir dos parâmetrosOptions
                                     const parametroCompleto = parametrosOptions.find(p => p.id === parametro);
                                     // console.log("id dos parametros",parametro)
                                     return (
-                                        <p className='parametros' key={parametro}>
+                                        <p className='parametro' key={parametro}>
                                             <strong>
                                                 {parametroCompleto
                                                     ? `${parametroCompleto.nome} - ${parametroCompleto.unidade}`
@@ -388,7 +388,7 @@ export const DropdownEstacao: React.FC = () => {
                 </div>
                 <div className="content">
                     <div className='adicionarUsuario'>
-                        <Link to="/estacoes/cadastro" className='btn'>Adicionar estação</Link>
+                        <Link to="/estacao/cadastro" className='btn'>Adicionar estação</Link>
                     </div>
                     <TabelaGenerica<Estacao>
                         data={estacoes}
