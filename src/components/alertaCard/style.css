@@ -12,7 +12,7 @@
   border: 1px solid #ff0000;
   border-radius: 8px;
   background-color: #fff9e5;
-  padding: 20x;
+  padding: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -87,12 +87,12 @@
   box-sizing: border-box;
 }
 
-/* Botões */
 .box-btn {
   display: flex;
-  justify-content: flex-end;
-  /* Alinha os botões à direita */
-  gap: 10px;
+  justify-content: space-between; 
+  width: 100%; 
+  gap: 20px; 
+  padding: 0 40px;
 }
 
 .btn {
@@ -100,7 +100,7 @@
   color: white;
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
