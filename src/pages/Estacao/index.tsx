@@ -3,7 +3,7 @@ import TabelaGenerica from '../../components/tabelaDropdown';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Link } from 'react-router-dom';
 import "./style.css"
-import api from '../../config';
+import {api} from '../../config';
 import "../../components/tabelaDropdown/style.css"
 import Swal from 'sweetalert2';
 import { Estacao } from '../../interface/estacao';
@@ -340,7 +340,7 @@ export const DropdownEstacao: React.FC = () => {
                             <button className="btn" onClick={() => excluirEstacao(estacao.id)}>Excluir</button>
                         </div>
                         <div>
-                            <Link to={`/estacao/${estacao.id}`} className='btn'>Dashboard</Link>
+                            <Link to={`/estacao/${estacao.id}`} state={{ estacao }} className='btn'>Dashboard</Link>
                         </div>
                     </div>
                 ]
@@ -359,7 +359,7 @@ export const DropdownEstacao: React.FC = () => {
         const fetchEstacoes = async () => {
             try {
                 const response = await api.get('/estacoes');
-                console.log(response.data);
+                console.log('estacoes:',response.data);
                 setEstacoes(response.data);
                 setLoading(false);
             } catch (err) {

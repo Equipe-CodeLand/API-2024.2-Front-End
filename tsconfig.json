@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "es2015"],
+    "target": "ES6",
+    "lib": ["dom", "es2015", "es2020"],
     "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "node",
@@ -9,6 +9,9 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "build"]

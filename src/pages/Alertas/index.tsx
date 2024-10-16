@@ -3,7 +3,7 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import './style.css';
 import { Alerta } from '../../interface/alerta';
 import AlertaCard from '../../components/alertaCard';
-import api from '../../config/index';
+import {api} from '../../config/index';
 
 interface GroupedAlert {
   nomeEstacao: string;
@@ -36,10 +36,10 @@ const Alertas: React.FC = () => {
           );
 
           const estacoesResponses = await Promise.all(getEstacao);
-          const estacoesData = estacoesResponses.map(res => res.data);
+          const estacoesData = estacoesResponses.map((res: { data: any; }) => res.data);
 
           data.forEach((alerta: any) => {
-            const estacaoData = estacoesData.find(estacao => estacao.id === alerta.estacaoId);
+            const estacaoData = estacoesData.find((estacao: { id: any; }) => estacao.id === alerta.estacaoId);
             const estacao = groupedAlerts.find(
               loc => loc.idEstacao === alerta.estacaoId
             );
