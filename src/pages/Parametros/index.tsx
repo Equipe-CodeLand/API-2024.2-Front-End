@@ -174,7 +174,7 @@ const Parametros: React.FC = () => {
         extra: [
           <div key="action-button" className="button-group">
             <button className='btn-editar' onClick={() => handleEdit(parametro)}>Editar</button>
-            <button className='btn-deletar' onClick={() => parametro.id && confirmDelete(parametro.id)}>Deletar</button>
+            <button className='btn-deletar' onClick={() => parametro.id && confirmDelete(parametro.id)}>Excluir</button>
           </div>
         ]
       };
