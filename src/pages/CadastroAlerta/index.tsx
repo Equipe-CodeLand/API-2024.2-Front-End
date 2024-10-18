@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; // Importa o SweetAlert2
 import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
-import api from '../../config';
+import {api} from '../../config';
 import { useNavigate } from 'react-router-dom';
 import { Estacao } from '../../interface/estacao';
 import { Parametro } from '../../interface/parametro';

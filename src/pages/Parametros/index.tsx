@@ -5,7 +5,7 @@ import TabelaGenerica from '../../components/tabelaDropdown';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './style.css';
-import api from '../../config';
+import {api} from '../../config';
 import { Parametro } from '../../interface/parametro';
 
 const Parametros: React.FC = () => {

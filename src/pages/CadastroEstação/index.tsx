@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
 import { formatCep } from '../../utils/formatters';
-import api from '../../config';
+import {api} from '../../config';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 

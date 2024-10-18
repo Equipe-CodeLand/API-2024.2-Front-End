@@ -1,5 +1,5 @@
 import axios from 'axios';
-import api from '../config';
+import {api} from '../config';
 
 jest.mock('../config'); // Mocka a instância `api`
 const mockedApi = api as jest.Mocked<typeof api>;
