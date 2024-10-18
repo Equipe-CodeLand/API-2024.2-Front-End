@@ -63,7 +63,8 @@ const CadastroAlerta: React.FC = () => {
                 unidade: '', // Provide appropriate default or fetched values
                 fator: 1,    // Provide appropriate default or fetched values
                 offset: 0,   // Provide appropriate default or fetched values
-                descricao: '' // Provide appropriate default or fetched values
+                descricao: '', // Provide appropriate default or fetched values
+                sigla: ''
             }));
             setParametros(parametrosEstacao);
             console.log('parametro da estação', parametrosEstacao);
