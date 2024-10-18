@@ -6,6 +6,7 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import { Usuario } from '../../interface/usuario';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import BackArrow from '../../assets/back-arrow.png';
 
 const CadastroUsuario: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -118,12 +119,17 @@ const CadastroUsuario: React.FC = () => {
           <h2 className="title-text">Cadastro de Usuários</h2>
         </div>
         <form className="signin-container" onSubmit={handleSubmit}>
+          <div className="back-button" onClick={() => navigate('/usuarios')}>
+            <img src={BackArrow} alt="voltar" className='back-arrow' />
+            <span>Voltar</span>
+          </div>
           <div className="signin-item-row">
             <div className="signin-row">
               <label htmlFor="nome">Nome:</label>
               <input
                 type="text"
                 id="nome"
+                placeholder="ex: Júlio Pereira de Souza Álves"
                 name="nome"
                 className='input-full-size'
                 value={nome}
@@ -141,6 +147,7 @@ const CadastroUsuario: React.FC = () => {
               <input
                 type="text"
                 id="email"
+                placeholder="ex: juliopsalves@gmail.com"
                 name="email"
                 className='input-full-size'
                 value={email}
@@ -156,6 +163,7 @@ const CadastroUsuario: React.FC = () => {
               <input
                 type="text"
                 id="cpf"
+                placeholder="ex: 123.456.789-01"
                 name="cpf"
                 className='input-full-size'
                 value={formatCpf(cpf)}

@@ -5,11 +5,12 @@ import TabelaGenerica from '../../components/tabelaDropdown';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './style.css';
-import {api} from '../../config';
+import { api } from '../../config';
 import { Parametro } from '../../interface/parametro';
 
 const Parametros: React.FC = () => {
   const [parametros, setParametros] = useState<Parametro[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [editando, setEditando] = useState<string | null>(null);
   const [parametroEditado, setParametroEditado] = useState<Partial<Parametro>>({});
@@ -20,6 +21,7 @@ const Parametros: React.FC = () => {
       const response = await api.get('/parametros');
       console.log('Dados recebidos:', response.data);
       setParametros(response.data);
+      setLoading(false);
     } catch (err) {
       console.error('Erro ao buscar parâmetros:', err);
       if (axios.isAxiosError(err) && err.response) {
@@ -46,6 +48,7 @@ const Parametros: React.FC = () => {
     if (parametroEditado.fator === undefined) errors.fator = 'O campo fator é obrigatório.';
     if (parametroEditado.offset === undefined) errors.offset = 'O campo offset é obrigatório.';
     if (!parametroEditado.descricao) errors.descricao = 'O campo descrição é obrigatório.';
+    if (!parametroEditado.sigla) errors.sigla = 'O campo sigla é obrigatório.';
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -137,6 +140,8 @@ const Parametros: React.FC = () => {
             {validationErrors.unidade && <p className="error-text">{validationErrors.unidade}</p>}
             <p><strong className="field-label">Offset:</strong> <input className="input-field" type="number" name="offset" value={parametroEditado.offset || 0} onChange={handleChange} /></p>
             {validationErrors.offset && <p className="error-text">{validationErrors.offset}</p>}
+            <p><strong className="field-label">Sigla:</strong> <input className="input-field" type="text" name="sigla" value={parametroEditado.sigla || ''} onChange={handleChange} /></p>
+            {validationErrors.sigla && <p className="error-text">{validationErrors.sigla}</p>}
           </div>
         ),
         extra: [
@@ -169,6 +174,8 @@ const Parametros: React.FC = () => {
             <p className="field-value">{parametro.unidade}</p>
             <p className="field-label">Offset:</p>
             <p className="field-value">{parametro.offset}</p>
+            <p className="field-label">Sigla:</p>
+            <p className="field-value">{parametro.sigla}</p>
           </div>
         ),
         extra: [
@@ -210,20 +217,26 @@ const Parametros: React.FC = () => {
       </div>
       <div className="content">
         {error && <strong className='error-text'>{error}</strong>}
-        <TabelaGenerica<Parametro>
-          data={parametros}
-          columns={columns}
-          detailExtractor={(parametro) => (
-            <div className="parametro-detalhes">
-              <p className="field-label">ID: {parametro.id}</p>
-              <p className="field-label">Nome:</p>
-              <p className="field-value">{parametro.nome}</p>
-              <p className="field-label">Fator:</p>
-              <p className="field-value">{parametro.fator}</p>
-            </div>
-          )}
-          dropdownContent={dropdownContent}
-        />
+        {loading ? (
+          <p>Carregando...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <TabelaGenerica<Parametro>
+            data={parametros}
+            columns={columns}
+            detailExtractor={(parametro) => (
+              <div className="parametro-detalhes">
+                <p className="field-label">ID: {parametro.id}</p>
+                <p className="field-label">Nome:</p>
+                <p className="field-value">{parametro.nome}</p>
+                <p className="field-label">Fator:</p>
+                <p className="field-value">{parametro.fator}</p>
+              </div>
+            )}
+            dropdownContent={dropdownContent}
+          />
+        )}
       </div>
     </div>
   );

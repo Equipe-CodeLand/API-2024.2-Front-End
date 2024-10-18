@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
 import { formatCep } from '../../utils/formatters';
-import {api} from '../../config';
+import { api } from '../../config';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import BackArrow from '../../assets/back-arrow.png';
 
 const CadastroEstacao: React.FC = () => {
     const [nome, setNome] = useState('');
@@ -130,12 +131,17 @@ const CadastroEstacao: React.FC = () => {
                 </div>
                 <div className="content">
                     <form className="signin-container" onSubmit={handleSubmit}>
+                    <div className="back-button" onClick={() => navigate('/estacoes')}>
+                        <img src={BackArrow} alt="voltar" className='back-arrow' />
+                        <span>Voltar</span>
+                    </div>
                         <div className="signin-item-row">
                             <div className="signin-row">
                                 <label htmlFor="nome">Nome:</label>
                                 <input
                                     type="text"
                                     id="nome"
+                                    placeholder="ex: Estação exemplo"
                                     name="nome"
                                     className='input-full-size'
                                     value={nome}
@@ -152,6 +158,7 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="mac-address"
+                                    placeholder="ex: abc123"
                                     name="uid"
                                     className='input-full-size'
                                     value={uid}
@@ -194,6 +201,7 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="cep"
+                                    placeholder="ex: 12345-678"
                                     name="cep"
                                     className='input-full-size'
                                     value={cep}
@@ -231,6 +239,7 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="rua"
+                                    placeholder="ex: Rua exemplo"
                                     name="rua"
                                     className='input-full-size'
                                     value={rua}
@@ -246,6 +255,7 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="numero"
+                                    placeholder="ex: 123"
                                     name="numero"
                                     className='input-full-size'
                                     value={numero}
@@ -264,6 +274,7 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="bairro"
+                                    placeholder="ex: Bairro exemplo"
                                     name="bairro"
                                     className='input-full-size'
                                     value={bairro}
@@ -279,6 +290,7 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="cidade"
+                                    placeholder="ex: Cidade exemplo"
                                     name="cidade"
                                     className='input-full-size'
                                     value={cidade}

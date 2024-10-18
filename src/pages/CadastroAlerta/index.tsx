@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; // Importa o SweetAlert2
 import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
-import {api} from '../../config';
+import { api } from '../../config';
 import { useNavigate } from 'react-router-dom';
 import { Estacao } from '../../interface/estacao';
 import { Parametro } from '../../interface/parametro';
+import BackArrow from '../../assets/back-arrow.png';
 
 const CadastroAlerta: React.FC = () => {
     // estados referente as estações
@@ -43,7 +44,7 @@ const CadastroAlerta: React.FC = () => {
             try {
                 const response = await api.get('/estacoes');
                 setEstacoes(response.data);
-                console.log('get estações:',response.data);
+                console.log('get estações:', response.data);
             } catch (err) {
                 console.log('Erro ao buscar as estações: ' + err);
             }
@@ -65,7 +66,7 @@ const CadastroAlerta: React.FC = () => {
                 descricao: '' // Provide appropriate default or fetched values
             }));
             setParametros(parametrosEstacao);
-            console.log('parametro da estação',parametrosEstacao);
+            console.log('parametro da estação', parametrosEstacao);
         } else {
             setParametros([]);
         }
@@ -167,6 +168,10 @@ const CadastroAlerta: React.FC = () => {
                 </div>
                 <div className="content">
                     <form className="signin-container" onSubmit={handleSubmit}>
+                        <div className="back-button" onClick={() => navigate('/alertas')}>
+                            <img src={BackArrow} alt="voltar" className='back-arrow' />
+                            <span>Voltar</span>
+                        </div>
                         <div className='signin-item-row'>
                             <div className="signin-row">
                                 <label htmlFor="estacao">Estação:</label>

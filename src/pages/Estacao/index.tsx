@@ -3,7 +3,7 @@ import TabelaGenerica from '../../components/tabelaDropdown';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Link } from 'react-router-dom';
 import './style.css'
-import {api} from '../../config';
+import { api } from '../../config';
 import "../../components/tabelaDropdown/style.css"
 import Swal from 'sweetalert2';
 import { Estacao } from '../../interface/estacao';
@@ -20,7 +20,7 @@ export const DropdownEstacao: React.FC = () => {
     const [parametrosOptions, setParametrosOptions] = useState<Parametro[]>([])
 
     const excluirEstacao = async (id: string) => {
-        console.log("id da estação para deletar:",id)
+        console.log("id da estação para deletar:", id)
         Swal.fire({
             title: 'Tem certeza?',
             text: 'Esta ação não pode ser desfeita!',
@@ -130,7 +130,7 @@ export const DropdownEstacao: React.FC = () => {
         const fetchParametros = async () => {
             try {
                 const response = await api.get('/parametros');
-                console.log('parametros:',response.data);
+                console.log('parametros:', response.data);
                 setParametrosOptions(response.data);
             } catch (err) {
                 console.log('Erro ao buscar as estações' + err);
@@ -284,7 +284,7 @@ export const DropdownEstacao: React.FC = () => {
                 idRow: (
                     <div>
                         <p><strong style={{ color: 'var(--main-purple)' }}>ID:</strong> {estacao.id}</p>
-                        </div>
+                    </div>
                 ),
                 col1: (
                     <div className='listagem'>
@@ -359,7 +359,7 @@ export const DropdownEstacao: React.FC = () => {
         const fetchEstacoes = async () => {
             try {
                 const response = await api.get('/estacoes');
-                console.log('estacoes:',response.data);
+                console.log('estacoes:', response.data);
                 setEstacoes(response.data);
                 setLoading(false);
             } catch (err) {
@@ -371,13 +371,6 @@ export const DropdownEstacao: React.FC = () => {
         fetchEstacoes();
     }, []);
 
-    if (loading) {
-        return <div>Carregando...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     return (
         <>
@@ -390,25 +383,31 @@ export const DropdownEstacao: React.FC = () => {
                     <div className='adicionarUsuario'>
                         <Link to="/estacao/cadastro" className='btn'>Adicionar estação</Link>
                     </div>
-                    <TabelaGenerica<Estacao>
-                        data={estacoes}
-                        columns={[
-                            { label: 'MAC', key: 'uid' },
-                            { label: 'Nome', key: 'nome' },
-                            { label: 'CEP', key: 'cep' }
-                        ]}
-                        detailExtractor={(estacao) => (
-                            <div className="estacao-detalhes">
-                                <p><strong>ID:</strong> {estacao.id}</p>
-                                <p><strong>Nome:</strong> {estacao.nome}</p>
-                                <p><strong>MAC-ADDRESS:</strong> {estacao.uid}</p>
-                                <p><strong>CEP:</strong> {estacao.cep}</p>
-                                <p><strong>Endereço:</strong> {estacao.rua} n° {estacao.numero}</p>
-                                <p>{estacao.bairro} - {estacao.cidade}</p>
-                            </div>
-                        )}
-                        dropdownContent={dropdownContent}
-                    />
+                    {loading ? (
+                        <p>Carregando...</p>
+                    ) : error ? (
+                        <p>{error}</p>
+                    ) : (
+                        <TabelaGenerica<Estacao>
+                            data={estacoes}
+                            columns={[
+                                { label: 'MAC', key: 'uid' },
+                                { label: 'Nome', key: 'nome' },
+                                { label: 'CEP', key: 'cep' }
+                            ]}
+                            detailExtractor={(estacao) => (
+                                <div className="estacao-detalhes">
+                                    <p><strong>ID:</strong> {estacao.id}</p>
+                                    <p><strong>Nome:</strong> {estacao.nome}</p>
+                                    <p><strong>MAC-ADDRESS:</strong> {estacao.uid}</p>
+                                    <p><strong>CEP:</strong> {estacao.cep}</p>
+                                    <p><strong>Endereço:</strong> {estacao.rua} n° {estacao.numero}</p>
+                                    <p>{estacao.bairro} - {estacao.cidade}</p>
+                                </div>
+                            )}
+                            dropdownContent={dropdownContent}
+                        />
+                    )}
                 </div>
             </div>
         </>

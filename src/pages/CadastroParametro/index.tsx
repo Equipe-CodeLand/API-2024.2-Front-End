@@ -4,6 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import './style.css';
 import { useNavigate } from 'react-router-dom';
+import BackArrow from '../../assets/back-arrow.png';
 
 const CadastroParametros: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -11,6 +12,7 @@ const CadastroParametros: React.FC = () => {
   const [fator, setFator] = useState('');
   const [offset, setOffset] = useState('');
   const [unidade, setUnidade] = useState('');
+  const [sigla, setSigla] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate()
@@ -31,6 +33,7 @@ const CadastroParametros: React.FC = () => {
     if (!fator || isNaN(Number(fator))) formErrors.fator = 'Fator é obrigatório e deve ser numérico';
     if (!offset || isNaN(Number(offset))) formErrors.offset = 'Offset é obrigatório e deve ser numérico';
     if (!unidade) formErrors.unidade = 'Unidade é obrigatória';
+    if (!sigla) formErrors.sigla = 'Sigla é obrigatória';
 
     setErrors(formErrors);
 
@@ -38,14 +41,15 @@ const CadastroParametros: React.FC = () => {
       try {
         const apiUrl = `${process.env.REACT_APP_API_URL}/parametro/cadastro`;
         console.log('Enviando dados para:', apiUrl); // Adicione este log
-        console.log('Dados:', { nome, descricao, fator, offset, unidade }); // Adicione este log
+        console.log('Dados:', { nome, descricao, fator, offset, unidade, sigla }); // Adicione este log
 
         const response = await axios.post(apiUrl, {
           nome,
           descricao,
           fator,
           offset,
-          unidade
+          unidade, 
+          sigla
         });
 
         if (response.status === 201) {
@@ -60,6 +64,7 @@ const CadastroParametros: React.FC = () => {
           setFator('');
           setOffset('');
           setUnidade('');
+          setSigla('');
           navigate('/parametros')
         } else {
           setErrors({ form: response.data.message });
@@ -79,12 +84,17 @@ const CadastroParametros: React.FC = () => {
           <h2 className="title-text">Cadastro de Parâmetros</h2>
         </div>
         <form className="signin-container" onSubmit={handleSubmit}>
+          <div className="back-button" onClick={() => navigate('/parametros')}>
+            <img src={BackArrow} alt="voltar" className='back-arrow' />
+            <span>Voltar</span>
+          </div>
           <div className="signin-item-row">
             <div className="signin-row">
               <label htmlFor="nome">Nome:</label>
               <input
                 type="text"
                 id="nome"
+                placeholder="ex: Temperatura"
                 name="nome"
                 className="input-full-size"
                 value={nome}
@@ -103,6 +113,7 @@ const CadastroParametros: React.FC = () => {
               <textarea
                 id="descricao"
                 name="descricao"
+                placeholder="ex: Usado para medir a temperatura média."
                 className="input-full-size"
                 value={descricao}
                 onChange={(e) => {
@@ -120,6 +131,7 @@ const CadastroParametros: React.FC = () => {
               <input
                 type="text"
                 id="fator"
+                placeholder="ex: 12"
                 name="fator"
                 className="input-full-size"
                 value={fator}
@@ -135,6 +147,7 @@ const CadastroParametros: React.FC = () => {
               <input
                 type="text"
                 id="offset"
+                placeholder="ex: 0"
                 name="offset"
                 className="input-full-size"
                 value={offset}
@@ -151,6 +164,7 @@ const CadastroParametros: React.FC = () => {
                 type="text"
                 id="unidade"
                 name="unidade"
+                placeholder="ex: km/h, %, C°"
                 className="input-full-size"
                 value={unidade}
                 onChange={(e) => {
@@ -159,6 +173,22 @@ const CadastroParametros: React.FC = () => {
                 }}
               />
               {errors.unidade && <span className="error">{errors.unidade}</span>}
+            </div>
+            <div className="signin-row">
+              <label htmlFor="unidade">Sigla:</label>
+              <input
+                type="text"
+                id="sigla"
+                name="sigla"
+                placeholder="ex: umi, tem, plu, vel"
+                className="input-full-size"
+                value={sigla}
+                onChange={(e) => {
+                  setSigla(e.target.value);
+                  setErrors((prevErrors) => ({ ...prevErrors, sigla: '' }));
+                }}
+              />
+              {errors.sigla && <span className="error">{errors.sigla}</span>}
             </div>
           </div>
 

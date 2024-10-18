@@ -5,4 +5,5 @@ export interface Parametro {
     fator: number;
     offset: number;
     descricao: string;
+    sigla: string;
 }
