@@ -4,4 +4,5 @@ export interface Notificacao {
     dataNotificacao: string;
     mensagemAlerta: string;
     parametroId: string;
+    estacaoId: string;
 }
