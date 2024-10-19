@@ -34,7 +34,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/parametros/`);
         setParametrosOptions(response.data);
-        console.log('parametro da estaçao',response.data);
+        console.log('parametro da estaçao', response.data);
 
       } catch (error) {
         console.error("Erro ao buscar parâmetros:", error);
@@ -93,6 +93,10 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
       }
     });
   };
+
+  const handleCancelClick = () => {
+    setIsEditing(false);
+  };  
 
   const handleSaveClick = async () => {
     try {
@@ -253,7 +257,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
                   ))}
                 </select>
               ) : (
-                  <span>{ParametroNome(alerta.parametroId)}</span>
+                <span>{ParametroNome(alerta.parametroId)}</span>
               )}
             </div>
             <div className={`information-box-item ${isEditing ? 'editing-mode' : ''}`}>
@@ -281,8 +285,8 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
           <button className="btn" onClick={isEditing ? handleSaveClick : handleEditClick}>
             {isEditing ? 'Salvar' : 'Editar'}
           </button>
-          <button className="btn" onClick={handleDeleteClick}>
-            Excluir
+          <button className="btn" onClick={isEditing ? handleCancelClick : handleDeleteClick}>
+            {isEditing ? 'Cancelar' : 'Excluir'}
           </button>
         </div>
       </details>
