@@ -15,11 +15,11 @@ const CadastroParametros: React.FC = () => {
   const [sigla, setSigla] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (successMessage) {
-      return () => setSuccessMessage('');;
+      return () => setSuccessMessage('');
     }
   }, [successMessage]);
 
@@ -43,13 +43,21 @@ const CadastroParametros: React.FC = () => {
         console.log('Enviando dados para:', apiUrl); // Adicione este log
         console.log('Dados:', { nome, descricao, fator, offset, unidade, sigla }); // Adicione este log
 
+        // Adicionar o token ao cabeçalho
+        const token = localStorage.getItem('token');
+
         const response = await axios.post(apiUrl, {
           nome,
           descricao,
           fator,
           offset,
-          unidade, 
+          unidade,
           sigla
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Aqui está o token
+            'Content-Type': 'application/json'
+          }
         });
 
         if (response.status === 201) {
@@ -65,7 +73,7 @@ const CadastroParametros: React.FC = () => {
           setOffset('');
           setUnidade('');
           setSigla('');
-          navigate('/parametros')
+          navigate('/parametros');
         } else {
           setErrors({ form: response.data.message });
         }

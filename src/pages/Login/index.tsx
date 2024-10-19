@@ -1,13 +1,49 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Importe o hook useNavigate
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/Logo1.png';
-import './style.css'; // Importe o arquivo CSS global
+import './style.css';
 
 const Login: React.FC = () => {
-  const navigate = useNavigate(); // Inicialize o hook useNavigate
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handleNavigation = () => {
-    navigate('/home'); // Navegue para a rota /home
+  const handleLogin = async () => {
+    setErrorMessage('');
+
+    if (!email || !senha) {
+      setErrorMessage('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      const data = await response.json();
+      console.log("Dados retornados:", data); // Verifique a estrutura do retorno
+
+      if (response.ok) {
+        // Armazena o token e ID do usuário no localStorage
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('usuarioId', data.usuarioId);
+
+        // Navegue para a página principal
+        navigate('/home');
+      } else {
+        // Exiba a mensagem de erro
+        setErrorMessage(data.erro || 'Email ou senha inválidos.');
+      }
+    } catch (error) {
+      console.error('Erro ao realizar o login:', error);
+      setErrorMessage('Erro ao realizar o login. Tente novamente mais tarde.');
+    }
   };
 
   return (
@@ -18,32 +54,34 @@ const Login: React.FC = () => {
         <input 
           type="email" 
           placeholder="exemplo@email.com" 
-          name="userEmail" 
-          autoComplete="new-email" 
           className="login-input"
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
         />
-        
+
         <label className="login-label">Senha:</label>
         <input 
           type="password" 
           placeholder="********" 
-          name="userPassword" 
-          autoComplete="new-password" 
           className="login-input"
+          value={senha} 
+          onChange={(e) => setSenha(e.target.value)} 
         />
         
+        {errorMessage && <p className="login-error">{errorMessage}</p>}
+
         <button 
           type="button" 
           className="login-button" 
-          onClick={handleNavigation} // Chame a função para navegar
+          onClick={handleLogin}
         >
           Entrar
         </button>
         
         <div className="login-links">
-          <a href="#" className="login-link" onClick={handleNavigation}>Cadastre-se</a>
+          <a href="#" className="login-link" onClick={handleLogin}>Cadastre-se</a>
           <span>ou</span>
-          <a href="#" className="login-link" onClick={handleNavigation}>Continue sem login</a>
+          <a href="#" className="login-link" onClick={handleLogin}>Continue sem login</a>
         </div>
       </form>
     </div>

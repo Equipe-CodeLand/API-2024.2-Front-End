@@ -118,13 +118,23 @@ const CadastroAlerta: React.FC = () => {
         // se não houver erros, envia os dados para o servidor
         if (Object.keys(formErrors).length === 0) {
             try {
-                const response = await api.post("/alerta/cadastro", {
+                const apiUrl = `${process.env.REACT_APP_API_URL}/alerta/cadastro`;
+                
+                // Adicionar o token ao cabeçalho
+                const token = localStorage.getItem('token');
+
+                const response = await api.post(apiUrl, {
                     estacaoId: estacaoSelecionada,
                     parametroId: parametroSelecionado,
                     mensagemAlerta: mensagem,
                     tipoAlerta: alertaSelecionado.toLowerCase(),
                     condicao: condicaoSelecionada,
                     valor: parseFloat(valor)
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Aqui está o token
+                        'Content-Type': 'application/json'
+                    }
                 });
 
                 if (response.status === 201) {
@@ -134,7 +144,7 @@ const CadastroAlerta: React.FC = () => {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                        navigate('/alertas')
+                        navigate('/alertas');
                     });
 
                     // limpar os campos
@@ -154,6 +164,12 @@ const CadastroAlerta: React.FC = () => {
                 }
             } catch (error) {
                 console.error('Erro ao cadastrar alerta:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: 'Erro ao cadastrar alerta.',
+                    confirmButtonText: 'OK'
+                });
             }
         } else {
             console.log('Erros no formulário:', formErrors);

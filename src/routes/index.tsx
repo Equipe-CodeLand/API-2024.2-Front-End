@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import DropdownUsuario from "../pages/Usuarios";
 import Notificacoes from "../pages/Notificações";
 import '../globalCss/index.css';
 import CadastroUsuario from "../pages/CadastroUsuario";

@@ -76,18 +76,24 @@ const CadastroUsuario: React.FC = () => {
     if (Object.keys(formErrors).length === 0) {
       try {
         const apiUrl = `${process.env.REACT_APP_API_URL}/usuario/cadastro`;
-        console.log('Enviando dados para:', apiUrl);
-        console.log('Dados:', { nome, email, senha, perfil, cpf: cpfUnformatted });
-
+        
+        // Adicionar o token ao cabeçalho
+        const token = localStorage.getItem('token');
+  
         const response = await axios.post(apiUrl, {
           nome,
           email,
           cpf: cpfUnformatted,
           senha,
           perfil
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Aqui está o token
+            'Content-Type': 'application/json'
+          }
         });
-
-        if (response.status == 201){
+  
+        if (response.status == 201) {
           Swal.fire({
             title: 'Sucesso!',
             text: 'Usuário cadastrado com sucesso',
@@ -100,7 +106,7 @@ const CadastroUsuario: React.FC = () => {
           setSenha('');
           setConfirmarSenha('');
           setPerfil('');
-          navigate('/usuarios')
+          navigate('/usuarios');
         } else {
           setErrors({ form: response.data.message });
         }

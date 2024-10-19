@@ -1,0 +1,50 @@
+.adicionarUsuario {
+    display: flex;
+    justify-content: flex-end ;
+    align-items: flex-end ;
+    width: 100%;
+    margin-right: 15%;
+  }
+  
+  .adicionarUsuario .btn {
+    margin: var(--mg-2);
+  }
+
+  .listagem p{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 2%;
+  }
+
+  .listagem strong{
+    margin-right: 2%;
+  }
+
+.botoes {
+  display: flex;
+  justify-content: space-between; /* Espaça os botões ao máximo */
+  margin-top: 10px; /* Adiciona um espaçamento acima dos botões */
+  width: 80%;
+  margin-bottom: 1.5%;
+}
+
+.botoes button {
+  justify-content: center;
+}
+
+.btn {
+  padding: 5px 10px;
+  background-color: var(--main-purple);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: var(--main-white);
+  color: black;
+  border: 3px solid var(--main-purple);
+}

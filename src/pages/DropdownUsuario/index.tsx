@@ -7,7 +7,6 @@ import { Perfil, Usuario } from '../../interface/usuario';
 import { Link } from 'react-router-dom'; // Importar o componente Link
 import './style.css';
 import { formatCpf } from '../../utils/formatters';
-import { api } from '../../config';
 
 const PerfilLabel: { [key in Perfil]: string } = {
   [Perfil.Admin]: 'Administrador',
@@ -43,10 +42,10 @@ const UsuarioTable: React.FC = () => {
               <input
                 type="text"
                 value={usuarioEditado.nome}
-                onChange={(e) => {
+                onChange={(e) =>{
                   setUsuarioEditado({ ...usuarioEditado, nome: e.target.value });
                   setErrors((prevErrors) => ({ ...prevErrors, nome: '' }));
-                }
+                  }
                 }
               />
               {errors.nome && <span className="error">{errors.nome}</span>}
@@ -59,7 +58,7 @@ const UsuarioTable: React.FC = () => {
                 onChange={(e) => {
                   setUsuarioEditado({ ...usuarioEditado, email: e.target.value })
                   setErrors((prevErrors) => ({ ...prevErrors, email: '' }));
-                }
+                  }
                 }
               />
               {errors.email && <span className="error">{errors.email}</span>}
@@ -72,7 +71,7 @@ const UsuarioTable: React.FC = () => {
                 onChange={(e) => {
                   setUsuarioEditado({ ...usuarioEditado, senha: e.target.value })
                   setErrors((prevErrors) => ({ ...prevErrors, senha: '' }));
-                }
+                  }
                 }
               />
               {errors.senha && <span className="error">{errors.senha}</span>}
@@ -108,10 +107,10 @@ const UsuarioTable: React.FC = () => {
               {errors.cpf && <span className="error">{errors.cpf}</span>}
             </p>
             <p>
-              <div style={{ background: 'white', padding: '1.25rem' }} />
+              <div style={{background: 'white', padding: '1.25rem'}} />
             </p>
             <p>
-              <div style={{ background: 'white', padding: 'var(--pd-3)' }} />
+              <div style={{background: 'white', padding: 'var(--pd-3)'}} />
             </p>
           </div>
         ),
@@ -126,7 +125,7 @@ const UsuarioTable: React.FC = () => {
           </div>
         ]
       }
-    } else {
+    }else {
       return {
         idRow: (
           <div>
@@ -140,7 +139,7 @@ const UsuarioTable: React.FC = () => {
             <p><strong style={{ color: 'var(--main-purple)' }}>Email:</strong></p>
             <p>{usuario.email}</p>
             <p><strong style={{ color: 'var(--main-purple)' }}>Senha:</strong></p>
-            <p>{usuario.senha ? '*'.repeat(usuario.senha.length) : 'Senha não definida'}</p>
+            <p>{usuario.senha ? '*'.repeat(usuario.senha.length) : 'Senha não definida'}</p>        
           </div>
         ),
         col2: (
@@ -150,20 +149,20 @@ const UsuarioTable: React.FC = () => {
             <p><strong style={{ color: 'var(--main-purple)' }}>CPF:</strong></p>
             <p>{formatCpf(usuario.cpf)}</p>
             <p>
-              <div style={{ background: 'white', padding: '2rem' }} />
+              <div style={{background: 'white', padding: '2rem'}} />
             </p>
           </div>
         ),
         extra: [
           <>
-            <div className='botoes'>
-              <div key="edit-button">
-                <button className="btn" onClick={() => setUsuarioEditado(usuario)}>Editar</button>
-              </div>
-              <div key="delete-button">
-                <button className="btn" onClick={() => excluirUsuario(usuario.id)}>Excluir</button>
-              </div>
+          <div className='botoes'>
+            <div key="edit-button">
+              <button className="btn" onClick={() => setUsuarioEditado(usuario)}>Editar</button>
             </div>
+            <div key="delete-button">
+              <button className="btn" onClick={() => excluirUsuario(usuario.id)}>Excluir</button>
+            </div>
+          </div>
           </>
         ]
       };
@@ -173,28 +172,17 @@ const UsuarioTable: React.FC = () => {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/usuarios`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`, // Adiciona o token de autenticação
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Erro ao buscar usuários');
-        }
-
-        const usuariosData = await response.json();
-
-        setUsuarios(usuariosData.map((user: Usuario): Usuario => ({
+        const response = await axios.get('http://localhost:5000/usuarios');
+        const usuariosData = response.data.map((user: Usuario): Usuario => ({
           id: user.id,
           nome: user.nome,
           email: user.email,
           cpf: user.cpf,
           perfil: user.perfil as Perfil,
           senha: user.senha
-        })));
+        }));
+
+        setUsuarios(usuariosData);
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
       } finally {
@@ -205,59 +193,56 @@ const UsuarioTable: React.FC = () => {
     fetchUsuarios();
   }, []);
 
-
   const salvarEdicao = async (usuario: Usuario) => {
+    // Limpa os erros antes de verificar novamente
     setErrors({});
-
-    let hasErrors = false;
-
-    // Validação dos campos
+  
+    // Verifica se os campos obrigatórios estão preenchidos
+    let hasErrors = false; // Variável para controlar se houve erros
+  
     if (!usuario.nome) {
       setErrors((prev) => ({ ...prev, nome: 'Nome é obrigatório.' }));
-      hasErrors = true;
+      hasErrors = true; // Marca que houve um erro
     }
     if (!usuario.email) {
       setErrors((prev) => ({ ...prev, email: 'Email é obrigatório.' }));
-      hasErrors = true;
+      hasErrors = true; // Marca que houve um erro
     }
     if (!usuario.senha) {
       setErrors((prev) => ({ ...prev, senha: 'Senha é obrigatória.' }));
-      hasErrors = true;
+      hasErrors = true; // Marca que houve um erro
     }
     if (!usuario.cpf) {
       setErrors((prev) => ({ ...prev, cpf: 'CPF é obrigatório.' }));
-      hasErrors = true;
+      hasErrors = true; // Marca que houve um erro
     }
-
-    if (hasErrors) return;
-
+  
+    // Se houver erros, não continua com a requisição
+    if (hasErrors) {
+      return; // Retorna se houver erros
+    }
+  
     try {
-      await axios.put(`${process.env.REACT_APP_API_URL}/usuario/atualizar`, usuario, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}` // Adiciona o token aqui
-        }
-      });
-
+      await axios.put('http://localhost:5000/usuario/atualizar', usuario);
+  
       Swal.fire({
         icon: 'success',
         title: 'Sucesso!',
         text: 'Usuário atualizado com sucesso!',
       });
-
+  
       setUsuarios(usuarios.map(u => u.id === usuario.id ? usuario : u));
       setUsuarioEditando(null);
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
-      Swal.fire('Erro!', 'Não foi possível atualizar o usuário.', 'error');
     }
-  };
-
+  };  
 
   const cancelarEdicao = () => {
     setUsuarioEditando(null); // Sai do modo de edição
-  };
+  };  
 
-  const excluirUsuario = async (id: number) => {
+    const excluirUsuario = async (id: number) => {
     Swal.fire({
       title: 'Tem certeza?',
       text: 'Esta ação não pode ser desfeita!',
@@ -265,27 +250,23 @@ const UsuarioTable: React.FC = () => {
       showCancelButton: true,
       cancelButtonText: 'Cancelar',
       confirmButtonText: 'Sim, excluir!',
-      reverseButtons: true,
+      reverseButtons: true, // Inverte a ordem dos botões
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await api.delete(`${process.env.REACT_APP_API_URL}/usuario/deletar`, {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}` // Adiciona o token aqui
-            },
+          await axios.delete('http://localhost:5000/usuario/deletar', {
             data: { id }
           });
-
+  
           Swal.fire('Excluído!', 'O usuário foi excluído com sucesso.', 'success');
-
+  
           setUsuarios(usuarios.filter(usuario => usuario.id !== id));
         } catch (error) {
           console.error("Erro ao excluir usuário:", error);
-          Swal.fire('Erro!', 'Não foi possível excluir o usuário.', 'error');
         }
       }
     });
-  }
+  };
 
   type Column<T> = {
     label: string;
@@ -294,7 +275,7 @@ const UsuarioTable: React.FC = () => {
   };
 
   const columns: Array<Column<Usuario>> = [
-    { label: 'CPF', key: 'cpf' },
+    { label: 'ID', key: 'id' },
     { label: 'Nome', key: 'nome' },
     {
       label: 'Tipo',
@@ -322,14 +303,14 @@ const UsuarioTable: React.FC = () => {
       </div>
       <div className="content">
         <div className='adicionarUsuario'>
-          <Link to="/usuario/cadastro" className='btn'>Adicionar usuário</Link>
+          <Link to="/usuario/cadastro" className='btn'>Adicionar usuário</Link> 
         </div>
         <TabelaGenerica<Usuario>
           data={usuarios}
           columns={columns}
           detailExtractor={(usuario) => (
             <div className="usuario-detalhes">
-              <p><strong>ID:</strong> {usuario.id}</p>
+              <p><strong>ID:</strong> {usuario.id}</p>              
               <p><strong>Nome:</strong> {usuario.nome}</p>
               <p><strong>Email:</strong> {usuario.email}</p>
               <p><strong>Tipo:</strong> {PerfilLabel[usuario.perfil as Perfil]}</p>
