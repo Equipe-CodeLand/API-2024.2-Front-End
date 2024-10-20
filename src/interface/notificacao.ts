@@ -1,7 +1,7 @@
 export interface Notificacao {
     id?: string;
     alertaId: string;
-    dataNotificacao: Date;
+    dataNotificacao: string;
     mensagemAlerta: string;
     parametroId: string;
     estacaoId: string;
