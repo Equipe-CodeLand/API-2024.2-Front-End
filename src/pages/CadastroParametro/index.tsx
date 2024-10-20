@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/sidebar/sidebar';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import './style.css';
 import { useNavigate } from 'react-router-dom';
 import BackArrow from '../../assets/back-arrow.png';
+import { api } from '../../config';
 
 const CadastroParametros: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -46,7 +46,7 @@ const CadastroParametros: React.FC = () => {
         // Adicionar o token ao cabeçalho
         const token = localStorage.getItem('token');
 
-        const response = await axios.post(apiUrl, {
+        const response = await api.post(apiUrl, {
           nome,
           descricao,
           fator,
@@ -55,7 +55,7 @@ const CadastroParametros: React.FC = () => {
           sigla
         }, {
           headers: {
-            'Authorization': `Bearer ${token}`, // Aqui está o token
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });

@@ -38,7 +38,7 @@ const Login: React.FC = () => {
         navigate('/home');
       } else {
         // Exiba a mensagem de erro
-        setErrorMessage(data.erro || 'Email ou senha inválidos.');
+        setErrorMessage('Email ou senha inválidos.');
       }
     } catch (error) {
       console.error('Erro ao realizar o login:', error);
@@ -79,9 +79,9 @@ const Login: React.FC = () => {
         </button>
         
         <div className="login-links">
-          <a href="#" className="login-link" onClick={handleLogin}>Cadastre-se</a>
+          <a href="/usuario/cadastro" className="login-link" onClick={handleLogin}>Cadastre-se</a>
           <span>ou</span>
-          <a href="#" className="login-link" onClick={handleLogin}>Continue sem login</a>
+          <a href="/home" className="login-link" onClick={handleLogin}>Continue sem login</a>
         </div>
       </form>
     </div>

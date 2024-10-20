@@ -7,13 +7,15 @@ import { Usuario } from '../../interface/usuario';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import BackArrow from '../../assets/back-arrow.png';
+import { api } from '../../config';
+import { isUserAdmin } from '../Login/privateRoutes';
 
 const CadastroUsuario: React.FC = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
-  const [perfil, setPerfil] = useState('');
+  const [perfil, setPerfil] = useState('Leitor');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [successMessage, setSuccessMessage] = useState('');
@@ -76,11 +78,10 @@ const CadastroUsuario: React.FC = () => {
     if (Object.keys(formErrors).length === 0) {
       try {
         const apiUrl = `${process.env.REACT_APP_API_URL}/usuario/cadastro`;
-        
-        // Adicionar o token ao cabeçalho
+
         const token = localStorage.getItem('token');
-  
-        const response = await axios.post(apiUrl, {
+
+        const response = await api.post(apiUrl, {
           nome,
           email,
           cpf: cpfUnformatted,
@@ -88,11 +89,11 @@ const CadastroUsuario: React.FC = () => {
           perfil
         }, {
           headers: {
-            'Authorization': `Bearer ${token}`, // Aqui está o token
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
-  
+
         if (response.status == 201) {
           Swal.fire({
             title: 'Sucesso!',
@@ -105,7 +106,7 @@ const CadastroUsuario: React.FC = () => {
           setCpf('');
           setSenha('');
           setConfirmarSenha('');
-          setPerfil('');
+          setPerfil('Leitor');
           navigate('/usuarios');
         } else {
           setErrors({ form: response.data.message });
@@ -214,26 +215,29 @@ const CadastroUsuario: React.FC = () => {
               {errors.confirmarSenha && <span className="error">{errors.confirmarSenha}</span>}
             </div>
           </div>
-          <div className="signin-item-row">
-            <div className="signin-row">
-              <label htmlFor="perfil">Perfil:</label>
-              <select
-                id="perfil"
-                name="perfil"
-                className='input-full-size'
-                value={perfil}
-                onChange={(e) => {
-                  setPerfil(e.target.value);
-                  setErrors((prevErrors) => ({ ...prevErrors, perfil: '' }));
-                }}
-              >
-                <option value="">Selecione um perfil</option>
-                <option value="Leitor">Leitor</option>
-                <option value="Administrador">Administrador</option>
-              </select>
-              {errors.perfil && <span className="error">{errors.perfil}</span>}
+          {isUserAdmin() && (
+            <div className="signin-item-row">
+              <div className="signin-row">
+                <label htmlFor="perfil">Perfil:</label>
+                <select
+                  id="perfil"
+                  name="perfil"
+                  className='input-full-size'
+                  value={perfil}
+                  onChange={(e) => {
+                    setPerfil(e.target.value);
+                    setErrors((prevErrors) => ({ ...prevErrors, perfil: '' }));
+                  }}
+                >
+                  <option value="">Selecione um perfil</option>
+                  <option value="Leitor">Leitor</option>
+                  <option value="Administrador">Administrador</option>
+                </select>
+                {errors.perfil && <span className="error">{errors.perfil}</span>}
+              </div>
             </div>
-          </div>
+          )}
+
           <div className="signin-row-submit">
             <input type="submit" className='btn' value="Cadastrar" />
           </div>

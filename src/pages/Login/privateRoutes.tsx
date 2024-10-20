@@ -1,3 +1,4 @@
+import { log } from 'node:console';
 import React from 'react';
 import { Route, Navigate } from 'react-router-dom';
 
@@ -6,28 +7,27 @@ interface PrivateRouteProps {
   isAdmin?: boolean;
 }
 
+// Verifica se o usuário é admin (opcional)
+export const isUserAdmin = () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decodifica o token JWT
+      return decodedToken.claims.perfil === 'Administrador'; // Altere 'perfil' se necessário
+    } catch (error) {
+      console.error("Erro ao decodificar token:", error);
+      return false;
+    }
+  }
+  return false;
+};
+
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, isAdmin }) => {
+
   const token = localStorage.getItem('token');
 
-  // Aqui você pode adicionar lógica para verificar se o usuário é admin
-  const isAuthenticated = !!token; // Altere conforme a sua lógica de autenticação
-  console.log("Token:", token); // Log do token
-  console.log("Is Authenticated:", isAuthenticated); // Log do estado de autenticação
+  const isAuthenticated = !!token;
 
-  // Verifica se o usuário é admin (opcional)
-  const isUserAdmin = () => {
-    if (token) {
-      try {
-        const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decodifica o token JWT
-        console.log("Decoded Token:", decodedToken); // Log do token decodificado
-        return decodedToken.perfil === 'Administrador'; // Altere 'perfil' se necessário
-      } catch (error) {
-        console.error("Erro ao decodificar token:", error);
-        return false;
-      }
-    }
-    return false;
-  };
 
   if (!isAuthenticated) {
     console.log("Redirecionando para login, não autenticado.");
@@ -36,7 +36,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, isAdmin }) => {
 
   if (isAdmin && !isUserAdmin()) {
     console.log("Redirecionando para login, não é admin.");
-    return <Navigate to="/" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   return element;

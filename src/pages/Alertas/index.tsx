@@ -3,7 +3,8 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import './style.css';
 import { Alerta } from '../../interface/alerta';
 import AlertaCard from '../../components/alertaCard';
-import {api} from '../../config/index';
+import { api } from '../../config/index';
+import { isUserAdmin } from '../Login/privateRoutes';
 
 interface GroupedAlert {
   nomeEstacao: string;
@@ -118,9 +119,11 @@ const Alertas: React.FC = () => {
         <div className="title-box">
           <h2 className='title-text'>Alertas cadastrados</h2>
           <div className='new-alert-container'>
-            <button className="btn" onClick={handleNewAlert}>
-              + Novo Alerta
-            </button>
+            {isUserAdmin() && (
+              <button className="btn" onClick={handleNewAlert}>
+                + Novo Alerta
+              </button>
+            )}
           </div>
         </div>
         <div className="content">

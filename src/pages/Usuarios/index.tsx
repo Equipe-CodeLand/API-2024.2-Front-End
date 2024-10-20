@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'; // Importar o componente Link
 import './style.css';
 import { formatCpf } from '../../utils/formatters';
 import { api } from '../../config';
+import { isUserAdmin } from '../Login/privateRoutes';
 
 const PerfilLabel: { [key in Perfil]: string } = {
   [Perfil.Admin]: 'Administrador',
@@ -115,7 +116,7 @@ const UsuarioTable: React.FC = () => {
             </p>
           </div>
         ),
-        extra: [
+        extra: isUserAdmin() ? [
           <div className='botoes'>
             <div key="save-button">
               <button className="btn" onClick={() => salvarEdicao(usuarioEditado)}>Salvar</button>
@@ -124,7 +125,7 @@ const UsuarioTable: React.FC = () => {
               <button className="btn" onClick={() => cancelarEdicao(null)}>Cancelar</button>
             </div>
           </div>
-        ]
+        ] : undefined
       }
     } else {
       return {
@@ -154,7 +155,7 @@ const UsuarioTable: React.FC = () => {
             </p>
           </div>
         ),
-        extra: [
+        extra: isUserAdmin() ? [
           <>
             <div className='botoes'>
               <div key="edit-button">
@@ -165,7 +166,7 @@ const UsuarioTable: React.FC = () => {
               </div>
             </div>
           </>
-        ]
+        ] : undefined
       };
     }
   };

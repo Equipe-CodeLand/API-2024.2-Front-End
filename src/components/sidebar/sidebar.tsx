@@ -4,15 +4,14 @@ import './styles.css';
 import Logo from '../../assets/Logo.png';
 import AprendaMais from '../../assets/AprendaMais.png';
 import Home from '../../assets/Home.png';
-// import Dashboard from '../../assets/Dashboard.png';
 import Estacoes from '../../assets/Estacoes.png';
 import Usuario from '../../assets/Usuario.png';
 import Notificacoes from '../../assets/Notificacoes.png';
-// import Relatorio from '../../assets/Relatorio.png';
 import Parametros from '../../assets/Parametros.png';
 import Menu from '../../assets/Menu.png';
 import X from '../../assets/X.png';
 import Alertas from '../../assets/Alerta.png';
+import { isUserAdmin } from '../../pages/Login/privateRoutes';
 
 interface SidebarLinkProps {
   label: string;
@@ -51,15 +50,30 @@ export const Sidebar: React.FC = () => {
       <nav className="sidebar-nav">
         <ul>
           {links.map((link) => (
-            <li key={link.href}>
-              <NavLink to={link.href} className="sidebar-link">
-                <img src={link.icon} alt={`${link.label} icon`} className="icon" />
-                <span className="label">{link.label}</span>
-              </NavLink>
-            </li>
+            <>
+              {link.label == 'Usuários' ? (
+                <>
+                  {isUserAdmin() && (
+                    <li key={link.href}>
+                      <NavLink to={link.href} className="sidebar-link">
+                        <img src={link.icon} alt={`${link.label} icon`} className="icon" />
+                        <span className="label">{link.label}</span>
+                      </NavLink>
+                    </li>
+                  )}
+                </>
+              ) : (
+                <li key={link.href}>
+                  <NavLink to={link.href} className="sidebar-link">
+                    <img src={link.icon} alt={`${link.label} icon`} className="icon" />
+                    <span className="label">{link.label}</span>
+                  </NavLink>
+                </li>
+              )}
+            </>
           ))}
         </ul>
-      </nav>
-    </div>
+      </nav >
+    </div >
   );
 };
