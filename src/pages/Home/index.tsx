@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sidebar } from '../../components/sidebar/sidebar'; 
 import './style.css'; 
-import Logo_Icon from '../../../public/images/Logo_Icon.png';
+import Logo_Icon from '../../assets/Logo_Icon.png';
 
 const Home: React.FC = () => {
   return (

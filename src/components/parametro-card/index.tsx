@@ -32,7 +32,7 @@ const ParametroCard: React.FC<ParametroCardProps> = ({ parametro, onEdit, onDele
 
   const handleSave = async () => {
     try {
-      await axios.put(`http://localhost:5000/parametro/${parametro.id}`, editValues);
+      await axios.put(`${process.env.REACT_APP_API_URL}/parametro/${parametro.id}`, editValues);
       onEdit(editValues); // Chama a função de edição passada como prop
       setIsEditing(false);
     } catch (err) {
@@ -53,7 +53,7 @@ const ParametroCard: React.FC<ParametroCardProps> = ({ parametro, onEdit, onDele
 
   const handleDeleteClick = async () => {
     try {
-      await axios.delete(`http://localhost:5000/parametro/${parametro.id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/parametro/${parametro.id}`);
       onDelete(parametro.id); // Chama a função de deleção passada como prop
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {

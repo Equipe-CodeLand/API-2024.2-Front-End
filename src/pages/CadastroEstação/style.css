@@ -10,8 +10,8 @@
   display: flex;
   align-items: center;
   border-radius: 12px;
-  color: var(--main-purplew);
-  border: 1px solid var(--main-purple);
+  color: var(--main-purplew)!important;
+  border: 2px solid var(--main-purple);
   gap: 6px;
   padding: 6px 8px;
   cursor: default;
@@ -26,4 +26,10 @@
   display: flex;
   justify-content: center;
   padding-top: 12px;
+}
+.back-button{
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 12px;
 }

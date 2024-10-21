@@ -16,19 +16,13 @@
  
 <span id="execution">
 <h3>⚙️ Execução do Sistema</h3>
-Antes de iniciar, você precisa ter instalado o [PNPM](https://pnpm.io/pt/installation#usando-npm) em sua máquina, com o seguinte comando:
+Clone o repositório e siga o passo a passo descrito abaixo:
 <br>
 
 ```bash
-# Instalar o pnpm
-$ npm install -g pnpm
-```
-Após sua instalação, clone o repositório e siga o passo a passo descrito abaixo:
-
-```bash
-# Instale as dependências do projeto com o pnpm
-$ pnpm install
+# Instale as dependências do projeto com o npm
+$ npm install
 
 # Rode o projeto compilado
-$ pnpm run dev
+$ npm start
 ```

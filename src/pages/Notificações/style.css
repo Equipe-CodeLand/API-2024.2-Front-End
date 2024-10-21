@@ -1,37 +1,79 @@
-.notification-container{
-  width: 100%;
-  max-width: 1200px;
+.notification-container {
   padding: 0 var(--pd-3);
   margin: var(--mg-8) 0;
 }
-.notification-container .notification-box{
+
+.notification-container.red .notification-box {
+  border-color: red;
+  background-color: #ffe5e5;
+}
+
+.notification-container.yellow .notification-box {
+  border-color: #ff9800;
+  background-color: #fff9e5;
+}
+
+.content-box {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 var(--pd-3);
+}
+
+.small-title-text {
+  margin: 10px;
+}
+
+.notification-container .notification-box {
   margin: 10px 0;
   width: 100%;
   display: flex;
   justify-content: space-between;
   border: 1px solid #ffe5e5;
   border-radius: 8px;
-  background-color: #fff9e5;
   padding: var(--pd-5);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.notification-container .notification-box .notification-info{
+
+.notification-container .notification-box .notification-info {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-.notification-container .notification-box .notification-info .icon-and-type{
+
+.notification-container .notification-box .notification-info .icon-and-type {
   display: flex;
   align-items: center;
 }
-.notification-container .notification-box .notification-info .text-type{
+
+.notification-container .notification-box .notification-info .text-type {
   font-weight: 800;
-  color: #ff9800;
-}
-.notification-container .notification-box .notification-info .yellow{
-  color: #ff9800;
-}
-.notification-container .notification-box .notification-info .red{
-  color: var(--main-red);
 }
 
+.notification-container .notification-box .notification-info .text-type.red {
+  color: red;
+}
+
+.notification-container .notification-box .notification-info .text-type.yellow {
+  color: #ff9800;
+}
+
+/* Ajustes nos dados da notificação */
+.notification-container .notification-box .notification-data {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.notification-data p {
+  margin: 0;
+  word-wrap: break-word;
+}
+
+.icon.red {
+  color: red;
+}
+
+.icon.yellow {
+  color: #ff9800;
+}

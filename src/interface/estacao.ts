@@ -1,5 +1,5 @@
 export interface Estacao {
-    id: number;
+    id: string;
     nome: string;
     uid: string;
     cep: string;
@@ -7,6 +7,5 @@ export interface Estacao {
     numero: number;
     bairro: string;
     cidade: string;
-    parametros: any[];
-    status: string;
+    parametros: string[];
 }

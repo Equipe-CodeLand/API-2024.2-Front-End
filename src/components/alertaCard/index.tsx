@@ -3,26 +3,14 @@ import WarningIcon from '@mui/icons-material/Warning';
 import './style.css';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-
-export interface Alerta {
-  id: number;
-  local: string;
-  gravidade: string;
-  descricao: string;
-  valor: number;
-  parametro: string;
-  condicao: string;
-  nomeParametro: string;
-  nomeEstacao: string;
-  estacaoId: number;
-  parametroId: number;
-}
+import { Alerta } from '../../interface/alerta';
+import { isUserAdmin } from '../../pages/Login/privateRoutes';
 
 interface AlertaCardProps {
   alerta: Alerta;
-  idEstacao: number;
-  idParametro: number;
-  onDelete: (id: number) => void;
+  idEstacao: string;
+  idParametro: string;
+  onDelete: (id: string) => void;
   onUpdate: (alerta: Alerta) => void;
 }
 
@@ -31,7 +19,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
   const [editAlerta, setEditAlerta] = useState<Alerta>(alerta);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [parametrosOptions, setParametrosOptions] = useState<any[]>([]);
-  const [parametroSelecionado, setParametroSelecionado] = useState<number | null>(null);
+  const [parametroSelecionado, setParametroSelecionado] = useState<string | null>(null);
 
   // Condições disponíveis no dropdown
   const condicoes = ['<', '>', '==', '>=', '<='];
@@ -45,9 +33,9 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
   useEffect(() => {
     const fetchParametros = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/parametro/estacao/${idEstacao}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/parametros/`);
         setParametrosOptions(response.data);
-        console.log(response.data);
+        console.log('parametro da estaçao', response.data);
 
       } catch (error) {
         console.error("Erro ao buscar parâmetros:", error);
@@ -67,7 +55,6 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
     return () => clearTimeout(timer);
   }, [errors]);
 
-
   const handleEditClick = () => {
     setIsEditing(!isEditing);
     if (!isEditing) {
@@ -79,11 +66,12 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
     const { name, value } = e.target;
     setEditAlerta((prev) => ({
       ...prev,
-      [name]: value,
-      parametroId: name === 'parametro' ? Number(value) : prev.parametroId // Converte para número
+      [name]: value
     }));
+    if (name === 'parametro') {
+      setParametroSelecionado(value);
+    }
   };
-
 
   const handleDeleteClick = async () => {
     Swal.fire({
@@ -97,7 +85,15 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:5000/alerta/deletar/${alerta.id}`);
+          const token = localStorage.getItem('token');
+
+          await axios.delete(`${process.env.REACT_APP_API_URL}/alerta/deletar/${alerta.id}`,
+            {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            });
           Swal.fire('Excluído!', 'O alerta foi excluído com sucesso.', 'success');
           onDelete(alerta.id);
         } catch (error) {
@@ -107,8 +103,13 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
     });
   };
 
+  const handleCancelClick = () => {
+    setIsEditing(false);
+  };  
+
   const handleSaveClick = async () => {
     try {
+      const token = localStorage.getItem('token');
       // Validações de campos obrigatórios
       let hasErrors = false;
       const newErrors: { [key: string]: string } = {};
@@ -130,15 +131,21 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
 
       // Caso contrário, prosseguir com a atualização
       const updatedAlerta = {
-        estacaoId: idEstacao,
-        parametroId: parametroSelecionado,
+        idEstacao: idEstacao,
+        idParametro: parametroSelecionado,
         mensagemAlerta: editAlerta.descricao,
         tipoAlerta: editAlerta.gravidade,
         condicao: editAlerta.condicao,
         valor: editAlerta.valor
       };
 
-      const response = await axios.put(`http://localhost:5000/alerta/atualizar/${editAlerta.id}`, updatedAlerta);
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/alerta/atualizar/${editAlerta.id}`, updatedAlerta,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
       onUpdate(response.data);
 
       Swal.fire({
@@ -148,7 +155,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
       }).then(() => {
         window.location.reload(); // Recarrega a página após clicar em OK
       });
-  
+
       setIsEditing(false);
       setErrors({}); // Limpa os erros após salvar
     } catch (error) {
@@ -157,8 +164,11 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
     }
   };
 
-
-
+  // busca o nome dos parametros usando o parametroId
+  const ParametroNome = (parametroId: string) => {
+    const parametro = parametrosOptions.find(param => param.id === parametroId);
+    return parametro ? parametro.nome : 'Desconhecido';
+  };
 
   const gravidadeClasse = alerta.gravidade === 'Atenção' ? 'atencao' : 'perigo';
 
@@ -200,7 +210,6 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
               ) : (
                 <span>{alerta.descricao}</span>
               )}
-
             </div>
           </div>
 
@@ -240,7 +249,6 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
               ) : (
                 <span>{alerta.valor}</span>
               )}
-
             </div>
           </div>
 
@@ -253,7 +261,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
                   className='input-edicao'
                   value={parametroSelecionado || ''}
                   onChange={(e) => {
-                    const selectedValue = Number(e.target.value); // Converte para número
+                    const selectedValue = e.target.value; // Mantém como string
                     setParametroSelecionado(selectedValue);
                     setEditAlerta({ ...editAlerta, parametroId: selectedValue });
                   }}
@@ -265,7 +273,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
                   ))}
                 </select>
               ) : (
-                <span>{alerta.parametro}</span>
+                <span>{ParametroNome(alerta.parametroId)}</span>
               )}
             </div>
             <div className={`information-box-item ${isEditing ? 'editing-mode' : ''}`}>
@@ -288,7 +296,8 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
               )}
             </div>
           </div>
-
+        </div>
+        {isUserAdmin() && (
           <div className="box-btn">
             <button className="btn" onClick={isEditing ? handleSaveClick : handleEditClick}>
               {isEditing ? 'Salvar' : 'Editar'}
@@ -297,10 +306,11 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
               Excluir
             </button>
           </div>
-        </div>
+        )}
       </details>
     </div>
+
   );
-}
+};
 
 export default AlertaCard;

@@ -2,18 +2,26 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; // Importa o SweetAlert2
 import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
-import api from '../../config';
+import { api } from '../../config';
 import { useNavigate } from 'react-router-dom';
+import { Estacao } from '../../interface/estacao';
+import { Parametro } from '../../interface/parametro';
+import BackArrow from '../../assets/back-arrow.png';
 
 const CadastroAlerta: React.FC = () => {
-    const [estacaoSelecionada, setEstacaoSelecionada] = useState<number>(0);
-    const [parametroSelecionado, setParametroSelecionado] = useState<number>(0);
+    // estados referente as estações
+    const [estacoes, setEstacoes] = useState<Estacao[]>([]);
+    const [estacaoSelecionada, setEstacaoSelecionada] = useState<string>('');
+    // estados referentes aos parametros
+    const [parametros, setParametros] = useState<Parametro[]>([]);
+    const [parametroSelecionado, setParametroSelecionado] = useState<string>('');
+    // 
     const [alertaSelecionado, setAlertaSelecionado] = useState('');
-    const [mensagem, setMensagem] = useState('');
+    // 
     const [condicaoSelecionada, setCondicaoSelecionada] = useState('');
+    // 
+    const [mensagem, setMensagem] = useState('');
     const [valor, setValor] = useState<string>('');
-    const [estacoesOptions, setEstacoesOptions] = useState<any[]>([]);
-    const [parametrosOptions, setParametrosOptions] = useState<any[]>([]);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const navigate = useNavigate();
 
@@ -34,8 +42,9 @@ const CadastroAlerta: React.FC = () => {
     useEffect(() => {
         const fetchEstacoes = async () => {
             try {
-                const response = await api.get('/estacao');
-                setEstacoesOptions(response.data);
+                const response = await api.get('/estacoes');
+                setEstacoes(response.data);
+                console.log('get estações:', response.data);
             } catch (err) {
                 console.log('Erro ao buscar as estações: ' + err);
             }
@@ -46,20 +55,32 @@ const CadastroAlerta: React.FC = () => {
 
     // busca os parâmetros quando a estação é selecionada
     useEffect(() => {
-        const fetchParametros = async () => {
-            try {
-                if (estacaoSelecionada !== 0) {
-                    const response = await api.get(`/parametro/estacao/${estacaoSelecionada}`);
-                    console.log(response.data, 'parametros');
-                    setParametrosOptions(response.data);
-                }
-            } catch (err) {
-                console.log('Erro ao buscar os parâmetros: ' + err);
-            }
-        };
+        const estacao = estacoes.find((e) => e.id === estacaoSelecionada);
+        if (estacao) {
+            const parametrosEstacao = estacao.parametros.map(parametro => ({
+                id: parametro,
+                nome: parametro,
+                unidade: '', // Provide appropriate default or fetched values
+                fator: 1,    // Provide appropriate default or fetched values
+                offset: 0,   // Provide appropriate default or fetched values
+                descricao: '', // Provide appropriate default or fetched values
+                sigla: ''
+            }));
+            setParametros(parametrosEstacao);
+            console.log('parametro da estação', parametrosEstacao);
+        } else {
+            setParametros([]);
+        }
+    }, [estacaoSelecionada, estacoes]);
 
-        fetchParametros();
-    }, [estacaoSelecionada]);
+    const handleEstacaoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setEstacaoSelecionada(event.target.value);
+        setParametroSelecionado('');
+    };
+
+    const handleParametroChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setParametroSelecionado(event.target.value);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -97,28 +118,38 @@ const CadastroAlerta: React.FC = () => {
         // se não houver erros, envia os dados para o servidor
         if (Object.keys(formErrors).length === 0) {
             try {
-                const response = await api.post("/alerta/cadastro", {
+                const apiUrl = `${process.env.REACT_APP_API_URL}/alerta/cadastro`;
+                
+                // Adicionar o token ao cabeçalho
+                const token = localStorage.getItem('token');
+
+                const response = await api.post(apiUrl, {
                     estacaoId: estacaoSelecionada,
                     parametroId: parametroSelecionado,
                     mensagemAlerta: mensagem,
                     tipoAlerta: alertaSelecionado.toLowerCase(),
                     condicao: condicaoSelecionada,
                     valor: parseFloat(valor)
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Aqui está o token
+                        'Content-Type': 'application/json'
+                    }
                 });
 
-                if (response.data.success) {
+                if (response.status === 201) {
                     Swal.fire({
                         title: 'Sucesso!',
                         text: 'O alerta foi cadastrado com sucesso!',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                       navigate('/alertas')
+                        navigate('/alertas');
                     });
 
                     // limpar os campos
-                    setEstacaoSelecionada(0);
-                    setParametroSelecionado(0);
+                    setEstacaoSelecionada('');
+                    setParametroSelecionado('');
                     setAlertaSelecionado('');
                     setMensagem('');
                     setCondicaoSelecionada('');
@@ -133,12 +164,17 @@ const CadastroAlerta: React.FC = () => {
                 }
             } catch (error) {
                 console.error('Erro ao cadastrar alerta:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: 'Erro ao cadastrar alerta.',
+                    confirmButtonText: 'OK'
+                });
             }
         } else {
             console.log('Erros no formulário:', formErrors);
         }
     };
-
 
     return (
         <div>
@@ -149,6 +185,10 @@ const CadastroAlerta: React.FC = () => {
                 </div>
                 <div className="content">
                     <form className="signin-container" onSubmit={handleSubmit}>
+                        <div className="back-button" onClick={() => navigate('/alertas')}>
+                            <img src={BackArrow} alt="voltar" className='back-arrow' />
+                            <span>Voltar</span>
+                        </div>
                         <div className='signin-item-row'>
                             <div className="signin-row">
                                 <label htmlFor="estacao">Estação:</label>
@@ -156,13 +196,10 @@ const CadastroAlerta: React.FC = () => {
                                     id="estacao"
                                     className='input-full-size'
                                     value={estacaoSelecionada}
-                                    onChange={(e) => {
-                                        setEstacaoSelecionada(parseInt(e.target.value));
-                                        setParametroSelecionado(0);
-                                    }}
+                                    onChange={handleEstacaoChange}
                                 >
                                     <option value="">Selecione uma estação</option>
-                                    {estacoesOptions.map((estacao, index) => (
+                                    {estacoes.map((estacao, index) => (
                                         <option key={index} value={estacao.id}>
                                             {estacao.nome}
                                         </option>
@@ -180,12 +217,12 @@ const CadastroAlerta: React.FC = () => {
                                         id="parametro"
                                         className='input-full-size'
                                         value={parametroSelecionado}
-                                        onChange={(e) => setParametroSelecionado(parseInt(e.target.value))}
-                                        disabled={estacaoSelecionada === 0} // desabilitar se nenhuma estação estiver selecionada
+                                        onChange={handleParametroChange}
+                                        disabled={!estacaoSelecionada} // desabilitar se nenhuma estação estiver selecionada
                                     >
                                         <option value="">Selecione um parâmetro</option>
-                                        {parametrosOptions.map((parametro, index) => (
-                                            <option key={index} value={parametro.id}>
+                                        {parametros.map((parametro, index) => (
+                                            <option key={index} value={parametro.nome}>
                                                 {parametro.nome}
                                             </option>
                                         ))}

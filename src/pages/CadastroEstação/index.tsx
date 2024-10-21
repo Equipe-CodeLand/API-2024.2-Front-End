@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Sidebar } from "../../components/sidebar/sidebar";
 import './style.css';
 import { formatCep } from '../../utils/formatters';
-import api from '../../config';
+import { api } from '../../config';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import BackArrow from '../../assets/back-arrow.png';
 
 const CadastroEstacao: React.FC = () => {
     const [nome, setNome] = useState('');
@@ -14,123 +15,90 @@ const CadastroEstacao: React.FC = () => {
     const [numero, setNumero] = useState('');
     const [bairro, setBairro] = useState('');
     const [cidade, setCidade] = useState('');
-    const [selectedParametros, setSelectedParametros] = useState<any[]>([]);
-    const [parametroSelecionado, setParametroSelecionado] = useState<number>(0);
+    const [selectedParametros, setSelectedParametros] = useState<string[]>([]);
+    const [parametroSelecionado, setParametroSelecionado] = useState<string>('');
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [successMessage, setSuccessMessage] = useState('');
-    const navigate = useNavigate()
-
-    const [parametrosOptions, setParametrosOptions] = useState<any[]>([])
-
-    useEffect(() => {
-        if (successMessage) {
-            const timer = setTimeout(() => {
-                setSuccessMessage('');
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [successMessage]);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setErrors({});
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, [errors]);
+    const navigate = useNavigate();
+    const [parametrosOptions, setParametrosOptions] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchParametros = async () => {
             try {
                 const response = await api.get('/parametros');
-                setParametrosOptions(response.data.parametros);
+                setParametrosOptions(response.data);
+                console.log(selectedParametros)
             } catch (err) {
-                console.log('Erro ao buscar as estações' + err);
+                console.log('Erro ao buscar os parâmetros: ' + err);
             }
         };
 
         fetchParametros();
-    }, []);
+    }, [selectedParametros]); // Adicionei a dependência selectedParametros para evitar um loop infinito
 
-    const handleSelectParametro = (parametroId: number) => {
-
+    const handleSelectParametro = (parametroId: string) => {
         if (!selectedParametros.includes(parametroId)) {
             setSelectedParametros([...selectedParametros, parametroId]);
-            setParametroSelecionado(0);
+            setParametroSelecionado('');
         }
     };
 
-
-    const handleRemoveParametro = (parametroId: number) => {
-        // Remove o parâmetro selecionado pelo ID
+    const handleRemoveParametro = (parametroId: string) => {
         setSelectedParametros(selectedParametros.filter(id => id !== parametroId));
     };
-
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const formErrors: { [key: string]: string } = {};
         setSuccessMessage('');
 
-        // validação do nome
+        // Validação de campos
         if (!nome) {
             formErrors.nome = 'Nome é obrigatório';
         }
-
-        // validação de Mac Address
         if (!uid) {
             formErrors.uid = 'Mac Address é obrigatório';
         }
-
-        // validação de CEP
         if (!cep) {
             formErrors.cep = 'CEP é obrigatório';
         }
-
-        // validação de rua
         if (!rua) {
             formErrors.rua = 'Rua é obrigatória';
         }
-
-        // validação de número
         if (!numero) {
             formErrors.numero = 'Número é obrigatório';
         }
-
-        // validação de bairro
         if (!bairro) {
             formErrors.bairro = 'Bairro é obrigatório';
         }
-
-        // validação de cidade
         if (!cidade) {
             formErrors.cidade = 'Cidade é obrigatória';
         }
-
-        // Validação de parâmetros
         if (selectedParametros.length === 0) {
             formErrors.parametros = 'Nenhum parâmetro selecionado';
         }
 
         setErrors(formErrors);
         if (Object.keys(formErrors).length === 0) {
-            // adicionar aqui a rota para o cadastro, igual foi feito no cadastro de usuario
             try {
-                const response = await api.post("/estacao/cadastro",
-                    {
-                        nome,
-                        uid,
-                        cep,
-                        rua,
-                        numero,
-                        bairro,
-                        cidade,
-                        parametros: selectedParametros
-                    })
+                const token = localStorage.getItem('token'); // Obtém o token do localStorage
+                const response = await api.post("/estacao/cadastro", {
+                    nome,
+                    uid,
+                    cep,
+                    rua,
+                    numero,
+                    bairro,
+                    cidade,
+                    parametros: selectedParametros
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-                if (response.data.success) {
-
+                if (response.status === 201) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Sucesso!',
@@ -144,7 +112,7 @@ const CadastroEstacao: React.FC = () => {
                     setBairro('');
                     setCidade('');
                     setSelectedParametros([]);
-                    navigate('/estacoes')
+                    navigate('/estacoes');
                 }
             } catch (error) {
                 console.error('Erro ao cadastrar estação:', error);
@@ -162,12 +130,17 @@ const CadastroEstacao: React.FC = () => {
                 </div>
                 <div className="content">
                     <form className="signin-container" onSubmit={handleSubmit}>
+                    <div className="back-button" onClick={() => navigate('/estacoes')}>
+                        <img src={BackArrow} alt="voltar" className='back-arrow' />
+                        <span>Voltar</span>
+                    </div>
                         <div className="signin-item-row">
                             <div className="signin-row">
                                 <label htmlFor="nome">Nome:</label>
                                 <input
                                     type="text"
                                     id="nome"
+                                    placeholder="ex: Estação exemplo"
                                     name="nome"
                                     className='input-full-size'
                                     value={nome}
@@ -184,6 +157,7 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="mac-address"
+                                    placeholder="ex: abc123"
                                     name="uid"
                                     className='input-full-size'
                                     value={uid}
@@ -197,25 +171,23 @@ const CadastroEstacao: React.FC = () => {
                         </div>
 
                         <div className="signin-item-row">
-
                             <div className="signin-row">
                                 <label htmlFor="parametros">Parâmetros:</label>
-
                                 <select
                                     id="parametros"
                                     className='input-full-size'
                                     value={parametroSelecionado}
                                     onChange={(e) => {
-                                        setParametroSelecionado(parseInt(e.target.value));
-                                        handleSelectParametro(parseInt(e.target.value));
+                                        setParametroSelecionado(e.target.value);
+                                        handleSelectParametro(e.target.value);
                                     }}
                                 >
                                     <option value="">Selecione um parâmetro</option>
-                                    {parametrosOptions.map((parametro, index) => (
+                                    {Array.isArray(parametrosOptions) && parametrosOptions.map((parametro, index) => (
                                         <option
                                             key={index}
                                             value={parametro.id}
-                                            disabled={selectedParametros.includes(parametro)}
+                                            disabled={selectedParametros.includes(parametro.id)}
                                         >
                                             {parametro.nome} - {parametro.unidade}
                                         </option>
@@ -228,35 +200,37 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="cep"
+                                    placeholder="ex: 12345-678"
                                     name="cep"
                                     className='input-full-size'
-                                    value={formatCep(cep)}
-                                    maxLength={8}
+                                    value={cep}
+                                    maxLength={9}
                                     onChange={(e) => {
-                                        setCep(e.target.value);
+                                        setCep(formatCep(e.target.value));
                                         setErrors({ ...errors, cep: '' });
                                     }}
                                 />
                                 {errors.cep && <span className="error">{errors.cep}</span>}
                             </div>
                         </div>
-
-                        {selectedParametros.length > 0 ? (
-                            <div className="parametros-list">
-                                {selectedParametros.map((parametroId) => {
-                                    // Busca o objeto completo com base no ID
-                                    const parametro = parametrosOptions.find(p => p.id === parametroId);
-                                    return (
+                        <div >
+                            {selectedParametros.length === 0 ? (
+                                <p>Nenhum parâmetro selecionado</p>
+                            ) : (
+                                <div className="parametros-list">
+                                    {selectedParametros.map((parametroId) => (
                                         <div key={parametroId} className="selected-parametro">
-                                            {parametro?.nome}
-                                            <p onClick={() => handleRemoveParametro(parametroId)} className="close"> x </p>
+
+                                            {parametrosOptions.find(p => p.id === parametroId)?.nome}
+                                            <p onClick={() => handleRemoveParametro(parametroId)} className="close">
+                                                x
+                                            </p>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <></>
-                        )}
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
 
                         <div className="signin-item-row">
                             <div className="signin-row">
@@ -264,6 +238,7 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="rua"
+                                    placeholder="ex: Rua exemplo"
                                     name="rua"
                                     className='input-full-size'
                                     value={rua}
@@ -279,6 +254,7 @@ const CadastroEstacao: React.FC = () => {
                                 <input
                                     type="text"
                                     id="numero"
+                                    placeholder="ex: 123"
                                     name="numero"
                                     className='input-full-size'
                                     value={numero}
@@ -291,45 +267,44 @@ const CadastroEstacao: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="signin-item">
-                            <div className="signin-item-row">
-                                <div className="signin-row">
-                                    <label htmlFor="bairro">Bairro:</label>
-                                    <input
-                                        type="text"
-                                        id="bairro"
-                                        name="bairro"
-                                        className='input-full-size'
-                                        value={bairro}
-                                        onChange={(e) => {
-                                            setBairro(e.target.value);
-                                            setErrors({ ...errors, bairro: '' });
-                                        }}
-                                    />
-                                    {errors.bairro && <span className="error">{errors.bairro}</span>}
-                                </div>
-                                <div className="signin-row">
-                                    <label htmlFor="cidade">Cidade:</label>
-                                    <input
-                                        type="text"
-                                        id="cidade"
-                                        name="cidade"
-                                        className='input-full-size'
-                                        value={cidade}
-                                        onChange={(e) => {
-                                            setCidade(e.target.value);
-                                            setErrors({ ...errors, cidade: '' });
-                                        }}
-                                    />
-                                    {errors.cidade && <span className="error">{errors.cidade}</span>}
-                                </div>
+                        <div className="signin-item-row">
+                            <div className="signin-row">
+                                <label htmlFor="bairro">Bairro:</label>
+                                <input
+                                    type="text"
+                                    id="bairro"
+                                    placeholder="ex: Bairro exemplo"
+                                    name="bairro"
+                                    className='input-full-size'
+                                    value={bairro}
+                                    onChange={(e) => {
+                                        setBairro(e.target.value);
+                                        setErrors({ ...errors, bairro: '' });
+                                    }}
+                                />
+                                {errors.bairro && <span className="error">{errors.bairro}</span>}
+                            </div>
+                            <div className="signin-row">
+                                <label htmlFor="cidade">Cidade:</label>
+                                <input
+                                    type="text"
+                                    id="cidade"
+                                    placeholder="ex: Cidade exemplo"
+                                    name="cidade"
+                                    className='input-full-size'
+                                    value={cidade}
+                                    onChange={(e) => {
+                                        setCidade(e.target.value);
+                                        setErrors({ ...errors, cidade: '' });
+                                    }}
+                                />
+                                {errors.cidade && <span className="error">{errors.cidade}</span>}
                             </div>
                         </div>
 
                         <div className="signin-row-submit">
                             <input type="submit" className='btn' value="Cadastrar" />
                         </div>
-                        {successMessage && <div className="success-message">{successMessage}</div>}
                     </form>
                 </div>
             </div>

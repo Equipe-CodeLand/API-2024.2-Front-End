@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { formatCpf, validateCpf, validateEmail } from '../../utils/formatters';
 import axios from 'axios';
 import './style.css';
@@ -6,30 +6,24 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import { Usuario } from '../../interface/usuario';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import BackArrow from '../../assets/back-arrow.png';
+import { api } from '../../config';
+import { isUserAdmin } from '../Login/privateRoutes';
 
 const CadastroUsuario: React.FC = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
-  const [perfil, setPerfil] = useState('');
+  const [perfil, setPerfil] = useState('Leitor');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (successMessage) {
-      const timer = setTimeout(() => {
-        setSuccessMessage('');
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [successMessage]);
-
   const checkExistingEmail = async (email: string) => {
     try {
-      const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
+      const response = await axios.get<Usuario[]>(`${process.env.REACT_APP_API_URL}/usuarios`);
       const usuarios = response.data;
       return usuarios.some((usuario) => usuario.email === email);
     } catch (error) {
@@ -40,7 +34,7 @@ const CadastroUsuario: React.FC = () => {
 
   const checkExistingCpf = async (cpf: string) => {
     try {
-      const response = await axios.get<Usuario[]>(`${import.meta.env.VITE_API_URL}/usuarios`);
+      const response = await axios.get<Usuario[]>(`${process.env.REACT_APP_API_URL}/usuarios`);
       const usuarios = response.data;
       return usuarios.some((usuario) => usuario.cpf === cpf);
     } catch (error) {
@@ -83,19 +77,24 @@ const CadastroUsuario: React.FC = () => {
 
     if (Object.keys(formErrors).length === 0) {
       try {
-        const apiUrl = `${import.meta.env.VITE_API_URL}/usuario/cadastro`;
-        console.log('Enviando dados para:', apiUrl);
-        console.log('Dados:', { nome, email, senha, perfil, cpf: cpfUnformatted });
+        const apiUrl = `${process.env.REACT_APP_API_URL}/usuario/cadastro`;
 
-        const response = await axios.post(apiUrl, {
+        const token = localStorage.getItem('token');
+
+        const response = await api.post(apiUrl, {
           nome,
           email,
           cpf: cpfUnformatted,
           senha,
           perfil
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         });
 
-        if (response.data.success) {
+        if (response.status == 201) {
           Swal.fire({
             title: 'Sucesso!',
             text: 'Usuário cadastrado com sucesso',
@@ -107,8 +106,8 @@ const CadastroUsuario: React.FC = () => {
           setCpf('');
           setSenha('');
           setConfirmarSenha('');
-          setPerfil('');
-          navigate('/usuarios')
+          setPerfil('Leitor');
+          navigate('/usuarios');
         } else {
           setErrors({ form: response.data.message });
         }
@@ -127,12 +126,17 @@ const CadastroUsuario: React.FC = () => {
           <h2 className="title-text">Cadastro de Usuários</h2>
         </div>
         <form className="signin-container" onSubmit={handleSubmit}>
+          <div className="back-button" onClick={() => navigate('/usuarios')}>
+            <img src={BackArrow} alt="voltar" className='back-arrow' />
+            <span>Voltar</span>
+          </div>
           <div className="signin-item-row">
             <div className="signin-row">
               <label htmlFor="nome">Nome:</label>
               <input
                 type="text"
                 id="nome"
+                placeholder="ex: Júlio Pereira de Souza Álves"
                 name="nome"
                 className='input-full-size'
                 value={nome}
@@ -150,6 +154,7 @@ const CadastroUsuario: React.FC = () => {
               <input
                 type="text"
                 id="email"
+                placeholder="ex: juliopsalves@gmail.com"
                 name="email"
                 className='input-full-size'
                 value={email}
@@ -165,6 +170,7 @@ const CadastroUsuario: React.FC = () => {
               <input
                 type="text"
                 id="cpf"
+                placeholder="ex: 123.456.789-01"
                 name="cpf"
                 className='input-full-size'
                 value={formatCpf(cpf)}
@@ -209,26 +215,29 @@ const CadastroUsuario: React.FC = () => {
               {errors.confirmarSenha && <span className="error">{errors.confirmarSenha}</span>}
             </div>
           </div>
-          <div className="signin-item-row">
-            <div className="signin-row">
-              <label htmlFor="perfil">Perfil:</label>
-              <select
-                id="perfil"
-                name="perfil"
-                className='input-full-size'
-                value={perfil}
-                onChange={(e) => {
-                  setPerfil(e.target.value);
-                  setErrors((prevErrors) => ({ ...prevErrors, perfil: '' }));
-                }}
-              >
-                <option value="">Selecione um perfil</option>
-                <option value="Leitor">Leitor</option>
-                <option value="Administrador">Administrador</option>
-              </select>
-              {errors.perfil && <span className="error">{errors.perfil}</span>}
+          {isUserAdmin() && (
+            <div className="signin-item-row">
+              <div className="signin-row">
+                <label htmlFor="perfil">Perfil:</label>
+                <select
+                  id="perfil"
+                  name="perfil"
+                  className='input-full-size'
+                  value={perfil}
+                  onChange={(e) => {
+                    setPerfil(e.target.value);
+                    setErrors((prevErrors) => ({ ...prevErrors, perfil: '' }));
+                  }}
+                >
+                  <option value="">Selecione um perfil</option>
+                  <option value="Leitor">Leitor</option>
+                  <option value="Administrador">Administrador</option>
+                </select>
+                {errors.perfil && <span className="error">{errors.perfil}</span>}
+              </div>
             </div>
-          </div>
+          )}
+
           <div className="signin-row-submit">
             <input type="submit" className='btn' value="Cadastrar" />
           </div>

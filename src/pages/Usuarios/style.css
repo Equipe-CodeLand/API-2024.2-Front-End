@@ -1,0 +1,51 @@
+.adicionarUsuario {
+    display: flex;
+    justify-content: flex-end ;
+    align-items: flex-end ;
+    width: 100%;
+    margin-right: 15%;
+  }
+  
+  .adicionarUsuario .btn {
+    margin: var(--mg-2);
+  }
+
+  .listagem p{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 2%;
+  }
+
+  .listagem strong{
+    margin-right: 2%;
+  }
+
+.botoes {
+  display: flex;
+  justify-content: space-between; /* Espaça os botões ao máximo */
+  margin-top: 10px; /* Adiciona um espaçamento acima dos botões */
+  width: 80%;
+  margin-bottom: 1.5%;
+}
+
+.botoes button {
+  justify-content: center;
+}
+
+.btn {
+  background-color: #5751d3; /* Cor de fundo */
+  color: white; /* Cor do texto */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.btn:hover {
+  background-color: var(--main-white);
+  color: black;
+  border: 3px solid var(--main-purple);
+}

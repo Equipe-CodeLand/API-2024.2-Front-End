@@ -2,34 +2,29 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import TabelaGenerica from '../../components/tabelaDropdown';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './style.css';
-import api from '../../config';
-
-interface Parametro {
-  id: number;
-  nome: string;
-  unidade: string;
-  fator: number;
-  offset: number;
-  descricao: string;
-}
+import { api } from '../../config';
+import { Parametro } from '../../interface/parametro';
+import { isUserAdmin } from '../Login/privateRoutes';
 
 const Parametros: React.FC = () => {
   const [parametros, setParametros] = useState<Parametro[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [editando, setEditando] = useState<number | null>(null);
+  const [editando, setEditando] = useState<string | null>(null);
   const [parametroEditado, setParametroEditado] = useState<Partial<Parametro>>({});
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
   const fetchParametros = async () => {
     try {
-      const response = await api.get('http://localhost:5000/parametros'); // Atualize a URL
-      console.log('Dados recebidos:', response.data); // Adicione este log para verificar os dados recebidos
-      setParametros(response.data.parametros); // Ajuste conforme a estrutura dos dados
+      const response = await api.get('/parametros');
+      console.log('Dados recebidos:', response.data);
+      setParametros(response.data);
+      setLoading(false);
     } catch (err) {
-      console.error('Erro ao buscar parâmetros:', err); // Mude para console.error para erros
+      console.error('Erro ao buscar parâmetros:', err);
       if (axios.isAxiosError(err) && err.response) {
         setError(`Erro ao buscar parâmetros: ${err.response.status} - ${err.response.statusText}`);
       } else {
@@ -43,7 +38,7 @@ const Parametros: React.FC = () => {
   }, []);
 
   const handleEdit = (parametro: Parametro) => {
-    setEditando(parametro.id);
+    setEditando(parametro.id || null);
     setParametroEditado(parametro);
   };
 
@@ -54,6 +49,7 @@ const Parametros: React.FC = () => {
     if (parametroEditado.fator === undefined) errors.fator = 'O campo fator é obrigatório.';
     if (parametroEditado.offset === undefined) errors.offset = 'O campo offset é obrigatório.';
     if (!parametroEditado.descricao) errors.descricao = 'O campo descrição é obrigatório.';
+    if (!parametroEditado.sigla) errors.sigla = 'O campo sigla é obrigatório.';
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -61,7 +57,14 @@ const Parametros: React.FC = () => {
     }
 
     try {
-      await api.put(`http://localhost:5000/parametro/atualizar/${parametroEditado.id}`, parametroEditado);
+      const token = localStorage.getItem('token');
+      await api.put(`/parametro/atualizar/${parametroEditado.id}`, parametroEditado, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
       Swal.fire({
         icon: 'success',
         title: 'Parâmetro atualizado com sucesso!',
@@ -80,16 +83,30 @@ const Parametros: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     try {
-      await api.delete(`http://localhost:5000/parametro/${id}`);
+      const token = localStorage.getItem('token');
+      await api.delete(`/parametro/deletar/${id}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+    });
       fetchParametros(); // Atualiza a lista após deletar
+      Swal.fire(
+        'Deletado!',
+        'O parâmetro foi deletado.',
+        'success'
+      );
     } catch (err) {
       console.error('Erro ao deletar parâmetro:', err);
+      setError('Erro ao deletar parâmetro.');
     }
   };
 
-  const confirmDelete = (id: number) => {
+  const confirmDelete = (id: string) => {
+    console.log('Deletar parâmetro com ID:', id);
     Swal.fire({
       title: 'Tem certeza?',
       text: "Você não poderá reverter isso!",
@@ -102,11 +119,7 @@ const Parametros: React.FC = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         handleDelete(id);
-        Swal.fire(
-          'Deletado!',
-          'O parâmetro foi deletado.',
-          'success'
-        );
+        console.log('Parâmetro deletado com sucesso!');
       }
     });
   };
@@ -142,14 +155,16 @@ const Parametros: React.FC = () => {
             {validationErrors.unidade && <p className="error-text">{validationErrors.unidade}</p>}
             <p><strong className="field-label">Offset:</strong> <input className="input-field" type="number" name="offset" value={parametroEditado.offset || 0} onChange={handleChange} /></p>
             {validationErrors.offset && <p className="error-text">{validationErrors.offset}</p>}
+            <p><strong className="field-label">Sigla:</strong> <input className="input-field" type="text" name="sigla" value={parametroEditado.sigla || ''} onChange={handleChange} /></p>
+            {validationErrors.sigla && <p className="error-text">{validationErrors.sigla}</p>}
           </div>
         ),
-        extra: [
+        extra: isUserAdmin() ? [
           <div key="action-button" className="button-group">
             <button className='btn-salvar' onClick={handleSave}>Salvar</button>
             <button className='btn-deletar' onClick={() => setEditando(null)}>Cancelar</button>
           </div>
-        ]
+        ] : undefined
       };
     } else {
       return {
@@ -174,14 +189,16 @@ const Parametros: React.FC = () => {
             <p className="field-value">{parametro.unidade}</p>
             <p className="field-label">Offset:</p>
             <p className="field-value">{parametro.offset}</p>
+            <p className="field-label">Sigla:</p>
+            <p className="field-value">{parametro.sigla}</p>
           </div>
         ),
-        extra: [
+        extra: isUserAdmin() ? [
           <div key="action-button" className="button-group">
             <button className='btn-editar' onClick={() => handleEdit(parametro)}>Editar</button>
-            <button className='btn-deletar' onClick={() => confirmDelete(parametro.id)}>Deletar</button>
+            <button className='btn-deletar' onClick={() => parametro.id && confirmDelete(parametro.id)}>Excluir</button>
           </div>
-        ]
+        ] : undefined
       };
     }
   };
@@ -190,7 +207,7 @@ const Parametros: React.FC = () => {
   type Column<T> = {
     label: string;
     key: keyof T;
-    renderCell?: (value: string | number) => JSX.Element;
+    renderCell?: (value: string | number | undefined) => JSX.Element;
   };
 
   // Colunas que serão exibidas na tabela
@@ -210,25 +227,33 @@ const Parametros: React.FC = () => {
         <br />
         <div className="button-container">
           {/* <button className='btn-filtro'>Filtro</button> */}
+          {isUserAdmin() && (
           <Link to="/parametro/cadastro" className='adicionarParametro'>Adicionar Parâmetro</Link>
+          )}
         </div>
       </div>
       <div className="content">
         {error && <strong className='error-text'>{error}</strong>}
-        <TabelaGenerica<Parametro> 
-          data={parametros} 
-          columns={columns} 
-          detailExtractor={(parametro) => (
-            <div className="parametro-detalhes">
-              <p className="field-label">ID: {parametro.id}</p>
-              <p className="field-label">Nome:</p>
-              <p className="field-value">{parametro.nome}</p>
-              <p className="field-label">Fator:</p>
-              <p className="field-value">{parametro.fator}</p>
-            </div>
-          )}
-          dropdownContent={dropdownContent} 
-        />
+        {loading ? (
+          <p>Carregando...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <TabelaGenerica<Parametro>
+            data={parametros}
+            columns={columns}
+            detailExtractor={(parametro) => (
+              <div className="parametro-detalhes">
+                <p className="field-label">ID: {parametro.id}</p>
+                <p className="field-label">Nome:</p>
+                <p className="field-value">{parametro.nome}</p>
+                <p className="field-label">Fator:</p>
+                <p className="field-value">{parametro.fator}</p>
+              </div>
+            )}
+            dropdownContent={dropdownContent}
+          />
+        )}
       </div>
     </div>
   );
