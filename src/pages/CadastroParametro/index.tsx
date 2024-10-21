@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/sidebar/sidebar';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import './style.css';
 import { useNavigate } from 'react-router-dom';
 import BackArrow from '../../assets/back-arrow.png';
+import { api } from '../../config';
 
 const CadastroParametros: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -15,11 +15,11 @@ const CadastroParametros: React.FC = () => {
   const [sigla, setSigla] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (successMessage) {
-      return () => setSuccessMessage('');;
+      return () => setSuccessMessage('');
     }
   }, [successMessage]);
 
@@ -43,13 +43,21 @@ const CadastroParametros: React.FC = () => {
         console.log('Enviando dados para:', apiUrl); // Adicione este log
         console.log('Dados:', { nome, descricao, fator, offset, unidade, sigla }); // Adicione este log
 
-        const response = await axios.post(apiUrl, {
+        // Adicionar o token ao cabeçalho
+        const token = localStorage.getItem('token');
+
+        const response = await api.post(apiUrl, {
           nome,
           descricao,
           fator,
           offset,
-          unidade, 
+          unidade,
           sigla
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         });
 
         if (response.status === 201) {
@@ -65,7 +73,7 @@ const CadastroParametros: React.FC = () => {
           setOffset('');
           setUnidade('');
           setSigla('');
-          navigate('/parametros')
+          navigate('/parametros');
         } else {
           setErrors({ form: response.data.message });
         }

@@ -20,7 +20,6 @@ const CadastroEstacao: React.FC = () => {
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
-
     const [parametrosOptions, setParametrosOptions] = useState<any[]>([]);
 
     useEffect(() => {
@@ -35,7 +34,7 @@ const CadastroEstacao: React.FC = () => {
         };
 
         fetchParametros();
-    });
+    }, [selectedParametros]); // Adicionei a dependência selectedParametros para evitar um loop infinito
 
     const handleSelectParametro = (parametroId: string) => {
         if (!selectedParametros.includes(parametroId)) {
@@ -53,34 +52,28 @@ const CadastroEstacao: React.FC = () => {
         const formErrors: { [key: string]: string } = {};
         setSuccessMessage('');
 
+        // Validação de campos
         if (!nome) {
             formErrors.nome = 'Nome é obrigatório';
         }
-
         if (!uid) {
             formErrors.uid = 'Mac Address é obrigatório';
         }
-
         if (!cep) {
             formErrors.cep = 'CEP é obrigatório';
         }
-
         if (!rua) {
             formErrors.rua = 'Rua é obrigatória';
         }
-
         if (!numero) {
             formErrors.numero = 'Número é obrigatório';
         }
-
         if (!bairro) {
             formErrors.bairro = 'Bairro é obrigatório';
         }
-
         if (!cidade) {
             formErrors.cidade = 'Cidade é obrigatória';
         }
-
         if (selectedParametros.length === 0) {
             formErrors.parametros = 'Nenhum parâmetro selecionado';
         }
@@ -88,6 +81,7 @@ const CadastroEstacao: React.FC = () => {
         setErrors(formErrors);
         if (Object.keys(formErrors).length === 0) {
             try {
+                const token = localStorage.getItem('token'); // Obtém o token do localStorage
                 const response = await api.post("/estacao/cadastro", {
                     nome,
                     uid,
@@ -97,6 +91,11 @@ const CadastroEstacao: React.FC = () => {
                     bairro,
                     cidade,
                     parametros: selectedParametros
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho
+                        'Content-Type': 'application/json'
+                    }
                 });
 
                 if (response.status === 201) {

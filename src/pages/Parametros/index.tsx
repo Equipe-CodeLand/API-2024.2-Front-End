@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import './style.css';
 import { api } from '../../config';
 import { Parametro } from '../../interface/parametro';
+import { isUserAdmin } from '../Login/privateRoutes';
 
 const Parametros: React.FC = () => {
   const [parametros, setParametros] = useState<Parametro[]>([]);
@@ -56,7 +57,14 @@ const Parametros: React.FC = () => {
     }
 
     try {
-      await api.put(`/parametro/atualizar/${parametroEditado.id}`, parametroEditado);
+      const token = localStorage.getItem('token');
+      await api.put(`/parametro/atualizar/${parametroEditado.id}`, parametroEditado, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
       Swal.fire({
         icon: 'success',
         title: 'Parâmetro atualizado com sucesso!',
@@ -77,7 +85,14 @@ const Parametros: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await api.delete(`/parametro/deletar/${id}`);
+      const token = localStorage.getItem('token');
+      await api.delete(`/parametro/deletar/${id}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+    });
       fetchParametros(); // Atualiza a lista após deletar
       Swal.fire(
         'Deletado!',
@@ -144,12 +159,12 @@ const Parametros: React.FC = () => {
             {validationErrors.sigla && <p className="error-text">{validationErrors.sigla}</p>}
           </div>
         ),
-        extra: [
+        extra: isUserAdmin() ? [
           <div key="action-button" className="button-group">
             <button className='btn-salvar' onClick={handleSave}>Salvar</button>
             <button className='btn-deletar' onClick={() => setEditando(null)}>Cancelar</button>
           </div>
-        ]
+        ] : undefined
       };
     } else {
       return {
@@ -178,12 +193,12 @@ const Parametros: React.FC = () => {
             <p className="field-value">{parametro.sigla}</p>
           </div>
         ),
-        extra: [
+        extra: isUserAdmin() ? [
           <div key="action-button" className="button-group">
             <button className='btn-editar' onClick={() => handleEdit(parametro)}>Editar</button>
             <button className='btn-deletar' onClick={() => parametro.id && confirmDelete(parametro.id)}>Excluir</button>
           </div>
-        ]
+        ] : undefined
       };
     }
   };
@@ -212,7 +227,9 @@ const Parametros: React.FC = () => {
         <br />
         <div className="button-container">
           {/* <button className='btn-filtro'>Filtro</button> */}
+          {isUserAdmin() && (
           <Link to="/parametro/cadastro" className='adicionarParametro'>Adicionar Parâmetro</Link>
+          )}
         </div>
       </div>
       <div className="content">

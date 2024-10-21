@@ -8,6 +8,7 @@ import "../../components/tabelaDropdown/style.css"
 import Swal from 'sweetalert2';
 import { Estacao } from '../../interface/estacao';
 import { Parametro } from '../../interface/parametro';
+import { isUserAdmin } from '../Login/privateRoutes';
 
 export const DropdownEstacao: React.FC = () => {
     const [estacoes, setEstacoes] = useState<Estacao[]>([]);
@@ -32,7 +33,14 @@ export const DropdownEstacao: React.FC = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await api.delete(`/estacao/deletar/${id}`); // Passa o ID na URL
+                    const token = localStorage.getItem('token');
+                    await api.delete(`/estacao/deletar/${id}`,
+                        {
+                            headers: {
+                              'Authorization': `Bearer ${token}`,
+                              'Content-Type': 'application/json'
+                            }
+                      });
 
                     Swal.fire('Excluído!', 'A estação foi excluída com sucesso.', 'success');
 
@@ -98,8 +106,14 @@ export const DropdownEstacao: React.FC = () => {
 
             // Atualiza a estação com os IDs dos parâmetros
             const updatedEstacao = { ...estacao, parametros: selectedParametros };
-
-            await api.put(`/estacao/atualizar/`, updatedEstacao);
+            const token = localStorage.getItem('token');
+            await api.put(`/estacao/atualizar/`, updatedEstacao,
+                {
+                    headers: {
+                      'Authorization': `Bearer ${token}`,
+                      'Content-Type': 'application/json'
+                    }
+              });
 
             // Aqui, vamos buscar os objetos completos dos parâmetros novamente
             setEstacoes(estacoes.map(e => e.id === estacao.id ? updatedEstacao : e));
@@ -267,7 +281,7 @@ export const DropdownEstacao: React.FC = () => {
                         {errors.cidade && <span className="error">{errors.cidade}</span>}
                     </div>
                 ),
-                extra: [
+                extra: isUserAdmin() ? [
                     <div className='botoes'>
                         <div key="cancel-button">
                             <button className='btn' onClick={cancelarEdicao}>Cancelar</button>
@@ -276,7 +290,7 @@ export const DropdownEstacao: React.FC = () => {
                             <button className='btn' onClick={() => salvarEdicao(estacaoEditando)}>Salvar</button>
                         </div>
                     </div>
-                ]
+                ] : undefined
             };
         } else {
             // Se não estiver em modo de edição
@@ -331,7 +345,7 @@ export const DropdownEstacao: React.FC = () => {
                         </p>
                     </div>
                 ),
-                extra: [
+                extra: isUserAdmin() ? [
                     <div className='botoes'>
                         <div key="edit-button">
                             <button className="btn" onClick={() => setEstacaoEditando(estacao)}>Editar</button>
@@ -343,7 +357,7 @@ export const DropdownEstacao: React.FC = () => {
                             <Link to={`/estacao/${estacao.id}`} state={{ estacao }} className='btn'>Dashboard</Link>
                         </div>
                     </div>
-                ]
+                ] : undefined
             };
         }
     };
@@ -381,7 +395,9 @@ export const DropdownEstacao: React.FC = () => {
                 </div>
                 <div className="content">
                     <div className='adicionarUsuario'>
-                        <Link to="/estacao/cadastro" className='btn'>Adicionar estação</Link>
+                        {isUserAdmin() && (
+                            <Link to="/estacao/cadastro" className='btn'>Adicionar estação</Link>
+                        )}
                     </div>
                     {loading ? (
                         <p>Carregando...</p>

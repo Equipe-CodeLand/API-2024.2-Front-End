@@ -4,6 +4,7 @@ import './style.css';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { Alerta } from '../../interface/alerta';
+import { isUserAdmin } from '../../pages/Login/privateRoutes';
 
 interface AlertaCardProps {
   alerta: Alerta;
@@ -84,7 +85,15 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`${process.env.REACT_APP_API_URL}/alerta/deletar/${alerta.id}`);
+          const token = localStorage.getItem('token');
+
+          await axios.delete(`${process.env.REACT_APP_API_URL}/alerta/deletar/${alerta.id}`,
+            {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            });
           Swal.fire('Excluído!', 'O alerta foi excluído com sucesso.', 'success');
           onDelete(alerta.id);
         } catch (error) {
@@ -100,6 +109,7 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
 
   const handleSaveClick = async () => {
     try {
+      const token = localStorage.getItem('token');
       // Validações de campos obrigatórios
       let hasErrors = false;
       const newErrors: { [key: string]: string } = {};
@@ -129,7 +139,13 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
         valor: editAlerta.valor
       };
 
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/alerta/atualizar/${editAlerta.id}`, updatedAlerta);
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/alerta/atualizar/${editAlerta.id}`, updatedAlerta,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
       onUpdate(response.data);
 
       Swal.fire({
@@ -281,14 +297,16 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
             </div>
           </div>
         </div>
-        <div className="box-btn">
-          <button className="btn" onClick={isEditing ? handleSaveClick : handleEditClick}>
-            {isEditing ? 'Salvar' : 'Editar'}
-          </button>
-          <button className="btn" onClick={isEditing ? handleCancelClick : handleDeleteClick}>
-            {isEditing ? 'Cancelar' : 'Excluir'}
-          </button>
-        </div>
+        {isUserAdmin() && (
+          <div className="box-btn">
+            <button className="btn" onClick={isEditing ? handleSaveClick : handleEditClick}>
+              {isEditing ? 'Salvar' : 'Editar'}
+            </button>
+            <button className="btn" onClick={handleDeleteClick}>
+              Excluir
+            </button>
+          </div>
+        )}
       </details>
     </div>
 
