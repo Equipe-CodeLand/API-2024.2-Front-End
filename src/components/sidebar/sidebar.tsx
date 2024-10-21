@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './styles.css';
 import Logo from '../../assets/Logo.png';
 import AprendaMais from '../../assets/AprendaMais.png';
@@ -7,6 +7,7 @@ import Home from '../../assets/Home.png';
 import Estacoes from '../../assets/Estacoes.png';
 import Usuario from '../../assets/Usuario.png';
 import Notificacoes from '../../assets/Notificacoes.png';
+import Logout from '../../assets/logout.png';
 import Parametros from '../../assets/Parametros.png';
 import Menu from '../../assets/Menu.png';
 import X from '../../assets/X.png';
@@ -34,6 +35,12 @@ const links: SidebarLinkProps[] = [
 
 export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
 
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
@@ -42,7 +49,7 @@ export const Sidebar: React.FC = () => {
           <img src={isOpen ? X : Menu} alt="Toggle Icon" className="toggle-icon" />
         </button>
         {isOpen && (
-          <Link to="/">
+          <Link to="/home">
             <img src={Logo} alt="Logo" className="sidebar-logo" />
           </Link>
         )}
@@ -72,6 +79,12 @@ export const Sidebar: React.FC = () => {
               )}
             </>
           ))}
+          <li>
+            <a onClick={handleLogout} className="sidebar-link">
+              <img src={Logout} alt="Sair icon" className="icon" />
+              <span className="label">Sair</span>
+            </a>
+          </li>
         </ul>
       </nav >
     </div >
