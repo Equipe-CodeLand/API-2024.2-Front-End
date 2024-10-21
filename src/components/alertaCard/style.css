@@ -90,9 +90,11 @@
 /* Botões */
 .box-btn {
   display: flex;
-  justify-content: flex-end;
-  /* Alinha os botões à direita */
-  gap: 10px;
+  justify-content: space-between; 
+  width: 100%; 
+  gap: 20px; 
+  padding: 0 60px;
+  padding-bottom: 20px;
 }
 
 .btn {
@@ -100,7 +102,7 @@
   color: white;
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }

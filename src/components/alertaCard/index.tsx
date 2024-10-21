@@ -103,6 +103,10 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
     });
   };
 
+  const handleCancelClick = () => {
+    setIsEditing(false);
+  };  
+
   const handleSaveClick = async () => {
     try {
       const token = localStorage.getItem('token');
