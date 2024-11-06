@@ -7,6 +7,7 @@ import { Perfil, Usuario } from '../../interface/usuario';
 import { Link } from 'react-router-dom'; // Importar o componente Link
 import './style.css';
 import { formatCpf } from '../../utils/formatters';
+import { api } from '../../config';
 
 const PerfilLabel: { [key in Perfil]: string } = {
   [Perfil.Admin]: 'Administrador',
@@ -172,7 +173,7 @@ const UsuarioTable: React.FC = () => {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/usuarios');
+        const response = await api.get('/usuarios');
         const usuariosData = response.data.map((user: Usuario): Usuario => ({
           id: user.id,
           nome: user.nome,
@@ -223,7 +224,7 @@ const UsuarioTable: React.FC = () => {
     }
   
     try {
-      await axios.put('http://localhost:5000/usuario/atualizar', usuario);
+      await api.put('/usuario/atualizar', usuario);
   
       Swal.fire({
         icon: 'success',
@@ -254,7 +255,7 @@ const UsuarioTable: React.FC = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete('http://localhost:5000/usuario/deletar', {
+          await api.delete('/usuario/deletar', {
             data: { id }
           });
   

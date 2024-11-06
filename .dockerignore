@@ -1,0 +1,6 @@
+# Ignorar o node_modules e outras pastas de build
+node_modules
+build
+dist
+.tmp
+*.log
