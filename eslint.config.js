@@ -1,4 +1,4 @@
-import globals from './node_modules/globals/globals.json' assert { type: 'json' };
+import globals from './globals/globals.json' assert { type: 'json' };
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from '@typescript-eslint/eslint-plugin';
