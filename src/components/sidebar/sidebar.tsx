@@ -30,7 +30,6 @@ const links: SidebarLinkProps[] = [
   { label: 'Notificações', href: '/notificacoes', icon: Notificacoes },
   // { label: 'Relatórios', href: '/relatorios', icon: Relatorio },
   { label: 'Alertas', href: '/alertas', icon: Alertas },
-
 ];
 
 export const Sidebar: React.FC = () => {
@@ -58,7 +57,7 @@ export const Sidebar: React.FC = () => {
         <ul>
           {links.map((link) => (
             <>
-              {link.label == 'Usuários' ? (
+              {link.label === 'Usuários' ? (
                 <>
                   {isUserAdmin() && (
                     <li key={link.href}>
@@ -86,7 +85,7 @@ export const Sidebar: React.FC = () => {
             </a>
           </li>
         </ul>
-      </nav >
-    </div >
+      </nav>
+    </div>
   );
 };

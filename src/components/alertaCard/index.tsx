@@ -302,6 +302,11 @@ const AlertaCard: React.FC<AlertaCardProps> = ({ alerta, idEstacao, idParametro,
             <button className="btn" onClick={isEditing ? handleSaveClick : handleEditClick}>
               {isEditing ? 'Salvar' : 'Editar'}
             </button>
+            {isEditing && (
+              <button className="btn" onClick={handleCancelClick}>
+                Cancelar
+              </button>
+            )}
             <button className="btn" onClick={handleDeleteClick}>
               Excluir
             </button>
