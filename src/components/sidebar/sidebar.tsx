@@ -56,11 +56,11 @@ export const Sidebar: React.FC = () => {
       <nav className="sidebar-nav">
         <ul>
           {links.map((link) => (
-            <>
+            <React.Fragment key={link.href}>
               {link.label === 'Usuários' ? (
                 <>
                   {isUserAdmin() && (
-                    <li key={link.href}>
+                    <li>
                       <NavLink to={link.href} className="sidebar-link">
                         <img src={link.icon} alt={`${link.label} icon`} className="icon" />
                         <span className="label">{link.label}</span>
@@ -69,20 +69,20 @@ export const Sidebar: React.FC = () => {
                   )}
                 </>
               ) : (
-                <li key={link.href}>
+                <li>
                   <NavLink to={link.href} className="sidebar-link">
                     <img src={link.icon} alt={`${link.label} icon`} className="icon" />
                     <span className="label">{link.label}</span>
                   </NavLink>
                 </li>
               )}
-            </>
+            </React.Fragment>
           ))}
           <li>
-            <a onClick={handleLogout} className="sidebar-link">
+            <button onClick={handleLogout} className="sidebar-link">
               <img src={Logout} alt="Sair icon" className="icon" />
               <span className="label">Sair</span>
-            </a>
+            </button>
           </li>
         </ul>
       </nav>

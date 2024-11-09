@@ -112,6 +112,7 @@ const CadastroEstacao: React.FC = () => {
                     setBairro('');
                     setCidade('');
                     setSelectedParametros([]);
+                    setSuccessMessage('Estação cadastrada com sucesso!');
                     navigate('/estacoes');
                 }
             } catch (error) {
@@ -305,6 +306,7 @@ const CadastroEstacao: React.FC = () => {
                         <div className="signin-row-submit">
                             <input type="submit" className='btn' value="Cadastrar" />
                         </div>
+                        {successMessage && <p className="success-message">{successMessage}</p>}
                     </form>
                 </div>
             </div>

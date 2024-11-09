@@ -1,6 +1,5 @@
-import { log } from 'node:console';
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 interface PrivateRouteProps {
   element: JSX.Element;
