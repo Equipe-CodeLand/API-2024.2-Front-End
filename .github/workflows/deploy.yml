@@ -1,4 +1,4 @@
-name: CI/CD - Front-end
+name: Deploy - Front-end
 
 on:
   push:

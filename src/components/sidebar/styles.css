@@ -71,6 +71,8 @@
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   white-space: nowrap;
+  background-color: #5751d3;
+  border: 0px;
 }
 
 .sidebar-link:hover {
