@@ -4,7 +4,6 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import { Link } from 'react-router-dom';
 import './style.css'
 import { api } from '../../config';
-import "../../components/tabelaDropdown/style.css"
 import Swal from 'sweetalert2';
 import { Estacao } from '../../interface/estacao';
 import { Parametro } from '../../interface/parametro';
@@ -12,13 +11,17 @@ import { isUserAdmin } from '../Login/privateRoutes';
 
 export const DropdownEstacao: React.FC = () => {
     const [estacoes, setEstacoes] = useState<Estacao[]>([]);
+    const [filteredEstacoes, setFilteredEstacoes] = useState<Estacao[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [estacaoEditando, setEstacaoEditando] = useState<Estacao | null>(null);
     const [selectedParametros, setSelectedParametros] = useState<string[]>([]);
     const [parametroSelecionado, setParametroSelecionado] = useState<string>('');
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [parametrosOptions, setParametrosOptions] = useState<Parametro[]>([])
+    const [parametrosOptions, setParametrosOptions] = useState<Parametro[]>([]);
+    const [nomeFiltro, setNomeFiltro] = useState<string>('');
+    const [macFiltro, setMacFiltro] = useState<string>('');
+    const [cepFiltro, setCepFiltro] = useState<string>('');
 
     const excluirEstacao = async (id: string) => {
         console.log("id da estação para deletar:", id)
@@ -37,14 +40,15 @@ export const DropdownEstacao: React.FC = () => {
                     await api.delete(`/estacao/deletar/${id}`,
                         {
                             headers: {
-                              'Authorization': `Bearer ${token}`,
-                              'Content-Type': 'application/json'
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
                             }
-                      });
+                        });
 
                     Swal.fire('Excluído!', 'A estação foi excluída com sucesso.', 'success');
 
                     setEstacoes(estacoes.filter(estacao => estacao.id !== id));
+                    setFilteredEstacoes(filteredEstacoes.filter((estacao) => estacao.id !== id));
                 } catch (error) {
                     console.error("Erro ao excluir estação:", error);
                 }
@@ -110,13 +114,14 @@ export const DropdownEstacao: React.FC = () => {
             await api.put(`/estacao/atualizar/`, updatedEstacao,
                 {
                     headers: {
-                      'Authorization': `Bearer ${token}`,
-                      'Content-Type': 'application/json'
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
-              });
+                });
 
             // Aqui, vamos buscar os objetos completos dos parâmetros novamente
             setEstacoes(estacoes.map(e => e.id === estacao.id ? updatedEstacao : e));
+            setFilteredEstacoes(filteredEstacoes.map((e) => (e.id === estacao.id ? updatedEstacao : e)));
             setEstacaoEditando(null);
             setSelectedParametros([]); // Limpa a seleção de parâmetros
             Swal.fire({
@@ -375,6 +380,7 @@ export const DropdownEstacao: React.FC = () => {
                 const response = await api.get('/estacoes');
                 console.log('estacoes:', response.data);
                 setEstacoes(response.data);
+                setFilteredEstacoes(response.data);
                 setLoading(false);
             } catch (err) {
                 setError('Erro ao buscar as estações' + err);
@@ -385,6 +391,20 @@ export const DropdownEstacao: React.FC = () => {
         fetchEstacoes();
     }, []);
 
+    useEffect(() => {
+        const filtroEstacoes = () => {
+            const filtrado = estacoes.filter(estacao => {
+                return (
+                    (nomeFiltro === '' || estacao.nome.toLowerCase().includes(nomeFiltro.toLowerCase())) &&
+                    (macFiltro === '' || estacao.uid.toLowerCase().includes(macFiltro.toLowerCase())) &&
+                    (cepFiltro === '' || estacao.cep.toLowerCase().includes(cepFiltro.toLowerCase()))
+                );
+            });
+            setFilteredEstacoes(filtrado);
+        };
+
+        filtroEstacoes();
+    }, [nomeFiltro, macFiltro, cepFiltro, estacoes]);
 
     return (
         <>
@@ -395,6 +415,29 @@ export const DropdownEstacao: React.FC = () => {
                 </div>
                 <div className="content">
                     <div className='adicionarUsuario'>
+                        <div className="filter-container">
+                            <input
+                                className='input-full-size'
+                                type="text"
+                                placeholder="Filtrar por MAC:"
+                                value={macFiltro}
+                                onChange={(e) => setMacFiltro(e.target.value)}
+                            />
+                            <input
+                                className='input-full-size'
+                                type="text"
+                                placeholder="Filtrar por Nome:"
+                                value={nomeFiltro}
+                                onChange={(e) => setNomeFiltro(e.target.value)}
+                            />
+                            <input
+                                className='input-full-size'
+                                type="text"
+                                placeholder="Filtrar por CEP:"
+                                value={cepFiltro}
+                                onChange={(e) => setCepFiltro(e.target.value)}
+                            />
+                        </div>
                         {isUserAdmin() && (
                             <Link to="/estacao/cadastro" className='btn'>Adicionar estação</Link>
                         )}
@@ -405,7 +448,7 @@ export const DropdownEstacao: React.FC = () => {
                         <p>{error}</p>
                     ) : (
                         <TabelaGenerica<Estacao>
-                            data={estacoes}
+                            data={filteredEstacoes}
                             columns={[
                                 { label: 'MAC', key: 'uid' },
                                 { label: 'Nome', key: 'nome' },

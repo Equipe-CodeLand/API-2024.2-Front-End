@@ -13,29 +13,32 @@ const Notificacoes: React.FC = () => {
   const [estacoes, setEstacoes] = useState<{ [key: string]: string }>({});
   const [alertas, setAlertas] = useState<{ [key: string]: string }>({});
 
+  const [filtroEstacao, setFiltroEstacao] = useState('');
+  const [filtroParametro, setFiltroParametro] = useState('');
+  const [filtroMensagem, setFiltroMensagem] = useState('');
+
   const formatarDataHora = (dataStr: string) => {
     const [datePart, timePart] = dataStr.split(' ');
     const [dia, mes, ano] = datePart.split('/').map(Number);
     const [horas, minutos, segundos] = timePart.split(':').map(Number);
-  
+
     const date = new Date(ano, mes - 1, dia, horas, minutos, segundos);
-  
+
     if (isNaN(date.getTime())) {
-      // Se a data não for válida, retorna uma string padrão ou mensagem de erro
       return 'Data inválida';
     }
-  
+
     const diaFormatado = String(date.getDate()).padStart(2, '0');
     const mesFormatado = String(date.getMonth() + 1).padStart(2, '0');
     const anoFormatado = date.getFullYear();
-  
+
     const horasFormatadas = String(date.getHours()).padStart(2, '0');
     const minutosFormatados = String(date.getMinutes()).padStart(2, '0');
     const segundosFormatados = String(date.getSeconds()).padStart(2, '0');
-  
+
     return `${diaFormatado}/${mesFormatado}/${anoFormatado} ${horasFormatadas}:${minutosFormatados}:${segundosFormatados}`;
   };
-  
+
   useEffect(() => {
     const fetchNotificacoes = async () => {
       setLoading(true);
@@ -99,8 +102,16 @@ const Notificacoes: React.FC = () => {
     fetchNotificacoes();
   }, []);
 
+  const notificacoesFiltradas = notificacoes.filter(notificacao => {
+    return (
+      (filtroEstacao === '' || estacoes[notificacao.estacaoId].toLowerCase().includes(filtroEstacao.toLowerCase())) &&
+      (filtroParametro === '' || parametros[notificacao.parametroId].toLowerCase().includes(filtroParametro.toLowerCase())) &&
+      (filtroMensagem === '' || notificacao.mensagemAlerta.toLowerCase().includes(filtroMensagem.toLowerCase()))
+    );
+  });
+
   const notificacoesPorEstacao: { [key: string]: Notificacao[] } = {};
-  notificacoes.forEach((notificacao) => {
+  notificacoesFiltradas.forEach((notificacao) => {
     const estacaoId = notificacao.estacaoId;
     if (!notificacoesPorEstacao[estacaoId]) {
       notificacoesPorEstacao[estacaoId] = [];
@@ -108,13 +119,12 @@ const Notificacoes: React.FC = () => {
     notificacoesPorEstacao[estacaoId].push(notificacao);
   });
 
-  // Função para definir a classe de cor com base no tipoAlerta
   const getAlertaClass = (alertaId: string) => {
     const tipoAlerta = alertas[alertaId];
     if (tipoAlerta === 'Perigo') {
       return 'red';
     }
-    return 'yellow'; // Padrão é amarelo
+    return 'yellow';
   };
 
   return (
@@ -122,10 +132,34 @@ const Notificacoes: React.FC = () => {
       <Sidebar />
       <div>
         <div className="title-box">
-          <h2 className='title-text'>Notificações</h2>
+          <h2 className='title-text' style={{paddingBottom: '10px'}}>Notificações</h2>
         </div>
-        <br/>
-          <div className="content">
+        <div className="content">
+          <div className="filter-box">
+            <div className="filter-container">
+              <input
+                className='input-full-size'
+                type="text"
+                placeholder="Filtrar por estação"
+                value={filtroEstacao}
+                onChange={e => setFiltroEstacao(e.target.value)}
+              />
+              <input
+                className='input-full-size'
+                type="text"
+                placeholder="Filtrar por parâmetro"
+                value={filtroParametro}
+                onChange={e => setFiltroParametro(e.target.value)}
+              />
+              <input
+                className='input-full-size'
+                type="text"
+                placeholder="Filtrar por mensagem"
+                value={filtroMensagem}
+                onChange={e => setFiltroMensagem(e.target.value)}
+              />
+            </div>
+          </div>
           {loading ? (
             <p>Carregando notificações...</p>
           ) : error ? (
@@ -144,7 +178,6 @@ const Notificacoes: React.FC = () => {
                       <div className="notification-box">
                         <div className="notification-info">
                           <div className="icon-and-type">
-                            {/* Aplica a classe de cor com base no tipo de alerta */}
                             <WarningIcon className={`icon ${getAlertaClass(notificacao.alertaId)}`} />
                           </div>
                           <p className={`text-type ${getAlertaClass(notificacao.alertaId)}`}>{notificacao.mensagemAlerta}</p>

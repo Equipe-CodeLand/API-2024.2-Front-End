@@ -5,6 +5,7 @@ import { Alerta } from '../../interface/alerta';
 import AlertaCard from '../../components/alertaCard';
 import { api } from '../../config/index';
 import { isUserAdmin } from '../Login/privateRoutes';
+import { Link } from 'react-router-dom';
 
 interface GroupedAlert {
   nomeEstacao: string;
@@ -17,6 +18,10 @@ const Alertas: React.FC = () => {
   const [alerts, setAlerts] = useState<GroupedAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [estacaoFiltro, setEstacaoFiltro] = useState('');
+  const [tipoFiltro, setTipoFiltro] = useState('');
+  const [parametroFiltro, setParametroFiltro] = useState('');
+  const [mensagemFiltro, setMensagemFiltro] = useState('');
 
   useEffect(() => {
     const fetchAlertas = async () => {
@@ -86,10 +91,6 @@ const Alertas: React.FC = () => {
     fetchAlertas();
   }, []);
 
-  const handleNewAlert = () => {
-    window.location.href = '/alerta/cadastro';
-  };
-
   const handleDelete = (id: string) => {
     const updatedAlerts = alerts
       .map(location => ({
@@ -112,30 +113,69 @@ const Alertas: React.FC = () => {
     setAlerts(updatedAlerts);
   };
 
+  const filteredAlerts = alerts.map(location => ({
+    ...location,
+    alerts: location.alerts.filter(alerta =>
+      (estacaoFiltro ? location.nomeEstacao.toLowerCase().includes(estacaoFiltro.toLowerCase()) : true) &&
+      (tipoFiltro ? alerta.gravidade === tipoFiltro : true) &&
+      (parametroFiltro ? alerta.parametro.toLowerCase().includes(parametroFiltro.toLowerCase()) : true) &&
+      (mensagemFiltro ? alerta.descricao.toLowerCase().includes(mensagemFiltro.toLowerCase()) : true)
+    )
+  })).filter(location => location.alerts.length > 0);
+
+
   return (
     <div className='container'>
       <Sidebar />
       <div>
         <div className="title-box">
           <h2 className='title-text'>Alertas cadastrados</h2>
-          <div className='new-alert-container'>
-            {isUserAdmin() && (
-              <button className="btn" onClick={handleNewAlert}>
-                + Novo Alerta
-              </button>
-            )}
-          </div>
         </div>
         <div className="content">
+          <div className='filter-box'>
+            <div className="filter-container">
+              <input
+                className="input-full-size"
+                type="text"
+                placeholder="Filtrar por Estação"
+                value={estacaoFiltro}
+                onChange={(e) => setEstacaoFiltro(e.target.value)}
+              />
+              <input
+                className="input-full-size"
+                type="text"
+                placeholder="Filtrar por Parâmetro"
+                value={parametroFiltro}
+                onChange={(e) => setParametroFiltro(e.target.value)}
+              />
+              <input
+                className="input-full-size"
+                type="text"
+                placeholder="Filtrar por Mensagem"
+                value={mensagemFiltro}
+                onChange={(e) => setMensagemFiltro(e.target.value)}
+              />
+              <select value={tipoFiltro} onChange={(e) => setTipoFiltro(e.target.value)} className="input-full-size" style={{marginTop: '13px'}}>
+                <option value="">Todos os Tipos</option>
+                <option value="Perigo">Perigo</option>
+                <option value="Atenção">Atenção</option>
+              </select>
+            </div>
+            {isUserAdmin() && (
+              <Link className="btn" to='/alerta/cadastro'>
+                Adicionar Alerta
+              </Link>
+            )}
+          </div>
           {loading ? (
             <p>Carregando alertas...</p>
           ) : error ? (
             <p className="error-text">{error}</p>
           ) : (
-            alerts.length === 0 ? (
+            filteredAlerts.length === 0 ? (
               <p className="no-alert-text">Nenhum alerta cadastrado no momento.</p>
             ) : (
-              alerts.map((location, index) => (
+              filteredAlerts.map((location, index) => (
                 <div className="alert-container" key={index}>
                   <h2 className="alert-title-text">{location.nomeEstacao}</h2>
                   {location.alerts.length === 0 ? (
