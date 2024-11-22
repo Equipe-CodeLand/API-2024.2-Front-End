@@ -9,6 +9,7 @@
   /* Opcional, para centralizar o conteúdo */
 }
 
-.small-title-text {
+.dashboard-title-text {
+  font-size: 1.3rem;
   margin-bottom: 10px;
 }

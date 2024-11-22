@@ -8,6 +8,8 @@
 .parameter-estacao-container .parameter-content-station{
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   gap: 12px;
 }
 .parameter-estacao-container .parameter{
@@ -22,7 +24,10 @@
   background-color: var(--main-purple);
   color: white;
 }
-
+.parameter-options{
+  display: flex;
+  gap: 12px;
+}
 .middle-container{
   padding: var(--pd-4) var(--pd-8);
   display: flex;
