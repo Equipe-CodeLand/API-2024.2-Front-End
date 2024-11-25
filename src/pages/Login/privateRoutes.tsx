@@ -28,7 +28,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, isAdmin }) => {
   const isAuthenticated = !!token;
 
 
-  if (!isAuthenticated) {
+  /* if (!isAuthenticated) {
     console.log("Redirecionando para login, não autenticado.");
     return <Navigate to="/" replace />;
   }
@@ -36,7 +36,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, isAdmin }) => {
   if (isAdmin && !isUserAdmin()) {
     console.log("Redirecionando para login, não é admin.");
     return <Navigate to="/home" replace />;
-  }
+  } */
 
   return element;
 };

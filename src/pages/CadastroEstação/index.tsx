@@ -116,7 +116,6 @@ const CadastroEstacao: React.FC = () => {
                     navigate('/estacoes');
                 }
             } catch (error) {
-                console.error('Erro ao cadastrar estação:', error);
                 setErrors({ ...errors, form: 'Erro ao cadastrar estação' });
             }
         }
