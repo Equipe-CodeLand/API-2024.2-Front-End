@@ -1,4 +1,4 @@
-name: SonarCloud Scan
+name: SonarCloud Scan // Nome do arquivo
 
 on:
   push:
