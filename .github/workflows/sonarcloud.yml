@@ -1,0 +1,31 @@
+name: SonarCloud Scan
+
+on:
+  push:
+    branches:
+      - testes-sonar
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - testes-sonar
+
+jobs:
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          npx sonar-scanner -Dsonar.projectKey=Equipe-CodeLand_API-2024.2-Front-End -Dsonar.organization=equipe-codeland -Dsonar.host.url=https://sonarcloud.io
