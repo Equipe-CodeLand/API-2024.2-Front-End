@@ -3,11 +3,11 @@ name: SonarCloud Scan
 on:
   push:
     branches:
-      - teste-sonar
+      - testes-sonar
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
-      - teste-sonar
+      - testes-sonar
 
 jobs:
   sonarcloud:
