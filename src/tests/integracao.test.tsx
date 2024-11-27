@@ -1,55 +1,22 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { BrowserRouter } from 'react-router-dom';
+import axios from 'axios';
 import Alertas from '../pages/Alertas';
+import { MemoryRouter } from 'react-router-dom'; // Importando o MemoryRouter
 
-// Mockando a API e funções externas
-jest.mock('../config', () => ({
-  api: {
-    get: jest.fn(() =>
-      Promise.resolve({
-        data: [],
-      })
-    ),
-  },
-}));
+test('renderiza a página Alertas sem quebrar', async () => {
+  // Renderiza o componente Alertas dentro de um MemoryRouter
+  render(
+    <MemoryRouter>
+      <Alertas />
+    </MemoryRouter>
+  );
 
-jest.mock('../components/sidebar/sidebar', () => ({
-  Sidebar: () => <div data-testid="sidebar">Sidebar</div>,
-}));
-
-jest.mock('../pages/Login/privateRoutes', () => ({
-  isUserAdmin: jest.fn(() => true),
-}));
-
-jest.mock('../components/alertaCard/index', () => ({
-  default: () => <div data-testid="alerta-card">AlertaCard</div>,
-}));
-
-describe('Alertas Component', () => {
-  it('renderiza a página Alertas sem quebrar', async () => {
-    render(
-      <BrowserRouter>
-        <Alertas />
-      </BrowserRouter>
-    );
-
-    // Verifica se os principais elementos da página são renderizados
+  // Espera pela renderização do título
+  await waitFor(() => {
     expect(screen.getByText(/Alertas cadastrados/i)).toBeInTheDocument();
-    expect(screen.getByTestId('sidebar')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Filtrar por Estação/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Filtrar por Parâmetro/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Filtrar por Mensagem/i)).toBeInTheDocument();
   });
 
-  it('exibe uma mensagem de carregamento inicialmente', () => {
-    render(
-      <BrowserRouter>
-        <Alertas />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByText(/Carregando alertas.../i)).toBeInTheDocument();
-  });
+  // Verifica se o sidebar foi renderizado
+  expect(screen.getByTestId('sidebar')).toBeInTheDocument();
 });

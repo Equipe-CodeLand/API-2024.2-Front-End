@@ -31,8 +31,6 @@ const Alertas: React.FC = () => {
         const response = await api.get('/alertas');
         const data = await response.data;
 
-        console.log('Dados recebidos:', data);
-
         if (Array.isArray(data)) {
           const groupedAlerts: GroupedAlert[] = [];
 
@@ -126,7 +124,9 @@ const Alertas: React.FC = () => {
 
   return (
     <div className='container'>
-      <Sidebar />
+      <div className="sidebar" data-testid="sidebar">      
+        <Sidebar />
+      </div>
       <div>
         <div className="title-box">
           <h2 className='title-text'>Alertas cadastrados</h2>
