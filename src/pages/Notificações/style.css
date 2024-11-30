@@ -77,3 +77,11 @@
 .icon.yellow {
   color: #ff9800;
 }
+.filter-box{
+  max-width:1200px;
+  width:100%;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:  25px;
+}

@@ -11,9 +11,10 @@ const ParametrosEstacao: React.FC = () => {
   const location = useLocation();
   const [station, setStation] = useState<Estacao | null>(null);
   const [parametros, setParametros] = useState<any[]>([]);
-  const [selectedParametro, setSelectedParametro] = useState<any | null>(null); // Altere o tipo para armazenar o objeto do parâmetro
+  const [selectedParametro, setSelectedParametro] = useState<any | null>(null);
   const [selectedSigla, setSelectedSigla] = useState<string | null>(null);
   const [dadosPython, setDadosPython] = useState<any[]>([]);
+  const [dateRange, setDateRange] = useState<string>("total");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,13 +28,13 @@ const ParametrosEstacao: React.FC = () => {
 
           if (stationData.parametros && stationData.parametros.length > 0) {
             const response = await api.get('/parametros', {
-              params: { ids: stationData.parametros } // Enviando os IDs como parâmetros
+              params: { ids: stationData.parametros }
             });
 
             const fetchedParametros = response.data;
 
             const filteredParametros = fetchedParametros.filter((parametro: any) =>
-              stationData.parametros.includes(parametro.id) // Certifica-se de que o ID do parâmetro está na lista da estação
+              stationData.parametros.includes(parametro.id)
             );
 
             setParametros(filteredParametros);
@@ -41,7 +42,7 @@ const ParametrosEstacao: React.FC = () => {
 
             const pythonResponse = await serviceApi.get(`/parametrosEstacao/${stationData.uid}`);
             console.log('Dados recebidos do serviço em Python:', pythonResponse.data);
-            setDadosPython(pythonResponse.data.parametros); // Armazenar dados no estado
+            setDadosPython(pythonResponse.data.parametros);
 
             if (filteredParametros.length > 0) {
               setSelectedParametro(filteredParametros[0]);
@@ -65,6 +66,49 @@ const ParametrosEstacao: React.FC = () => {
     console.log('Parâmetro selecionado:', parametro.nome, 'Sigla:', parametro.sigla);
   };
 
+  const handleDateRangeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setDateRange(event.target.value);
+  };
+
+  // calcula o range de tempo com base no UXT coletado
+  const calculateDateRange = (range: string): { startDate: Date, endDate: Date } => {
+    const endDate = new Date();
+    let startDate = new Date();
+    switch (range) {
+      case '1 semana':
+        startDate.setDate(endDate.getDate() - 7);
+        break;
+      case '2 semanas':
+        startDate.setDate(endDate.getDate() - 14);
+        break;
+      case '3 semanas':
+        startDate.setMonth(endDate.getDate() - 21);
+        break;
+      default:
+        startDate.setDate(endDate.getDate() - 7);
+    }
+    return { startDate, endDate };
+  };
+
+  // filtra os dados pelo range de tempo do UXT
+  const filterDadosByDateRange = (dados: any[], range: string) => {
+    if (range === "total") {
+      return dados;
+    }
+    const { startDate, endDate } = calculateDateRange(range);
+    return dados.filter(dado => {
+      const data = new Date(dado.uxt * 1000); // Convertendo Unix timestamp para Date
+      return data >= startDate && data <= endDate;
+    });
+  };
+
+// organiza a renderização dos dados do mais antigo para o mais novo
+  const sortDadosByTimestamp = (dados: any[]) => {
+    return dados.sort((a, b) => a.uxt - b.uxt);
+  };
+
+  const filteredDados = sortDadosByTimestamp(filterDadosByDateRange(dadosPython, dateRange));
+
   return (
     <div className='container'>
       <Sidebar />
@@ -81,6 +125,7 @@ const ParametrosEstacao: React.FC = () => {
                 <span>Voltar</span>
               </div>
               <div className='parameter-content-station'>
+                <div className="parameter-options">
                 {parametros.length ? (
                   parametros.map((parametro, index) => (
                     <div
@@ -94,6 +139,15 @@ const ParametrosEstacao: React.FC = () => {
                 ) : (
                   <p className="no-parameter-text">Nenhum parâmetro disponível para esta estação.</p>
                 )}
+                </div>
+                <div className="date-range-picker-container">
+                    <select value={dateRange} onChange={handleDateRangeChange} className='input-full-size'>
+                      <option value="total">Selecione um Periodo</option>
+                      <option value="1 semana">1 semana</option>
+                      <option value="2 semanas">2 semanas</option>
+                      <option value="3 semanas">3 semanas</option>
+                    </select>
+                </div>
               </div>
             </div>
             <div className="middle-container-info">
@@ -107,7 +161,7 @@ const ParametrosEstacao: React.FC = () => {
               <div className="graphs-container">
                 {selectedSigla && (
                   <div className='graph'>
-                    <Grafico nome={selectedParametro.nome} parametro={selectedSigla} dados={dadosPython} />
+                    <Grafico nome={selectedParametro.nome} parametro={selectedSigla} dados={filteredDados} />
                   </div>
                 )}
               </div>

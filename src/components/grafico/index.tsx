@@ -30,15 +30,19 @@ const Grafico: React.FC<GraficoProps> = ({ parametro, dados, nome }) => {
 
   return (
     <div className="grafico-container">
-      <h4 className='small-title-text'>Gráfico de {nome}</h4>
-      <LineChart width={700} height={250} data={variacaoData}>
-        <Line type="monotone" dataKey="valor" stroke="#7f43c5" />
-        <Line type="monotone" dataKey="variacao" stroke="#ff7300" />
-        <CartesianGrid stroke="#ccc" />
-        <XAxis dataKey="name" />
-        <Tooltip />
-        <YAxis />
-      </LineChart>
+      <h4 className='dashboard-title-text'>Gráfico de {nome}</h4>
+      {data.length === 0 ? (
+        <p>Nenhuma medição encontrada nesse período.</p>
+      ) : (
+        <LineChart width={700} height={250} data={variacaoData}>
+          <Line type="monotone" dataKey="valor" stroke="#7f43c5" />
+          <Line type="monotone" dataKey="variacao" stroke="#ff7300" />
+          <CartesianGrid stroke="#ccc" />
+          <XAxis dataKey="name" />
+          <Tooltip />
+          <YAxis />
+        </LineChart>
+      )}
     </div>
   );
 };

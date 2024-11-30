@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
 
 interface PrivateRouteProps {
   element: JSX.Element;
@@ -23,9 +22,9 @@ export const isUserAdmin = () => {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, isAdmin }) => {
 
-  const token = localStorage.getItem('token');
+    /*const token = localStorage.getItem('token');
 
-  const isAuthenticated = !!token;
+    const isAuthenticated = !!token;
 
 
   if (!isAuthenticated) {
@@ -36,7 +35,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, isAdmin }) => {
   if (isAdmin && !isUserAdmin()) {
     console.log("Redirecionando para login, não é admin.");
     return <Navigate to="/home" replace />;
-  }
+  } */
 
   return element;
 };

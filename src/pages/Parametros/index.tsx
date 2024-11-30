@@ -224,15 +224,14 @@ const Parametros: React.FC = () => {
       <Sidebar />
       <div className="title-box">
         <h2 className='title-text'>Parâmetros</h2>
-        <br />
-        <div className="button-container">
-          {/* <button className='btn-filtro'>Filtro</button> */}
-          {isUserAdmin() && (
-          <Link to="/parametro/cadastro" className='adicionarParametro'>Adicionar Parâmetro</Link>
-          )}
-        </div>
       </div>
       <div className="content">
+        <div className="adicionarUsuario">
+          <div></div>
+          {isUserAdmin() && (
+          <Link to="/parametro/cadastro" className='btn'>Adicionar Parâmetro</Link>
+          )}
+        </div>
         {error && <strong className='error-text'>{error}</strong>}
         {loading ? (
           <p>Carregando...</p>
