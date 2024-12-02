@@ -1,13 +1,13 @@
-name: SonarCloud Scan // Nome do arquivo
+name: SonarCloud Scan
 
 on:
   push:
     branches:
-      - testes-sonar
+      - develop
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
-      - testes-sonar
+      - develop
 
 jobs:
   sonarcloud:
