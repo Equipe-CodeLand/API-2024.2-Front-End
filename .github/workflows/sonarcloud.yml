@@ -1,4 +1,4 @@
-name: SonarCloud Scan
+name: SonarCloud Scan // Nome da Action
 
 on:
   push:
