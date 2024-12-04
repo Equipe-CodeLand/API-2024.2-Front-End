@@ -124,8 +124,8 @@ const AprendaMais: React.FC = () => {
                     <h2 className="small-title-text">Piranômetro</h2>
 
                     <div className="text-box">
-                        <p>O piranômetro é um instrumento utilizado para medir a radiação solar incidente em uma superfície. A radiação solar é importante para várias aplicações, como estudos meteorológicos, pesquisa climática e controle de processos industriais.</p>
-                        <p>O piranômetro pode medir a radiação total (incluindo a direta e a difusa) ou a radiação direta. A fórmula utilizada para calcular a quantidade total de radiação solar incidente é:</p>
+                        <p>O Piranômetro é um instrumento utilizado para medir a radiação solar incidente em uma superfície. A radiação solar é importante para várias aplicações, como estudos meteorológicos, pesquisa climática e controle de processos industriais.</p>
+                        <p>O Piranômetro pode medir a radiação total (incluindo a direta e a difusa) ou a radiação direta. A fórmula utilizada para calcular a quantidade total de radiação solar incidente é:</p>
                         <p className="formula">R = E / A</p>
 
                         <ul className="list">
